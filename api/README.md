@@ -1,4 +1,4 @@
-# README
+# BudgetizerAPI [![Rails Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop-rails)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.

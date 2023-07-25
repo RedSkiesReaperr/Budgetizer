@@ -1,0 +1,12 @@
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - bin/**/*
+    - log/**/*
+    - tmp/**/*
+
+Style/Documentation:
+  Enabled: false
