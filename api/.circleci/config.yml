@@ -39,4 +39,6 @@ workflows:
   quality_and_test:
     jobs:
       - quality
-      - test
+      - test:
+          requires:
+            - quality
