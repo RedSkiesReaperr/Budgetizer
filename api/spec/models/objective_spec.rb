@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Objective, type: :model do
+describe Objective do
   let(:objective) { create(:objective) }
   let(:base) { 3201.87 }
 

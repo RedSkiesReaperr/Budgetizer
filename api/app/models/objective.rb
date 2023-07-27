@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Objective < ApplicationRecord
-  has_one :budget
+  has_one :budget, dependent: nil
 
   validates :vital, :non_essential, :saving, presence: true, numericality: { greater_than: 0, less_than: 100 }
 

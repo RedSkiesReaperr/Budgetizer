@@ -2,11 +2,13 @@
 
 require 'rails_helper'
 
-describe Budget, type: :model do
+describe Budget do
   let(:budget) { create(:budget) }
   let!(:income_lines) { create_list(:line, Faker::Number.between(from: 2, to: 15), budget:, line_type: :income) }
   let!(:vital_lines) { create_list(:line, Faker::Number.between(from: 2, to: 15), budget:, line_type: :vital) }
-  let!(:non_essential_lines) { create_list(:line, Faker::Number.between(from: 2, to: 15), budget:, line_type: :non_essential) }
+  let!(:non_essential_lines) do
+    create_list(:line, Faker::Number.between(from: 2, to: 15), budget:, line_type: :non_essential)
+  end
 
   describe '.forecast_income' do
     it 'returns the sum of income lines' do
