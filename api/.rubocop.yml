@@ -1,12 +1,16 @@
 require:
+  - rubocop-factory_bot
   - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
   Exclude:
-    - bin/**/*
-    - log/**/*
-    - tmp/**/*
+    - 'bin/**/*'
+    - 'db/schema.rb'
+
+Rails:
+  Enabled: true
 
 Style/Documentation:
   Enabled: false
