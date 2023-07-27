@@ -1,24 +1,52 @@
-# BudgetizerAPI [![CircleCI](https://dl.circleci.com/status-badge/img/gh/RedSkiesReaperr/BudgetizerApi/tree/main.svg?style=svg&circle-token=fc9e7827ec863982becbe2ea066bc5d218f12789)](https://dl.circleci.com/status-badge/redirect/gh/RedSkiesReaperr/BudgetizerApi/tree/main) [![Rails Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop-rails) 
+# BudgetizerApi [![CircleCI](https://dl.circleci.com/status-badge/img/gh/RedSkiesReaperr/BudgetizerApi/tree/main.svg?style=svg&circle-token=fc9e7827ec863982becbe2ea066bc5d218f12789)](https://dl.circleci.com/status-badge/redirect/gh/RedSkiesReaperr/BudgetizerApi/tree/main) [![Rails Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop-rails)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+BudgetizerApi is a backend Ruby on Rails project designed to manage and track personal budgets.
 
-Things you may want to cover:
+## Requirements
 
-* Ruby version
+- Ruby v3.2.2
+- Ruby on Rails v7.0.6
+- SQLite 3.42+
 
-* System dependencies
+## Getting Started
 
-* Configuration
+To get a copy of the project up and running on your local machine, follow these steps:
 
-* Database creation
+1. Clone the repository:
+    ```shell
+    git clone https://github.com/RedSkiesReaperr/BudgetizerApi.git
+    ```
 
-* Database initialization
+2. Install the required gems by running the following command in the project directory:
+    ```shell
+    bundle install
+    ```
 
-* How to run the test suite
+3. Set up the database with the necessary schema and seed data:
+    ```shell
+    rails db:setup
+    ```
 
-* Services (job queues, cache servers, search engines, etc.)
+4. Launch the Rails server:
+    ```shell
+    rails server
+    ```
 
-* Deployment instructions
+5. The application should now be accessible locally at `http://localhost:3000`.
 
-* ...
+## Dependencies
+
+BudgetizerApi relies on the following gems:
+
+- **faker**: A library for generating fake data to assist with testing and
+  development. [GitHub Repo](https://github.com/faker-ruby/faker)
+- **rspec-rails**: A testing framework for writing and executing Ruby
+  tests. [GitHub Repo](https://github.com/rspec/rspec-rails)
+- **rubocop**: A code style checking and formatting tool to ensure consistent code
+  quality. [GitHub Repo](https://github.com/rubocop/rubocop)
+- **rubycritic**: A gem that generates code quality reports based on RubyCritic
+  scores. [GitHub Repo](https://github.com/whitesmith/rubycritic)
+- **simplecov**: A code coverage analysis tool to track how much of the codebase is being
+  tested. [GitHub Repo](https://github.com/simplecov-ruby/simplecov)
+- **brakeman**: A security scanning tool that detects potential security vulnerabilities in the
+  code. [GitHub Repo](https://github.com/presidentbeef/brakeman)
