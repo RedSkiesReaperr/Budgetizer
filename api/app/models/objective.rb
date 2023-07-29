@@ -5,15 +5,15 @@ class Objective < ApplicationRecord
 
   validates :vital, :non_essential, :saving, presence: true, numericality: { greater_than: 0, less_than: 100 }
 
-  def vital_value(base)
-    vital * base / 100
+  def vital_value
+    vital * budget.forecast_income / 100
   end
 
-  def non_essential_value(base)
-    non_essential * base / 100
+  def non_essential_value
+    non_essential * budget.forecast_income / 100
   end
 
-  def saving_value(base)
-    saving * base / 100
+  def saving_value
+    saving * budget.forecast_income / 100
   end
 end
