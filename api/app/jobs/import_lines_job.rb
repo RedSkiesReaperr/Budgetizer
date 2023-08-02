@@ -8,10 +8,10 @@ class ImportLinesJob < ApplicationJob
   def perform(budget:)
     lines_to_create = []
 
-    FileReaders::Csv.read(file_path: 'budget.csv') do |line|
+    FileReaders::Csv.read(file_path: 'vendor/budget.csv') do |line|
       lines_to_create << {
         amount: line['amount'].to_f,
-        category: category(line['category']),
+        line_type: line_type(line['type']),
         label: line['label'],
         budget:
       }
