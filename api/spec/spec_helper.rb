@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'simplecov'
+require 'jsonapi/rspec'
 
 SimpleCov.start 'rails'
 
@@ -95,4 +96,10 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  # JSONAPI::Resources configuration
+  config.include JSONAPI::RSpec
+
+  # Support for documents with mixed string/symbol keys. Disabled by default.
+  config.jsonapi_indifferent_hash = true
 end

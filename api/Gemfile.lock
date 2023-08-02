@@ -115,6 +115,13 @@ GEM
     irb (1.7.4)
       reline (>= 0.3.6)
     json (2.6.3)
+    jsonapi-resources (0.10.7)
+      activerecord (>= 4.1)
+      concurrent-ruby
+      railties (>= 4.1)
+    jsonapi-rspec (0.0.11)
+      rspec-core
+      rspec-expectations
     kwalify (0.7.2)
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
@@ -285,6 +292,8 @@ DEPENDENCIES
   debug
   factory_bot_rails
   faker
+  jsonapi-resources
+  jsonapi-rspec
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.6)
