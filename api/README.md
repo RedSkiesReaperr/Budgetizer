@@ -50,3 +50,4 @@ BudgetizerApi relies on the following gems:
   tested. [GitHub Repo](https://github.com/simplecov-ruby/simplecov)
 - **brakeman**: A security scanning tool that detects potential security vulnerabilities in the
   code. [GitHub Repo](https://github.com/presidentbeef/brakeman). Use with: `bundle exec brakeman --color -o tmp/brakeman.html`
+- **jsonapi-resources**: A gem for building JSON:API compliant APIs. [GitHub Repo](https://github.com/cerebris/jsonapi-resources)
