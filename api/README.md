@@ -49,4 +49,4 @@ BudgetizerApi relies on the following gems:
 - **simplecov**: A code coverage analysis tool to track how much of the codebase is being
   tested. [GitHub Repo](https://github.com/simplecov-ruby/simplecov)
 - **brakeman**: A security scanning tool that detects potential security vulnerabilities in the
-  code. [GitHub Repo](https://github.com/presidentbeef/brakeman)
+  code. [GitHub Repo](https://github.com/presidentbeef/brakeman). Use with: `bundle exec brakeman --color -o tmp/brakeman.html`
