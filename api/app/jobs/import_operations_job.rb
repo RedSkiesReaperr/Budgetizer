@@ -5,14 +5,14 @@ class ImportOperationsJob < ApplicationJob
 
   queue_as :default
 
-  def perform
+  def perform(expenses_file: 'vendor/expenses.csv', income_file: 'vendor/incomes.csv')
     operations_to_create = []
 
-    FileReaders::Csv.read(file_path: 'expenses.csv') do |expense|
+    FileReaders::Csv.read(file_path: expenses_file) do |expense|
       operations_to_create << line_hash(expense)
     end
 
-    FileReaders::Csv.read(file_path: 'incomes.csv') do |income|
+    FileReaders::Csv.read(file_path: income_file) do |income|
       operations_to_create << line_hash(income)
     end
 
