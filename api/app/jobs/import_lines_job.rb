@@ -5,10 +5,10 @@ class ImportLinesJob < ApplicationJob
 
   queue_as :default
 
-  def perform(budget:)
+  def perform(budget:, lines_path: 'vendor/budget.csv')
     lines_to_create = []
 
-    FileReaders::Csv.read(file_path: 'vendor/budget.csv') do |line|
+    FileReaders::Csv.read(file_path: lines_path) do |line|
       lines_to_create << {
         amount: line['amount'].to_f,
         line_type: line_type(line['type']),
