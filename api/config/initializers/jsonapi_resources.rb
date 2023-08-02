@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 JSONAPI.configure do |config|
-  #:underscored_key, :camelized_key, :dasherized_key, or custom
+  # :underscored_key, :camelized_key, :dasherized_key, or custom
   config.json_key_format = :camelized_key
 
-  #:underscored_route, :camelized_route, :dasherized_route, or custom
+  # :underscored_route, :camelized_route, :dasherized_route, or custom
   config.route_format = :camelized_route
 
-  #:integer, :uuid, :string, or custom (provide a proc)
+  # :integer, :uuid, :string, or custom (provide a proc)
   config.resource_key_type = :integer
 
   # optional request features
@@ -106,3 +109,4 @@ JSONAPI.configure do |config|
   # performance. Should accept three arguments: resource name, hits count, misses count.
   config.resource_cache_usage_report_function = nil
 end
+# rubocop:enable Metrics/BlockLength

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OperationResource < JSONAPI::Resource
   attributes :date, :label, :amount, :comment, :pointed, :op_type, :category
 
