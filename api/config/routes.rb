@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   jsonapi_resources :operations
+  jsonapi_resources :lines
+  jsonapi_resources :budgets
+  jsonapi_resources :objectives
 end
