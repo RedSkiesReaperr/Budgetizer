@@ -34,18 +34,14 @@ export const Operations = {
     pointed?: boolean,
     opType?: string,
     category?: string
-  }): Promise<ApiResponse<Operation> | ApiError> => {
-    try {
-      const response = await client.patch<ApiResponse<Operation>>(`/operations/${operationId}`, {
-        data: {
-          type: 'operations',
-          id: operationId,
-          attributes: updatePayload
-        }
-      })
-      return response.data
-    } catch (err) {
-      return err
-    }
+  }): Promise<ApiResponse<Operation>> => {
+    const response = await client.patch<ApiResponse<Operation>>(`/operations/${operationId}`, {
+      data: {
+        type: 'operations',
+        id: operationId,
+        attributes: updatePayload
+      }
+    })
+    return response.data
   }
 }

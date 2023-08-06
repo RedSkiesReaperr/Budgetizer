@@ -86,7 +86,7 @@ export const Budgets = {
     return data
   },
   getOne: async (budgetId: number): Promise<ApiResponse<Budget>> => {
-    const {data} = await client.get<ApiResponse<Array<Budget>>>(`/budgets/${budgetId}`)
+    const {data} = await client.get<ApiResponse<Budget>>(`/budgets/${budgetId}`)
     return data
   },
   getRelatedLines: async (budget: Budget): Promise<ApiResponse<Array<Line>>> => {
