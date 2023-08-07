@@ -1,5 +1,5 @@
 import client from "@/api/client";
-import {ApiError, ApiResponse} from "@/api/responses";
+import {ApiResponse} from "@/api/responses";
 
 export interface Operation {
   id: string,

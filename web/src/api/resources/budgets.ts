@@ -1,6 +1,5 @@
 import {ApiResponse} from "@/api/responses";
 import client from "@/api/client";
-import Api from "@/api";
 
 export interface Budget {
   id: string,

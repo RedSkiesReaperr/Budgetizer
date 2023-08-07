@@ -1,14 +1,12 @@
-<template>
-  <v-toolbar prominent>
-    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-    <!--    <v-toolbar-title>Budgetizer</v-toolbar-title>-->
-    <v-spacer></v-spacer>
-    <v-btn icon>
-      <v-icon>mdi-export</v-icon>
-    </v-btn>
-  </v-toolbar>
+<script setup lang="ts">
+import {useBudgetLayoutStore} from "@/stores/budgetLayout";
 
-  <v-navigation-drawer v-model="drawer">
+const store = useBudgetLayoutStore()
+</script>
+
+<template>
+  <v-navigation-drawer expand-on-hover :rail="store.isRailMode"
+                       @update:rail="e => store.invertIsExpanded(!e)">
     <v-list>
       <v-list-item
         title="Budgetizer"
@@ -17,9 +15,12 @@
     </v-list>
 
     <!--    <v-divider></v-divider>-->
-
     <v-list density="compact" nav>
-      <v-list-subheader>{{ $t('budget.sidebar.general') }}</v-list-subheader>
+      <v-list-subheader v-if="store.isRailMode && !store.isExpanded">
+        <v-icon icon="mdi-dots-horizontal"/>
+      </v-list-subheader>
+      <v-list-subheader v-else>{{ $t('budget.sidebar.general') }}</v-list-subheader>
+
       <v-list-item
         v-for="(link, i) in generalLinks"
         :key="i"
@@ -30,6 +31,15 @@
     </v-list>
   </v-navigation-drawer>
 
+  <v-app-bar flat color="background">
+    <v-app-bar-nav-icon @click="e => store.invertIsRailMode()" elevation="0"></v-app-bar-nav-icon>
+    <!--    <v-toolbar-title>Budgetizer</v-toolbar-title>-->
+    <!--    <v-spacer></v-spacer>-->
+    <!--    <v-btn icon>-->
+    <!--      <v-icon>mdi-export</v-icon>-->
+    <!--    </v-btn>-->
+  </v-app-bar>
+
   <v-main>
     <router-view/>
   </v-main>
@@ -39,7 +49,6 @@
 export default {
   data() {
     return {
-      drawer: false,
       generalLinks: [
         {
           title: this.$t('overview'),
@@ -51,5 +60,6 @@ export default {
       ]
     }
   },
+  methods: {}
 }
 </script>
