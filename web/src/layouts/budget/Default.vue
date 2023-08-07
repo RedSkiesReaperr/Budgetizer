@@ -19,7 +19,7 @@
     <!--    <v-divider></v-divider>-->
 
     <v-list density="compact" nav>
-      <v-list-subheader>General</v-list-subheader>
+      <v-list-subheader>{{ $t('budget.sidebar.general') }}</v-list-subheader>
       <v-list-item
         v-for="(link, i) in generalLinks"
         :key="i"
@@ -42,12 +42,12 @@ export default {
       drawer: false,
       generalLinks: [
         {
-          title: 'Overview',
+          title: this.$t('overview'),
           icon: 'mdi-all-inclusive',
           route: 'overview'
         },
-        {title: 'Earnings', icon: 'mdi-bank-transfer-in', route: 'earnings'},
-        {title: 'Expenses', icon: 'mdi-bank-transfer-out', route: 'expenses'},
+        {title: this.$tc('earning', 2), icon: 'mdi-bank-transfer-in', route: 'earnings'},
+        {title: this.$tc('expense', 2), icon: 'mdi-bank-transfer-out', route: 'expenses'},
       ]
     }
   },
