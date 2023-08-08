@@ -42,3 +42,8 @@ pnpm build
 ### Customize configuration
 
 See [Configuration Reference](https://vitejs.dev/config/).
+
+
+
+### Resources
+- https://github.com/hampusborgos/country-flags
