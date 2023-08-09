@@ -23,7 +23,7 @@
               </v-avatar>
             </template>
 
-            <v-list-item-title v-text="item.title"></v-list-item-title>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-card>

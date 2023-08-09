@@ -34,12 +34,12 @@ const store = useBudgetLayoutStore()
   </v-app-bar>
 
   <v-main>
-    <router-view/>
+    <div class="px-6">
+      <h5 class="text-h5 mb-2">{{ $route.meta.title }}</h5>
+      <router-view/>
+    </div>
   </v-main>
 </template>
 
 <script lang="ts">
-export default {
-  methods: {}
-}
 </script>

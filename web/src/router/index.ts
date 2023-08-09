@@ -1,5 +1,6 @@
 // Composables
 import {createRouter, createWebHistory} from 'vue-router'
+import i18n from "@/plugins/vue-i18n";
 
 const routes = [
   {
@@ -9,17 +10,20 @@ const routes = [
       {
         path: 'overview',
         name: 'Overview',
-        component: () => import('@/views/budget/Overview.vue')
+        component: () => import('@/views/budget/Overview.vue'),
+        meta: {title: i18n.global.t('overview')}
       },
       {
         path: 'earnings',
         name: 'Earnings',
-        component: () => import('@/views/budget/Earnings.vue')
+        component: () => import('@/views/budget/Earnings.vue'),
+        meta: {title: i18n.global.t('earning', 2)}
       },
       {
         path: 'expenses',
         name: 'Expenses',
-        component: () => import('@/views/budget/Expenses.vue')
+        component: () => import('@/views/budget/Expenses.vue'),
+        meta: {title: i18n.global.t('expense', 2)}
       },
     ]
   }
