@@ -1,6 +1,6 @@
 <template>
-  <BasicCard :loading="operationsStore.operations.length <= 0">
-    <OperationsTable :data="operationsStore.operations" />
+  <BasicCard :loading="operationsStore.expenses.length <= 0">
+    <OperationsTable :data="operationsStore.expenses" />
   </BasicCard>
 </template>
 
@@ -23,7 +23,9 @@ export default {
     };
   },
   created() {
-    this.operationsStore.fetchAll();
+    if (this.operationsStore.expenses.length <= 0) {
+      this.operationsStore.fetchAll();
+    }
   },
   components: { BasicCard, OperationsTable },
 };
