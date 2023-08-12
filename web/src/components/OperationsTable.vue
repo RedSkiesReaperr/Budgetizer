@@ -39,6 +39,21 @@ const props = defineProps<Props>();
       ></CategoryChip>
     </template>
 
+    <template v-slot:[`item.attributes.amount`]="{ item }">
+      <span
+        :style="{
+          color: isIncome(item.columns['attributes.amount']) ? 'green' : 'red',
+        }"
+        >{{ formattedAmount(item.columns["attributes.amount"]) }}</span
+      >
+    </template>
+
+    <template v-slot:[`item.attributes.comment`]="{ item }">
+      <span :style="{ opacity: 0.8 }">
+        <i>{{ item.columns["attributes.comment"] }}</i>
+      </span>
+    </template>
+
     <template v-slot:[`item.attributes.pointed`]="{ item }">
       <span v-if="item.columns['attributes.date']">
         <v-icon icon="mdi-check-circle" color="green"></v-icon>
@@ -96,6 +111,16 @@ export default {
           key: "attributes.pointed",
         },
       ];
+    },
+  },
+  methods: {
+    isIncome(amount: number): boolean {
+      return amount > 0;
+    },
+    formattedAmount(rawAmount: number): string {
+      const amount = rawAmount.toFixed(2);
+
+      return rawAmount > 0 ? `+${amount} €` : `${amount} €`;
     },
   },
 };
