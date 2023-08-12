@@ -6,6 +6,7 @@ export default {
   earning: "Earning | Earnings",
   expense: "Expense | Expenses",
   overview: "Overview",
+  action: "Action | Actions",
   budget: {
     sidebar: {
       general: "General",

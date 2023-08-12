@@ -44,7 +44,7 @@ const props = defineProps<Props>();
         :style="{
           color: isIncome(item.columns['attributes.amount']) ? 'green' : 'red',
         }"
-        >{{ formattedAmount(item.columns["attributes.amount"]) }}</span
+        ><b>{{ formattedAmount(item.columns["attributes.amount"]) }}</b></span
       >
     </template>
 
@@ -61,6 +61,12 @@ const props = defineProps<Props>();
       <span v-else>
         <v-icon icon="mdi-check-circle" color="grey"></v-icon>
       </span>
+    </template>
+
+    <template v-slot:[`item.actions`]="{ }">
+      <v-icon size="small" class="me-2" @click="console.log('click')">
+        mdi-square-edit-outline
+      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -109,6 +115,11 @@ export default {
           title: this.$t("operation.attributes.pointed"),
           sortable: true,
           key: "attributes.pointed",
+        },
+        {
+          title: this.$t("action", 2),
+          sortable: false,
+          key: "actions",
         },
       ];
     },
