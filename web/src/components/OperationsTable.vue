@@ -2,6 +2,7 @@
 import { Operation } from "@/api/resources/operations";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import TypeChip from "@/components/TypeChip.vue";
+import CategoryChip from "@/components/CategoryChip.vue";
 
 interface Props {
   data: Operation[];
@@ -29,6 +30,13 @@ const props = defineProps<Props>();
         :raw-type="item.columns['attributes.opType']"
         size="small"
       ></TypeChip>
+    </template>
+
+    <template v-slot:[`item.attributes.category`]="{ item }">
+      <CategoryChip
+        :raw-category="item.columns['attributes.category']"
+        size="small"
+      ></CategoryChip>
     </template>
 
     <template v-slot:[`item.attributes.pointed`]="{ item }">

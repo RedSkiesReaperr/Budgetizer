@@ -28,5 +28,16 @@ export default {
       income: "Income",
       unknown: "Unknown",
     },
+    categories: {
+      to_categorize: "To categorize",
+      home: "Home",
+      bank: "Bank",
+      shopping: "Shopping",
+      food: "Food",
+      subscriptions: "Subscriptions",
+      auto_transport: "Auto & Transports",
+      beauty_care: "Beauty & Care",
+      taxes: "Taxes",
+    },
   },
 };
