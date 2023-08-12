@@ -1,6 +1,8 @@
-import fr from '@/i18n/fr'
-import en from '@/i18n/en'
+import customFr from "@/i18n/fr";
+import customEn from "@/i18n/en";
+import { fr, en } from "vuetify/locale";
 
 export default {
-  fr, en
-}
+  fr: { ...customFr, $vuetify: fr },
+  en: { ...customEn, $vuetify: en },
+};
