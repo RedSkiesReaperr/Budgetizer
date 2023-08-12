@@ -1,47 +1,59 @@
 import client from "@/api/client";
-import {ApiResponse} from "@/api/responses";
+import { ApiResponse } from "../responses";
 
 export interface Operation {
-  id: string,
-  type: string,
+  id: string;
+  type: string;
   links: {
-    self: string
-  },
+    self: string;
+  };
   attributes: {
-    date: string,
-    label: string,
-    amount: number,
-    comment: string,
-    pointed: boolean,
-    opType: string,
-    category: string
-  }
+    date: string;
+    label: string;
+    amount: number;
+    comment: string;
+    pointed: boolean;
+    opType: string;
+    category: string;
+  };
 }
 
-export const Operations = {
-  getAll: async (): Promise<ApiResponse<Array<Operation>>> => {
-    const {data} = await client.get<ApiResponse<Array<Operation>>>('/operations')
-    return data
-  },
-  getOne: async (operationId: number): Promise<ApiResponse<Operation>> => {
-    const {data} = await client.get<ApiResponse<Operation>>(`/operations/${operationId}`)
-    return data
-  },
-  updateOne: async (operationId: number, updatePayload: {
-    label?: string,
-    amount?: number,
-    comment?: string,
-    pointed?: boolean,
-    opType?: string,
-    category?: string
-  }): Promise<ApiResponse<Operation>> => {
-    const response = await client.patch<ApiResponse<Operation>>(`/operations/${operationId}`, {
+interface UpdatePayload {
+  label?: string;
+  amount?: number;
+  comment?: string;
+  pointed?: boolean;
+  opType?: string;
+  category?: string;
+}
+
+export default {
+  getAll: getAll,
+  getOne: getOne,
+  updateOne: updateOne,
+};
+
+async function getAll(): Promise<Operation[]> {
+  return (await client.get<ApiResponse<Operation[]>>("/operations")).data.data;
+}
+
+async function getOne(operationId: number): Promise<Operation> {
+  return (
+    await client.get<ApiResponse<Operation>>(`/operations/${operationId}`)
+  ).data.data;
+}
+
+async function updateOne(
+  operationId: number,
+  updatePayload: UpdatePayload
+): Promise<Operation> {
+  return (
+    await client.patch<ApiResponse<Operation>>(`/operations/${operationId}`, {
       data: {
-        type: 'operations',
+        type: "operations",
         id: operationId,
-        attributes: updatePayload
-      }
+        attributes: updatePayload,
+      },
     })
-    return response.data
-  }
+  ).data.data;
 }

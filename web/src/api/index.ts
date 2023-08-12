@@ -1,7 +1,7 @@
-import {Budgets} from "@/api/resources/budgets";
-import {Operations} from "@/api/resources/operations";
+import BudgetsRequests from "@/api/resources/budgets";
+import OperationsRequests from "@/api/resources/operations";
 
 export default {
-  budgets: Budgets,
-  operations: Operations
+  budgets: BudgetsRequests,
+  operations: OperationsRequests
 }

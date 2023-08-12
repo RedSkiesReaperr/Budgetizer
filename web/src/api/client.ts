@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const client = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_BASE,
   timeout: 1000,
   headers: {
-    'Content-Type': 'application/vnd.api+json'
-  }
-})
+    "Content-Type": "application/vnd.api+json",
+  },
+});
 
-export default client
+export default client;

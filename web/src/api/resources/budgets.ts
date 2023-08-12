@@ -1,99 +1,112 @@
-import {ApiResponse} from "@/api/responses";
+import { ApiResponse } from "@/api/responses";
 import client from "@/api/client";
 
 export interface Budget {
-  id: string,
-  type: 'budgets',
+  id: string;
+  type: "budgets";
   links: {
-    self: string
-  },
+    self: string;
+  };
   attributes: {
-    name: string,
-    forecastIncome: number,
-    forecastVital: number,
-    forecastNonEssential: number,
-    forecastSaving: number,
-    forecastVitalDiff: number,
-    forecastNonEssentialDiff: number,
-    forecastSavingDiff: number,
-    forecastVitalDiffPercentage: number,
-    forecastNonEssentialDiffPercentage: number,
-    forecastSavingDiffPercentage: number
-  },
+    name: string;
+    forecastIncome: number;
+    forecastVital: number;
+    forecastNonEssential: number;
+    forecastSaving: number;
+    forecastVitalDiff: number;
+    forecastNonEssentialDiff: number;
+    forecastSavingDiff: number;
+    forecastVitalDiffPercentage: number;
+    forecastNonEssentialDiffPercentage: number;
+    forecastSavingDiffPercentage: number;
+  };
   relationships: {
     lines: {
       links: {
-        self: string,
-        related: string
-      }
-    },
+        self: string;
+        related: string;
+      };
+    };
     objective: {
       links: {
-        self: string,
-        related: string
-      }
-    }
-  }
+        self: string;
+        related: string;
+      };
+    };
+  };
 }
 
 export interface Line {
-  id: string,
-  type: 'lines',
+  id: string;
+  type: "lines";
   links: {
-    self: string
-  },
+    self: string;
+  };
   attributes: {
-    label: string,
-    amount: number,
-    lineType: string,
-    category: string
-  },
+    label: string;
+    amount: number;
+    lineType: string;
+    category: string;
+  };
   relationships: {
     budget: {
       links: {
-        self: string,
-        related: string
-      }
-    }
-  }
+        self: string;
+        related: string;
+      };
+    };
+  };
 }
 
 export interface Objective {
-  id: string,
-  type: 'objectives',
+  id: string;
+  type: "objectives";
   links: {
-    self: string
-  },
+    self: string;
+  };
   attributes: {
-    vital: number,
-    nonEssential: number,
-    saving: number
-  },
+    vital: number;
+    nonEssential: number;
+    saving: number;
+  };
   relationships: {
     budget: {
       links: {
-        self: string,
-        related: string
-      }
-    }
-  }
+        self: string;
+        related: string;
+      };
+    };
+  };
 }
 
-export const Budgets = {
-  getAll: async (): Promise<ApiResponse<Array<Budget>>> => {
-    const {data} = await client.get<ApiResponse<Array<Budget>>>('/budgets')
-    return data
-  },
-  getOne: async (budgetId: number): Promise<ApiResponse<Budget>> => {
-    const {data} = await client.get<ApiResponse<Budget>>(`/budgets/${budgetId}`)
-    return data
-  },
-  getRelatedLines: async (budget: Budget): Promise<ApiResponse<Array<Line>>> => {
-    const {data} = await client.get(budget.relationships.lines.links.related)
-    return data
-  },
-  getRelatedObjective: async (budget: Budget): Promise<ApiResponse<Objective>> => {
-    const {data} = await client.get(budget.relationships.objective.links.related)
-    return data
-  }
+export default {
+  getAll: getAll,
+  getOne: getOne,
+  getRelatedLines: getRelatedLines,
+  getRelatedObjective: getRelatedObjective,
+};
+
+async function getAll(): Promise<Budget[]> {
+  return (await client.get<ApiResponse<Budget[]>>("/budgets")).data.data;
+}
+
+async function getOne(budgetId: number): Promise<Budget> {
+  return (await client.get<ApiResponse<Budget>>(`/budgets/${budgetId}`)).data
+    .data;
+}
+
+async function getRelatedLines(budget: Budget): Promise<Line[]> {
+  return (
+    await client.get<ApiResponse<Line[]>>(
+      budget.relationships.lines.links.related
+    )
+  ).data.data;
+}
+
+async function getRelatedObjective(budget: Budget): Promise<Objective> {
+  return (
+    await client.get<ApiResponse<Objective>>(
+      budget.relationships.objective.links.related
+    )
+  ).data.data;
 }
