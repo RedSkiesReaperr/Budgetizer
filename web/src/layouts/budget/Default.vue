@@ -57,7 +57,7 @@ const store = useBudgetLayoutStore();
   </v-app-bar>
 
   <v-main>
-    <div class="px-6">
+    <div class="px-6 pb-6">
       <h5 class="text-h5 mb-6">{{ translatedTitle }}</h5>
       <router-view />
     </div>
