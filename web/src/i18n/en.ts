@@ -7,9 +7,20 @@ export default {
   expense: "Expense | Expenses",
   overview: "Overview",
   action: "Action | Actions",
+  budget_selector: {
+    title: "Which budget to analyse ?",
+    select_btn: "Analyse",
+  },
   budget: {
+    appbar: {
+      change_budget: "Select another budget",
+    },
     sidebar: {
       general: "General",
+    },
+    attributes: {
+      id: "ID",
+      name: "Name",
     },
   },
   operation: {

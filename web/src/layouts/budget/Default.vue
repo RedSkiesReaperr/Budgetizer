@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useBudgetLayoutStore } from "@/stores/budgetLayout";
 import LanguageSwitch from "@/components/LanguageSwitch.vue";
+import routes from "@/router/routes";
 
-const store = useBudgetLayoutStore();
+const budgetLayoutStore = useBudgetLayoutStore();
 </script>
 
 <template>
@@ -11,8 +12,8 @@ const store = useBudgetLayoutStore();
     location="left"
     elevation="0"
     expand-on-hover
-    :rail="store.isRailMode"
-    @update:rail="(_) => store.invertIsExpanded()"
+    :rail="budgetLayoutStore.isRailMode"
+    @update:rail="(_) => budgetLayoutStore.invertIsExpanded()"
   >
     <v-list>
       <v-list-item
@@ -22,7 +23,9 @@ const store = useBudgetLayoutStore();
     </v-list>
 
     <v-list density="compact" nav>
-      <v-list-subheader v-if="store.isRailMode && !store.isExpanded">
+      <v-list-subheader
+        v-if="budgetLayoutStore.isRailMode && !budgetLayoutStore.isExpanded"
+      >
         <v-icon icon="mdi-dots-horizontal" />
       </v-list-subheader>
       <v-list-subheader v-else>{{
@@ -49,10 +52,20 @@ const store = useBudgetLayoutStore();
 
   <v-app-bar flat color="background">
     <v-app-bar-nav-icon
-      @click="(_) => store.invertIsRailMode()"
+      @click="(_) => budgetLayoutStore.invertIsRailMode()"
       elevation="0"
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
+
+    <v-tooltip :text="$t('budget.appbar.change_budget')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn
+          :to="routes.selector"
+          v-bind="props"
+          icon="mdi-swap-horizontal"
+        ></v-btn>
+      </template>
+    </v-tooltip>
     <LanguageSwitch />
   </v-app-bar>
 
@@ -65,7 +78,16 @@ const store = useBudgetLayoutStore();
 </template>
 
 <script lang="ts">
+import { useAppStore } from "@/stores/app";
+
 export default {
+  beforeCreate() {
+    const appStore = useAppStore();
+
+    if (Object.keys(appStore.currentBudget).length <= 0) {
+      this.$router.push(routes.selector);
+    }
+  },
   computed: {
     translatedTitle(): string {
       const count = this.$route.meta.pluralized === true ? 2 : 1;

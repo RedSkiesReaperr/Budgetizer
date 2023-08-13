@@ -3,6 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
+    path: "/",
+    redirect: { path: "/selector" }
+  },
+  {
+    path: "/selector",
+    component: () => import("@/views/BudgetSelector.vue"),
+  },
+  {
     path: "/budget",
     component: () => import("@/layouts/budget/Default.vue"),
     children: [

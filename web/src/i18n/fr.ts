@@ -7,10 +7,21 @@ export default {
   expense: "Dépense | Dépenses",
   overview: "Vue d'ensemble",
   action: "Action | Actions",
+  budget_selector: {
+    title: "Quel budget analyser ?",
+    select_btn: "Analyser"
+  },
   budget: {
+    appbar: {
+      change_budget: "Sélectionner un autre budget"
+    },
     sidebar: {
       general: "Général",
     },
+    attributes: {
+      id: "ID",
+      name: "Nom"
+    }
   },
   operation: {
     attributes: {
