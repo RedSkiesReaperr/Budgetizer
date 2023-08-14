@@ -13,7 +13,7 @@ const knownCategories = [
 export function getCategoryColor(rawCategory: string): string {
   switch (rawCategory) {
     case "to_categorize":
-      return "grey";
+      return "#9e9e9e";
     case "home":
       return "#2980b9";
     case "bank":
@@ -31,7 +31,7 @@ export function getCategoryColor(rawCategory: string): string {
     case "taxes":
       return "#bdc3c7";
     default:
-      return "grey";
+      return "#9e9e9e";
   }
 }
 

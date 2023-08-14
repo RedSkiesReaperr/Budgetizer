@@ -6,7 +6,7 @@ interface Props {
   label: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {});
+withDefaults(defineProps<Props>(), {});
 </script>
 
 <template>

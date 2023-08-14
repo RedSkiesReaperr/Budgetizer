@@ -8,7 +8,7 @@ import {
 describe("Categories service", () => {
   describe("getCategoryColor()", () => {
     const expectations = [
-      { rawCategory: "to_categorize", expected: "grey" },
+      { rawCategory: "to_categorize", expected: "#9e9e9e" },
       { rawCategory: "home", expected: "#2980b9" },
       { rawCategory: "bank", expected: "#d35400" },
       { rawCategory: "shopping", expected: "#e74c3c" },
@@ -17,7 +17,7 @@ describe("Categories service", () => {
       { rawCategory: "auto_transport", expected: "#1abc9c" },
       { rawCategory: "beauty_care", expected: "#ff9ff3" },
       { rawCategory: "taxes", expected: "#bdc3c7" },
-      { rawCategory: "this_is_unknown", expected: "grey" },
+      { rawCategory: "this_is_unknown", expected: "#9e9e9e" },
     ];
 
     it("returns right color for each Category", () => {

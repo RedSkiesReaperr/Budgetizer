@@ -8,6 +8,7 @@ export default {
   overview: "Vue d'ensemble",
   forecast: "Prévision | Prévisions",
   action: "Action | Actions",
+  saving: 'Economie | Economies',
   budget_selector: {
     title: "Quel budget analyser ?",
     select_btn: "Analyser",
