@@ -7,24 +7,24 @@
       <GaugeChart
         :label="$t('operation.types.vital')"
         :color="getTypeColor('vital')"
-        :value="1426.63"
-        :max-value="1290.58"
+        :value="getForecastTypesAmount(['vital'], appStore.currentBudgetLines)"
+        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.vital, appStore.currentBudgetLines)"
       ></GaugeChart>
     </BasicCard>
     <BasicCard :loading="appStore.currentBudgetLines.length <= 0">
       <GaugeChart
         :label="$t('operation.types.non_essential')"
         :color="getTypeColor('non_essential')"
-        :value="544.98"
-        :max-value="774.35"
+        :value="getForecastTypesAmount(['non_essential'], appStore.currentBudgetLines)"
+        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.nonEssential, appStore.currentBudgetLines)"
       ></GaugeChart>
     </BasicCard>
     <BasicCard :loading="appStore.currentBudgetLines.length <= 0">
       <GaugeChart
         :label="$t('saving', 2)"
         :color="getTypeColor('saving')"
-        :value="698.54"
-        :max-value="516.23"
+        :value="getForecastSavingAmount(appStore.currentBudgetLines)"
+        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.saving, appStore.currentBudgetLines)"
       ></GaugeChart>
     </BasicCard>
   </div>
@@ -56,6 +56,9 @@
           <v-icon size="small" class="me-2" @click="console.log('click')">
             mdi-square-edit-outline
           </v-icon>
+          <v-icon size="small" class="me-2" @click="console.log('click')">
+            mdi-trash-can-outline
+          </v-icon>
         </template>
       </v-data-table>
     </BasicCard>
@@ -69,12 +72,23 @@ import BasicCard from "@/components/BasicCard.vue";
 import GaugeChart from "@/components/GaugeChart.vue";
 import TypeChip from "@/components/TypeChip.vue";
 import { getTypeColor } from "@/services/types";
+import {
+  getForecastTypesAmount,
+  getForecastSavingAmount,
+  getForecastTypeMaxValue,
+} from "@/services/forecast";
 
 export default {
   setup() {
     const appStore = useAppStore();
 
-    return { appStore, getTypeColor };
+    return {
+      appStore,
+      getTypeColor,
+      getForecastTypesAmount,
+      getForecastSavingAmount,
+      getForecastTypeMaxValue,
+    };
   },
   data() {
     return {
