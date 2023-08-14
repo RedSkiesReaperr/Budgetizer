@@ -53,4 +53,11 @@ export default {
       taxes: "Taxes",
     },
   },
+  line: {
+    attributes: {
+      label: "Label",
+      type: "Type",
+      amount: "Amount",
+    },
+  },
 };

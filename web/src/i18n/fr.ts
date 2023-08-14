@@ -10,19 +10,19 @@ export default {
   action: "Action | Actions",
   budget_selector: {
     title: "Quel budget analyser ?",
-    select_btn: "Analyser"
+    select_btn: "Analyser",
   },
   budget: {
     appbar: {
-      change_budget: "Sélectionner un autre budget"
+      change_budget: "Sélectionner un autre budget",
     },
     sidebar: {
       general: "Général",
     },
     attributes: {
       id: "ID",
-      name: "Nom"
-    }
+      name: "Nom",
+    },
   },
   operation: {
     attributes: {
@@ -51,6 +51,13 @@ export default {
       auto_transport: "Auto & Transports",
       beauty_care: "Beauté & Soins",
       taxes: "Taxes",
+    },
+  },
+  line: {
+    attributes: {
+      label: "Intitulé",
+      type: "Type",
+      amount: "Montant",
     },
   },
 };
