@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    redirect: { path: "/selector" }
+    redirect: { path: "/selector" },
   },
   {
     path: "/selector",
@@ -19,6 +19,12 @@ const routes = [
         name: "Overview",
         component: () => import("@/views/budget/Overview.vue"),
         meta: { titleKey: "overview", pluralized: false },
+      },
+      {
+        path: "forecasts",
+        name: "Forecasts",
+        component: () => import("@/views/budget/Forecasts.vue"),
+        meta: { titleKey: "forecast", pluralized: true },
       },
       {
         path: "earnings",

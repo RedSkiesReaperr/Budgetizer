@@ -6,6 +6,7 @@ export default {
   earning: "Revenu | Revenus",
   expense: "Dépense | Dépenses",
   overview: "Vue d'ensemble",
+  forecast: "Prévision | Prévisions",
   action: "Action | Actions",
   budget_selector: {
     title: "Quel budget analyser ?",

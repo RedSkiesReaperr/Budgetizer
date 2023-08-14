@@ -6,6 +6,7 @@ export default {
   earning: "Earning | Earnings",
   expense: "Expense | Expenses",
   overview: "Overview",
+  forecast: "Forecast | Forecasts",
   action: "Action | Actions",
   budget_selector: {
     title: "Which budget to analyse ?",

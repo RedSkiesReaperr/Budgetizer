@@ -38,6 +38,11 @@ const budgetLayoutStore = useBudgetLayoutStore();
         to="overview"
       />
       <v-list-item
+        prepend-icon="mdi-weather-partly-cloudy"
+        :title="$t('forecast', 2)"
+        to="forecasts"
+      />
+      <v-list-item
         prepend-icon="mdi-bank-transfer-in"
         :title="$t('earning', 2)"
         to="earnings"

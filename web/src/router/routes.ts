@@ -3,6 +3,7 @@ export default {
   budget: {
     base: "/budget",
     overview: "/budget/overview",
+    forecasts: "/budget/forecasts",
     earnings: "/budget/earnings",
     expenses: "/budget/earnings",
   },
