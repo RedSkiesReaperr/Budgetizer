@@ -62,4 +62,7 @@ export default {
       amount: "Amount",
     },
   },
+  forecast_page: {
+    card_info: "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPerentage}%)."
+  }
 };

@@ -3,30 +3,29 @@
     class="mb-6 d-flex flex-row justify-center flex-wrap flex-grow-1"
     :style="{ gap: '18px' }"
   >
-    <BasicCard :loading="appStore.currentBudgetLines.length <= 0">
-      <GaugeChart
-        :label="$t('operation.types.vital')"
-        :color="getTypeColor('vital')"
-        :value="getForecastTypesAmount(['vital'], appStore.currentBudgetLines)"
-        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.vital, appStore.currentBudgetLines)"
-      ></GaugeChart>
-    </BasicCard>
-    <BasicCard :loading="appStore.currentBudgetLines.length <= 0">
-      <GaugeChart
-        :label="$t('operation.types.non_essential')"
-        :color="getTypeColor('non_essential')"
-        :value="getForecastTypesAmount(['non_essential'], appStore.currentBudgetLines)"
-        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.nonEssential, appStore.currentBudgetLines)"
-      ></GaugeChart>
-    </BasicCard>
-    <BasicCard :loading="appStore.currentBudgetLines.length <= 0">
-      <GaugeChart
-        :label="$t('saving', 2)"
-        :color="getTypeColor('saving')"
-        :value="getForecastSavingAmount(appStore.currentBudgetLines)"
-        :max-value="getForecastTypeMaxValue(appStore.currentBudgetObjective.attributes.saving, appStore.currentBudgetLines)"
-      ></GaugeChart>
-    </BasicCard>
+    <InfoCard
+      v-for="(f, i) in forecast()"
+      v-bind:key="i"
+      :loading="appStore.currentBudgetLines.length <= 0"
+    >
+      <template v-slot:main>
+        <GaugeChart
+          :label="$t(f.translationKey)"
+          :color="getTypeColor(i)"
+          :value="f.totalAmount"
+          :max-value="f.objectiveTarget"
+        ></GaugeChart>
+      </template>
+      <template v-slot:info>{{
+        $t("forecast_page.card_info", {
+          type: $t(f.translationKey),
+          budgetTargetAmount: f.objectiveTarget.toFixed(2),
+          valueAmount: f.totalAmount.toFixed(2),
+          diffValue: f.diffAmount.toFixed(2),
+          diffPerentage: f.diffPercentage,
+        })
+      }}</template>
+    </InfoCard>
   </div>
 
   <div class="d-flex flex-row flex-wrap">
@@ -38,7 +37,7 @@
         :items-per-page="itemsPerPage"
         :headers="headers"
         :items="appStore.currentBudgetLines"
-        :sort-by="[{ key: 'attributes.lineType', order: 'desc' }]"
+        :sort-by="[{ key: 'attributes.amount', order: 'desc' }]"
         density="compact"
       >
         <template v-slot:[`item.attributes.lineType`]="{ item }">
@@ -69,14 +68,11 @@
 import { useAppStore } from "@/stores/app";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import BasicCard from "@/components/BasicCard.vue";
+import InfoCard from "@/components/InfoCard.vue";
 import GaugeChart from "@/components/GaugeChart.vue";
 import TypeChip from "@/components/TypeChip.vue";
 import { getTypeColor } from "@/services/types";
-import {
-  getForecastTypesAmount,
-  getForecastSavingAmount,
-  getForecastTypeMaxValue,
-} from "@/services/forecast";
+import { percentageToValue } from "@/services/calculations";
 
 export default {
   setup() {
@@ -85,9 +81,6 @@ export default {
     return {
       appStore,
       getTypeColor,
-      getForecastTypesAmount,
-      getForecastSavingAmount,
-      getForecastTypeMaxValue,
     };
   },
   data() {
@@ -122,10 +115,58 @@ export default {
     },
   },
   methods: {
+    forecast() {
+      return {
+        vital: {
+          translationKey: "operation.types.vital",
+          objectiveTarget: percentageToValue(
+            this.appStore.currentBudgetObjective.attributes.vital,
+            this.appStore.currentBudget.attributes.forecastIncome
+          ),
+          totalAmount: this.appStore.currentBudget.attributes.forecastVital,
+          diffAmount: this.appStore.currentBudget.attributes.forecastVitalDiff,
+          diffPercentage: this.formattedPercentage(
+            this.appStore.currentBudget.attributes.forecastVitalDiffPercentage
+          ),
+        },
+        non_essential: {
+          translationKey: "operation.types.non_essential",
+          objectiveTarget: percentageToValue(
+            this.appStore.currentBudgetObjective.attributes.nonEssential,
+            this.appStore.currentBudget.attributes.forecastIncome
+          ),
+          totalAmount:
+            this.appStore.currentBudget.attributes.forecastNonEssential,
+          diffAmount:
+            this.appStore.currentBudget.attributes.forecastNonEssentialDiff,
+          diffPercentage: this.formattedPercentage(
+            this.appStore.currentBudget.attributes
+              .forecastNonEssentialDiffPercentage
+          ),
+        },
+        saving: {
+          translationKey: "saving",
+          objectiveTarget: percentageToValue(
+            this.appStore.currentBudgetObjective.attributes.saving,
+            this.appStore.currentBudget.attributes.forecastIncome
+          ),
+          totalAmount: this.appStore.currentBudget.attributes.forecastSaving,
+          diffAmount: this.appStore.currentBudget.attributes.forecastSavingDiff,
+          diffPercentage: this.formattedPercentage(
+            this.appStore.currentBudget.attributes.forecastSavingDiffPercentage
+          ),
+        },
+      };
+    },
     formattedAmount(rawAmount: number): string {
       return `${rawAmount.toFixed(2)} €`;
     },
+    formattedPercentage(value: number): string {
+      const perc = value.toFixed(2);
+
+      return value >= 0 ? `+${perc}` : perc;
+    },
   },
-  components: { VDataTable, GaugeChart, BasicCard, TypeChip },
+  components: { VDataTable, GaugeChart, BasicCard, TypeChip, InfoCard },
 };
 </script>
