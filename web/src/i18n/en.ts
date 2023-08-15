@@ -9,6 +9,7 @@ export default {
   forecast: "Forecast | Forecasts",
   action: "Action | Actions",
   saving: 'Saving | Savings',
+  information: 'Information | Informations',
   budget_selector: {
     title: "Which budget to analyse ?",
     select_btn: "Analyse",
