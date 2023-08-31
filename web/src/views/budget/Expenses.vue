@@ -1,5 +1,5 @@
 <template>
-  <BasicCard :loading="operationsStore.expenses.length <= 0">
+  <BasicCard class="pb-10" :loading="operationsStore.expenses.length <= 0">
     <OperationsTable :data="operationsStore.expenses" />
   </BasicCard>
 </template>

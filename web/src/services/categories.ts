@@ -1,4 +1,4 @@
-const knownCategories = [
+export const knownCategories = [
   "to_categorize",
   "home",
   "bank",

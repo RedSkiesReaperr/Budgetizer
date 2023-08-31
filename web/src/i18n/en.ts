@@ -8,8 +8,8 @@ export default {
   overview: "Overview",
   forecast: "Forecast | Forecasts",
   action: "Action | Actions",
-  saving: 'Saving | Savings',
-  information: 'Information | Informations',
+  saving: "Saving | Savings",
+  information: "Information | Informations",
   budget_selector: {
     title: "Which budget to analyse ?",
     select_btn: "Analyse",
@@ -54,6 +54,10 @@ export default {
       beauty_care: "Beauty & Care",
       taxes: "Taxes",
     },
+    edition: {
+      title: "Operation editing",
+      error: "Error while editing",
+    },
   },
   line: {
     attributes: {
@@ -63,6 +67,7 @@ export default {
     },
   },
   forecast_page: {
-    card_info: "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPerentage}%)."
-  }
+    card_info:
+      "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPerentage}%).",
+  },
 };

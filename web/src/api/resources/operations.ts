@@ -18,7 +18,7 @@ export interface Operation {
   };
 }
 
-interface UpdatePayload {
+export interface UpdatePayload {
   label?: string;
   amount?: number;
   comment?: string;
@@ -37,14 +37,14 @@ async function getAll(): Promise<Operation[]> {
   return (await client.get<ApiResponse<Operation[]>>("/operations")).data.data;
 }
 
-async function getOne(operationId: number): Promise<Operation> {
+async function getOne(operationId: string): Promise<Operation> {
   return (
     await client.get<ApiResponse<Operation>>(`/operations/${operationId}`)
   ).data.data;
 }
 
 async function updateOne(
-  operationId: number,
+  operationId: string,
   updatePayload: UpdatePayload
 ): Promise<Operation> {
   return (

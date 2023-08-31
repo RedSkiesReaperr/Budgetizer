@@ -8,8 +8,8 @@ export default {
   overview: "Vue d'ensemble",
   forecast: "Prévision | Prévisions",
   action: "Action | Actions",
-  saving: 'Economie | Economies',
-  information: 'Information | Informations',
+  saving: "Economie | Economies",
+  information: "Information | Informations",
   budget_selector: {
     title: "Quel budget analyser ?",
     select_btn: "Analyser",
@@ -54,6 +54,10 @@ export default {
       beauty_care: "Beauté & Soins",
       taxes: "Taxes",
     },
+    edition: {
+      title: "Edition d'opération",
+      error: "Erreur lors de l'édition",
+    },
   },
   line: {
     attributes: {
@@ -63,6 +67,7 @@ export default {
     },
   },
   forecast_page: {
-    card_info: "L'objectif budgetaire pour le type '{type}' est de {budgetTargetAmount}€. Les prévisions sont de {valueAmount}€. Cela représente une différence de {diffValue}€, soit {diffPerentage}%."
-  }
+    card_info:
+      "L'objectif budgetaire pour le type '{type}' est de {budgetTargetAmount}€. Les prévisions sont de {valueAmount}€. Cela représente une différence de {diffValue}€, soit {diffPerentage}%.",
+  },
 };
