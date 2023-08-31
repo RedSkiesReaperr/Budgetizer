@@ -55,7 +55,7 @@ const props = defineProps<Props>();
     </template>
 
     <template v-slot:[`item.attributes.pointed`]="{ item }">
-      <span v-if="item.columns['attributes.date']">
+      <span v-if="item.columns['attributes.pointed']">
         <v-icon icon="mdi-check-circle" color="green"></v-icon>
       </span>
       <span v-else>
