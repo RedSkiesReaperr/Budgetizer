@@ -61,6 +61,7 @@ export default {
   },
   line: {
     attributes: {
+      id: "ID",
       label: "Label",
       type: "Type",
       amount: "Amount",
@@ -72,6 +73,10 @@ export default {
     creation: {
       title: "Create a budget line",
       error: "Error while creating",
+    },
+    deletion: {
+      title: "Confirm deletion ?",
+      body: "If you confirm the deletion informations about this budget line can no longer be retrieved.",
     },
   },
   forecast_page: {
@@ -86,5 +91,6 @@ export default {
     cancel: "Cancel",
     create: "Create",
     save: "Save",
+    delete: "Delete",
   },
 };

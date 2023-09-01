@@ -71,7 +71,7 @@
           <v-icon
             size="small"
             class="me-2"
-            @click="console.log('click')"
+            @click="openDeleteDialog(item.raw)"
             color="red"
           >
             mdi-trash-can-outline
@@ -259,6 +259,51 @@
           </v-card>
         </v-dialog>
       </v-row>
+
+      <v-dialog
+        v-model="deleteDialog"
+        persistent
+        width="auto"
+        transition="fade-transition"
+      >
+        <v-card>
+          <v-card-title class="text-h5"
+            >{{ $t("line.deletion.title") }}
+          </v-card-title>
+          <v-card-text>
+            <p>{{ $t("line.deletion.body") }}</p>
+            <v-divider class="my-2"></v-divider>
+            <p>
+              <b>{{ $t("line.attributes.id") }}:</b>
+              <i>{{ deletingLine.id }}</i>
+            </p>
+            <p>
+              <b>{{ $t("line.attributes.label") }}:</b>
+              <i>{{ deletingLine.attributes.label }}</i>
+            </p>
+            <p>
+              <b>{{ $t("line.attributes.amount") }}:</b>
+              <i>{{ deletingLine.attributes.amount }}</i>
+            </p>
+            <p>
+              <b>{{ $t("line.attributes.type") }}:</b>
+              <TypeChip
+                :raw-type="deletingLine.attributes.lineType"
+                size="small"
+              ></TypeChip>
+            </p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn variant="text" @click="closeDeleteDialog">
+              {{ $t("actions.cancel") }}
+            </v-btn>
+            <v-btn color="red" variant="text" @click="confirmDelete">
+              {{ $t("actions.delete") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </BasicCard>
   </div>
 </template>
@@ -279,7 +324,6 @@ import {
   knownCategories,
   getCategoryTranslationKey,
 } from "@/services/categories";
-import { ref } from "vue";
 import { VForm } from "vuetify/lib/components/index.mjs";
 
 export default {
@@ -294,6 +338,10 @@ export default {
   data() {
     return {
       itemsPerPage: 30,
+      // Delete Line
+      deleteDialog: false,
+      deletingLine: {} as Line,
+      deletingLineIndex: -1,
       // Edit Line
       editDialog: false,
       editLoading: false,
@@ -488,6 +536,25 @@ export default {
     },
     closeCreateDialog() {
       this.createDialog = false;
+    },
+    openDeleteDialog(line: Line) {
+      console.log(line);
+      this.deletingLine = line;
+      this.deletingLineIndex = this.appStore.currentBudgetLines.indexOf(line);
+      this.deleteDialog = true;
+    },
+    closeDeleteDialog() {
+      this.deleteDialog = false;
+    },
+    async confirmDelete() {
+      await api.lines
+        .deleteOne(this.deletingLine.id)
+        .then(() => {
+          this.appStore.currentBudgetLines.splice(this.deletingLineIndex, 1);
+        })
+        .finally(() => {
+          this.deleteDialog = false;
+        });
     },
   },
   components: { VDataTable, GaugeChart, BasicCard, TypeChip, InfoCard },

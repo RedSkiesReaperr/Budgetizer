@@ -1,6 +1,5 @@
 import client from "@/api/client";
 import { ApiResponse } from "../responses";
-import { create } from "domain";
 
 export interface Line {
   id: string;
@@ -40,6 +39,7 @@ interface CreatePayload {
 export default {
   createOne: createOne,
   updateOne: updateOne,
+  deleteOne: deleteOne,
 };
 
 async function updateOne(
@@ -77,4 +77,8 @@ async function createOne(
       },
     })
   ).data.data;
+}
+
+async function deleteOne(lineId: string): Promise<any> {
+  return await client.delete<ApiResponse<Line>>(`/lines/${lineId}`);
 }
