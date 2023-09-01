@@ -55,7 +55,7 @@ export default {
       taxes: "Taxes",
     },
     edition: {
-      title: "Operation editing",
+      title: "Edit an operation",
       error: "Error while editing",
     },
   },
@@ -65,9 +65,26 @@ export default {
       type: "Type",
       amount: "Amount",
     },
+    edition: {
+      title: "Edit a budget line",
+      error: "Error while editing",
+    },
+    creation: {
+      title: "Create a budget line",
+      error: "Error while creating",
+    },
   },
   forecast_page: {
     card_info:
       "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPerentage}%).",
+  },
+  form_validations: {
+    required: "is mandatory",
+    gt: "must be greater than {limit}",
+  },
+  actions: {
+    cancel: "Cancel",
+    create: "Create",
+    save: "Save",
   },
 };

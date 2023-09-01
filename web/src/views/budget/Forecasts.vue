@@ -33,6 +33,14 @@
       class="pb-10 flex-grow-1"
       :loading="appStore.currentBudgetLines.length <= 0"
     >
+      <v-btn
+        icon="mdi-plus-circle-outline"
+        variant="text"
+        color="green"
+        :style="{ position: 'absolute', top: 0, right: 0 }"
+        @click="openCreateLine"
+      >
+      </v-btn>
       <v-data-table
         :items-per-page="itemsPerPage"
         :headers="headers"
@@ -52,10 +60,20 @@
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="small" class="me-2" @click="editLine(item.raw)">
+          <v-icon
+            size="small"
+            class="me-2"
+            @click="editLine(item.raw)"
+            color="blue"
+          >
             mdi-square-edit-outline
           </v-icon>
-          <v-icon size="small" class="me-2" @click="console.log('click')">
+          <v-icon
+            size="small"
+            class="me-2"
+            @click="console.log('click')"
+            color="red"
+          >
             mdi-trash-can-outline
           </v-icon>
         </template>
@@ -98,6 +116,7 @@
                       v-model="editedLine.attributes.amount"
                       :label="$t('operation.attributes.amount')"
                       variant="outlined"
+                      type="number"
                     ></v-text-field>
                   </v-col>
 
@@ -138,10 +157,103 @@
                 variant="text"
                 @click="closeEditDialog"
               >
-                Close
+                {{ $t("actions.cancel") }}
               </v-btn>
               <v-btn color="blue-darken-1" variant="text" @click="saveLine">
-                Save
+                {{ $t("actions.save") }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+
+      <v-row justify="center">
+        <v-dialog v-model="createDialog" persistent>
+          <v-card>
+            <v-card-title class="pt-4">
+              <span class="text-h5">{{ $t("line.creation.title") }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-overlay
+                  class="align-center justify-center"
+                  :model-value="createLoading"
+                  :close-on-content-click="false"
+                  contained
+                  disabled
+                  persistent
+                >
+                  <v-progress-circular
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                </v-overlay>
+
+                <v-form ref="createForm">
+                  <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="createdLine.attributes.label"
+                        :label="$t('operation.attributes.label')"
+                        variant="outlined"
+                        :rules="createRules.label"
+                        clearable
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                      <v-text-field
+                        v-model="createdLine.attributes.amount"
+                        :label="$t('operation.attributes.amount')"
+                        variant="outlined"
+                        type="number"
+                        :rules="createRules.amount"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="6" md="3">
+                      <v-select
+                        v-model="createdLine.attributes.lineType"
+                        small-chips
+                        default="createdLine.attributes.lineType"
+                        :label="$t('operation.attributes.type')"
+                        :items="typeItems"
+                        :rules="createRules.type"
+                        item-title="title"
+                        item-value="value"
+                        variant="outlined"
+                      >
+                        <template #selection="{ item }">
+                          <TypeChip
+                            :raw-type="item.value"
+                            size="small"
+                          ></TypeChip>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-alert
+                closable
+                v-model="createError"
+                :text="$t('operation.edition.error')"
+                type="error"
+                variant="tonal"
+              ></v-alert>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="closeCreateDialog"
+              >
+                {{ $t("actions.cancel") }}
+              </v-btn>
+              <v-btn color="blue-darken-1" variant="text" @click="createLine">
+                {{ $t("actions.create") }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -167,6 +279,8 @@ import {
   knownCategories,
   getCategoryTranslationKey,
 } from "@/services/categories";
+import { ref } from "vue";
+import { VForm } from "vuetify/lib/components/index.mjs";
 
 export default {
   setup() {
@@ -180,12 +294,34 @@ export default {
   data() {
     return {
       itemsPerPage: 30,
+      // Edit Line
       editDialog: false,
       editLoading: false,
       editError: false,
       defaultLine: {} as Line,
       editedLine: {} as Line,
       editedLineIndex: -1,
+      // Create Line
+      createDialog: false,
+      createError: false,
+      createLoading: false,
+      createdLine: {} as Line,
+      createRules: {
+        label: [
+          (value: string) =>
+            value ? true : this.$t("form_validations.required"),
+        ],
+        amount: [
+          (value: number) =>
+            value && value > 0
+              ? true
+              : this.$t("form_validations.gt", { limit: 0 }),
+        ],
+        type: [
+          (value: string) =>
+            value ? true : this.$t("form_validations.required"),
+        ],
+      },
     };
   },
   computed: {
@@ -310,7 +446,6 @@ export default {
               this.appStore.currentBudgetLines[this.editedLineIndex],
               res
             );
-            this.forecast();
             this.closeEditDialog();
           })
           .catch(() => {
@@ -320,6 +455,39 @@ export default {
             this.editLoading = false;
           });
       }
+    },
+    openCreateLine() {
+      this.createdLine = copyLine(this.defaultLine);
+      this.createDialog = true;
+    },
+    async createLine() {
+      const { valid } = await (this.$refs.createForm as VForm).validate();
+
+      if (valid) {
+        const createPayload = {
+          label: this.createdLine.attributes.label,
+          amount: this.createdLine.attributes.amount,
+          lineType: this.createdLine.attributes.lineType,
+          category: this.createdLine.attributes.category,
+        };
+
+        this.createLoading = true;
+        await api.lines
+          .createOne(this.appStore.currentBudget.id, createPayload)
+          .then((res) => {
+            this.appStore.currentBudgetLines.push(res);
+            this.closeCreateDialog();
+          })
+          .catch(() => {
+            this.createError = true;
+          })
+          .finally(() => {
+            this.createLoading = false;
+          });
+      }
+    },
+    closeCreateDialog() {
+      this.createDialog = false;
     },
   },
   components: { VDataTable, GaugeChart, BasicCard, TypeChip, InfoCard },
