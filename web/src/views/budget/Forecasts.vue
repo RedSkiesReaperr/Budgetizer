@@ -30,7 +30,7 @@
 
   <div class="d-flex flex-row flex-wrap">
     <BasicCard
-      class="flex-grow-1"
+      class="pb-10 flex-grow-1"
       :loading="appStore.currentBudgetLines.length <= 0"
     >
       <v-data-table
@@ -51,8 +51,8 @@
           <span>{{ formattedAmount(item.columns["attributes.amount"]) }}</span>
         </template>
 
-        <template v-slot:[`item.actions`]="{}">
-          <v-icon size="small" class="me-2" @click="console.log('click')">
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon size="small" class="me-2" @click="editLine(item.raw)">
             mdi-square-edit-outline
           </v-icon>
           <v-icon size="small" class="me-2" @click="console.log('click')">
@@ -60,6 +60,93 @@
           </v-icon>
         </template>
       </v-data-table>
+
+      <v-row justify="center">
+        <v-dialog v-model="editDialog" persistent>
+          <v-card>
+            <v-card-title class="pt-4">
+              <span class="text-h5">{{ $t("operation.edition.title") }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-overlay
+                  class="align-center justify-center"
+                  :model-value="editLoading"
+                  :close-on-content-click="false"
+                  contained
+                  disabled
+                  persistent
+                >
+                  <v-progress-circular
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                </v-overlay>
+
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field
+                      v-model="editedLine.attributes.label"
+                      :label="$t('operation.attributes.label')"
+                      variant="outlined"
+                      clearable
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="editedLine.attributes.amount"
+                      :label="$t('operation.attributes.amount')"
+                      variant="outlined"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="6" md="3">
+                    <v-select
+                      v-model="editedLine.attributes.lineType"
+                      small-chips
+                      default="editedLine.attributes.lineType"
+                      :label="$t('operation.attributes.type')"
+                      :items="typeItems"
+                      item-title="title"
+                      item-value="value"
+                      variant="outlined"
+                    >
+                      <template #selection="{ item }">
+                        <TypeChip
+                          :raw-type="item.value"
+                          size="small"
+                        ></TypeChip>
+                      </template>
+                    </v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-alert
+                closable
+                v-model="editError"
+                :text="$t('operation.edition.error')"
+                type="error"
+                variant="tonal"
+              ></v-alert>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="closeEditDialog"
+              >
+                Close
+              </v-btn>
+              <v-btn color="blue-darken-1" variant="text" @click="saveLine">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </BasicCard>
   </div>
 </template>
@@ -73,6 +160,13 @@ import GaugeChart from "@/components/GaugeChart.vue";
 import TypeChip from "@/components/TypeChip.vue";
 import { getTypeColor } from "@/services/types";
 import { percentageToValue } from "@/services/calculations";
+import { Line } from "@/api/resources/lines";
+import api from "@/api";
+import { copyLine } from "@/services/lines";
+import {
+  knownCategories,
+  getCategoryTranslationKey,
+} from "@/services/categories";
 
 export default {
   setup() {
@@ -86,6 +180,12 @@ export default {
   data() {
     return {
       itemsPerPage: 30,
+      editDialog: false,
+      editLoading: false,
+      editError: false,
+      defaultLine: {} as Line,
+      editedLine: {} as Line,
+      editedLineIndex: -1,
     };
   },
   computed: {
@@ -107,11 +207,33 @@ export default {
           key: "attributes.amount",
         },
         {
-          title: this.$t("action", 2),
+          title: "",
           sortable: false,
           key: "actions",
         },
       ];
+    },
+    typeItems() {
+      return [
+        { value: "income", title: this.$t("operation.types.income") },
+        { value: "vital", title: this.$t("operation.types.vital") },
+        {
+          value: "non_essential",
+          title: this.$t("operation.types.non_essential"),
+        },
+      ];
+    },
+    categoryItems(): Array<{ value: string; title: string }> {
+      let items: Array<{ value: string; title: string }> = [];
+
+      knownCategories.forEach((cat) => {
+        items.push({
+          value: cat,
+          title: this.$t(getCategoryTranslationKey(cat)),
+        });
+      });
+
+      return items;
     },
   },
   methods: {
@@ -121,39 +243,36 @@ export default {
           translationKey: "operation.types.vital",
           objectiveTarget: percentageToValue(
             this.appStore.currentBudgetObjective.attributes.vital,
-            this.appStore.currentBudget.attributes.forecastIncome
+            this.appStore.forecastIncome
           ),
-          totalAmount: this.appStore.currentBudget.attributes.forecastVital,
-          diffAmount: this.appStore.currentBudget.attributes.forecastVitalDiff,
+          totalAmount: this.appStore.forecastVital,
+          diffAmount: this.appStore.forecastVitalDiffValue,
           diffPercentage: this.formattedPercentage(
-            this.appStore.currentBudget.attributes.forecastVitalDiffPercentage
+            this.appStore.forecastVitalDiffPercentage
           ),
         },
         non_essential: {
           translationKey: "operation.types.non_essential",
           objectiveTarget: percentageToValue(
             this.appStore.currentBudgetObjective.attributes.nonEssential,
-            this.appStore.currentBudget.attributes.forecastIncome
+            this.appStore.forecastIncome
           ),
-          totalAmount:
-            this.appStore.currentBudget.attributes.forecastNonEssential,
-          diffAmount:
-            this.appStore.currentBudget.attributes.forecastNonEssentialDiff,
+          totalAmount: this.appStore.forecastNonEssential,
+          diffAmount: this.appStore.forecastNonEssentialDiffValue,
           diffPercentage: this.formattedPercentage(
-            this.appStore.currentBudget.attributes
-              .forecastNonEssentialDiffPercentage
+            this.appStore.forecastNonEssentialDiffPercentage
           ),
         },
         saving: {
           translationKey: "saving",
           objectiveTarget: percentageToValue(
             this.appStore.currentBudgetObjective.attributes.saving,
-            this.appStore.currentBudget.attributes.forecastIncome
+            this.appStore.forecastIncome
           ),
-          totalAmount: this.appStore.currentBudget.attributes.forecastSaving,
-          diffAmount: this.appStore.currentBudget.attributes.forecastSavingDiff,
+          totalAmount: this.appStore.forecastSaving,
+          diffAmount: this.appStore.forecastSavingDiffValue,
           diffPercentage: this.formattedPercentage(
-            this.appStore.currentBudget.attributes.forecastSavingDiffPercentage
+            this.appStore.forecastSavingDiffPercentage
           ),
         },
       };
@@ -165,6 +284,42 @@ export default {
       const perc = value.toFixed(2);
 
       return value >= 0 ? `+${perc}` : perc;
+    },
+    editLine(item: Line) {
+      this.editedLineIndex = this.appStore.currentBudgetLines.indexOf(item);
+      this.editedLine = copyLine(item);
+      this.editDialog = true;
+    },
+    closeEditDialog() {
+      this.editDialog = false;
+    },
+    async saveLine() {
+      if (this.editedLineIndex > -1) {
+        const editPayload = {
+          label: this.editedLine.attributes.label,
+          amount: this.editedLine.attributes.amount,
+          lineType: this.editedLine.attributes.lineType,
+          category: this.editedLine.attributes.category,
+        };
+
+        this.editLoading = true;
+        await api.lines
+          .updateOne(this.editedLine.id, editPayload)
+          .then((res) => {
+            Object.assign(
+              this.appStore.currentBudgetLines[this.editedLineIndex],
+              res
+            );
+            this.forecast();
+            this.closeEditDialog();
+          })
+          .catch(() => {
+            this.editError = true;
+          })
+          .finally(() => {
+            this.editLoading = false;
+          });
+      }
     },
   },
   components: { VDataTable, GaugeChart, BasicCard, TypeChip, InfoCard },

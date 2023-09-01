@@ -4,9 +4,9 @@ import { expect, describe, beforeEach, it, vi } from "vitest";
 import { useAppStore } from "./app";
 import BudgetsRequests, {
   Budget,
-  Line,
   Objective,
 } from "@/api/resources/budgets";
+import { Line } from "@/api/resources/lines";
 
 describe("app Store", () => {
   const budget: Budget = {

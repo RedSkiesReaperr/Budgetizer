@@ -1,5 +1,6 @@
 import { ApiResponse } from "@/api/responses";
 import client from "@/api/client";
+import { Line } from "@/api/resources/lines";
 
 export interface Budget {
   id: string;
@@ -28,28 +29,6 @@ export interface Budget {
       };
     };
     objective: {
-      links: {
-        self: string;
-        related: string;
-      };
-    };
-  };
-}
-
-export interface Line {
-  id: string;
-  type: "lines";
-  links: {
-    self: string;
-  };
-  attributes: {
-    label: string;
-    amount: number;
-    lineType: string;
-    category: string;
-  };
-  relationships: {
-    budget: {
       links: {
         self: string;
         related: string;

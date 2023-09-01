@@ -18,7 +18,7 @@ export interface Operation {
   };
 }
 
-export interface UpdatePayload {
+interface UpdatePayload {
   label?: string;
   amount?: number;
   comment?: string;
