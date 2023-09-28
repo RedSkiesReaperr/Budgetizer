@@ -54,7 +54,7 @@ describe Budget do
 
   describe 'forecast_saving_diff' do
     it do
-      expected = budget.forecast_vital - budget.objective.saving_value
+      expected = budget.forecast_saving - budget.objective.saving_value
 
       expect(budget.forecast_saving_diff).to eq(expected)
     end

@@ -33,7 +33,7 @@ class Budget < ApplicationRecord
   end
 
   def forecast_saving_diff
-    forecast_vital - objective.saving_value
+    forecast_saving - objective.saving_value
   end
 
   def forecast_vital_diff_percentage
