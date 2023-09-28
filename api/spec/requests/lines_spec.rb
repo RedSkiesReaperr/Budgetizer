@@ -56,10 +56,68 @@ RSpec.describe 'Lines' do
   end
 
   describe 'DELETE /lines/{id}' do
-    it { expect { delete line_url(1), headers: }.to raise_error(ActionController::RoutingError) }
+    let(:line) { create(:line) }
+
+    before do
+      line
+      delete line_url(line.id), headers:
+    end
+
+    it { expect(response).to have_http_status(:no_content) }
+
+    it 'removes the line' do
+      expect { Line.find(line.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe 'PATCH /lines/{id}' do
-    it { expect { patch line_url(1), headers: }.to raise_error(ActionController::RoutingError) }
+    let(:line) { create(:line) }
+
+    before do
+      line
+      patch line_url(line.id), headers:, params: body.to_json
+    end
+
+    context 'when editing a not editable field' do
+      let(:body) do
+        {
+          data: {
+            type: 'lines',
+            id: line.id,
+            attributes: {
+              data: Date.new
+            }
+          }
+        }
+      end
+
+      it { expect(response).to have_http_status(:bad_request) }
+    end
+
+    context 'when editing only editable fields' do
+      let(:body) do
+        {
+          data: {
+            type: 'lines',
+            id: line.id,
+            attributes: {
+              label: 'new label',
+              amount: 999.99,
+              lineType: 'income',
+              category: 'bank'
+            }
+          }
+        }
+      end
+      let(:data) { JSON.parse(response.parsed_body)['data'] }
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it { expect(data).to have_link(:self) }
+
+      it { expect(data).to have_type('lines') }
+
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :category) }
+    end
   end
 end
