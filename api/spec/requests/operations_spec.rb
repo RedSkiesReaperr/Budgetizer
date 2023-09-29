@@ -14,21 +14,53 @@ RSpec.describe 'Operations' do
   end
 
   describe 'GET /operations' do
-    let(:operations) { create_list(:operation, 4) }
+    let(:operations) do
+      [
+        create(:operation, date: Time.zone.yesterday),
+        create(:operation, date: Time.zone.today),
+        create(:operation, date: Time.zone.tomorrow),
+        create(:operation, date: Time.zone.today + 2)
+      ]
+    end
+
     let(:data) { JSON.parse(response.parsed_body)['data'] }
 
     before do
       operations
-      get operations_url, headers:
+      get operations_url(filters), headers:
     end
 
-    it { expect(response).to have_http_status(:ok) }
+    context 'without filters' do
+      let(:filters) { {} }
 
-    it { expect(data).to all(have_link(:self)) }
+      it { expect(response).to have_http_status(:ok) }
 
-    it { expect(data).to all(have_type('operations')) }
+      it { expect(data).to all(have_link(:self)) }
 
-    it { expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :category) }
+      it { expect(data).to all(have_type('operations')) }
+
+      it { expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :category) }
+    end
+
+    context 'with start_at filter' do
+      let(:filters) { { filter: { start_at: operations.second.date.to_time.to_i } } }
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it 'returns only newer operations' do
+        expect(data.map { |i| i['id'].to_i }).to eq([operations.second.id, operations.third.id, operations.fourth.id])
+      end
+    end
+
+    context 'with end_at filter' do
+      let(:filters) { { filter: { end_at: operations.third.date.to_time.to_i } } }
+
+      it { expect(response).to have_http_status(:ok) }
+
+      it 'returns only older operations' do
+        expect(data.map { |i| i['id'].to_i }).to eq([operations.first.id, operations.second.id])
+      end
+    end
   end
 
   describe 'GET /operations/{id}' do
