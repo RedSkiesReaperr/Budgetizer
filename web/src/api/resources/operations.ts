@@ -1,5 +1,6 @@
 import client from "@/api/client";
 import { ApiResponse } from "../responses";
+import moment from "moment";
 
 export interface Operation {
   id: string;
@@ -34,12 +35,12 @@ export default {
 };
 
 async function getAll(
-  startAtTimestamp: number,
-  endAtTimestamp: number
+  startAt: moment.Moment,
+  endAt: moment.Moment
 ): Promise<Operation[]> {
   return (
     await client.get<ApiResponse<Operation[]>>(
-      `/operations?filter[start_at]=${startAtTimestamp}&filter[end_at]=${endAtTimestamp}`
+      `/operations?filter[start_at]=${startAt.format()}&filter[end_at]=${endAt.format()}`
     )
   ).data.data;
 }

@@ -4,6 +4,7 @@ import { expect, describe, beforeEach, it, vi } from "vitest";
 import { useOperationsStore } from "@/stores/operations";
 import OperationsRequests, { Operation } from "@/api/resources/operations";
 import api from "@/api";
+import moment from "moment";
 
 describe("operations Store", () => {
   const incomeOperation = {
@@ -53,7 +54,7 @@ describe("operations Store", () => {
       const store = useOperationsStore();
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([]);
-      await store.fetchAll(1, 2);
+      await store.fetchAll(moment(), moment());
       expect(store.incomes).toStrictEqual([incomeOperation]);
       expect(store.expenses).toStrictEqual([]);
     });
@@ -65,7 +66,7 @@ describe("operations Store", () => {
       const store = useOperationsStore();
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([]);
-      await store.fetchAll(1, 2);
+      await store.fetchAll(moment(), moment());
       console.log("FINISH")
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([expenseOperation]);

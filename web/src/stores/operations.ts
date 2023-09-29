@@ -10,7 +10,7 @@ export const useOperationsStore = defineStore("operations", {
     fetching: false,
   }),
   actions: {
-    async fetchAll(startAt: number, endAt: number) {
+    async fetchAll(startAt: moment.Moment, endAt: moment.Moment) {
       this.fetching = true;
 
       api.operations
