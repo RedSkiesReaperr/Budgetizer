@@ -61,11 +61,12 @@ const props = defineProps<Props>();
     </template>
 
     <template v-slot:[`item.attributes.pointed`]="{ item }">
-      <span v-if="item.columns['attributes.pointed']">
-        <v-icon icon="mdi-check-circle" color="green"></v-icon>
-      </span>
-      <span v-else>
-        <v-icon icon="mdi-check-circle" color="grey"></v-icon>
+      <span>
+        <v-icon
+          icon="mdi-check-circle"
+          :color="item.columns['attributes.pointed'] ? 'green' : 'grey'"
+          v-on:click="pointOperation(item.raw)"
+        />
       </span>
     </template>
 
@@ -306,6 +307,15 @@ export default {
     },
     closeEditDialog() {
       this.editDialog = false;
+    },
+    async pointOperation(item: Operation) {
+      const newPointedValue = !item.attributes.pointed;
+
+      await api.operations
+        .updateOne(item.id, { pointed: newPointedValue })
+        .then(() => {
+          item.attributes.pointed = newPointedValue;
+        });
     },
     async saveOperation() {
       if (this.editedOperationIndex > -1) {
