@@ -43,7 +43,7 @@ RSpec.describe 'Operations' do
     end
 
     context 'with start_at filter' do
-      let(:filters) { { filter: { start_at: operations.second.date.to_time.to_i } } }
+      let(:filters) { { filter: { start_at: operations.second.date } } }
 
       it { expect(response).to have_http_status(:ok) }
 
@@ -53,12 +53,12 @@ RSpec.describe 'Operations' do
     end
 
     context 'with end_at filter' do
-      let(:filters) { { filter: { end_at: operations.third.date.to_time.to_i } } }
+      let(:filters) { { filter: { end_at: operations.third.date } } }
 
       it { expect(response).to have_http_status(:ok) }
 
       it 'returns only older operations' do
-        expect(data.map { |i| i['id'].to_i }).to eq([operations.first.id, operations.second.id])
+        expect(data.map { |i| i['id'].to_i }).to eq([operations.first.id, operations.second.id, operations.third.id])
       end
     end
   end
