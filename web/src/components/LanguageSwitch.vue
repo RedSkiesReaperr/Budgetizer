@@ -6,7 +6,7 @@
     <v-avatar size="24px">
       <v-img alt="Language" :src="currentLocaleFlagPath" cover/>
     </v-avatar>
-    <v-menu activator="parent" localtion="bottom" :close-on-content-click="true">
+    <v-menu activator="parent" location="bottom" :close-on-content-click="true">
       <v-card class="pa-2" width="200">
         <v-list>
           <v-list-item
