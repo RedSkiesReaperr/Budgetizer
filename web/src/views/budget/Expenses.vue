@@ -1,5 +1,5 @@
 <template>
-  <BasicCard class="pb-10" :loading="operationsStore.expenses.length <= 0">
+  <BasicCard class="pb-10" :loading="operationsStore.fetching">
     <OperationsTable :data="operationsStore.expenses" />
   </BasicCard>
 </template>
@@ -18,14 +18,8 @@ export default {
   },
   data() {
     return {
-      expensesLoading: true,
       operations: [] as Array<Operation>,
     };
-  },
-  created() {
-    if (this.operationsStore.expenses.length <= 0) {
-      this.operationsStore.fetchAll();
-    }
   },
   components: { BasicCard, OperationsTable },
 };

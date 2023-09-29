@@ -7,9 +7,15 @@ import {
   percentageToValue,
   variationPercentage,
 } from "@/services/calculations";
+import moment from "moment";
+import { useOperationsStore } from "./operations";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
+    currentDate: {
+      startAt: moment().startOf("month"),
+      endAt: moment().endOf("month"),
+    },
     currentBudget: {} as Budget,
     currentBudgetLines: [] as Line[],
     currentBudgetObjective: {} as Objective,
@@ -101,6 +107,18 @@ export const useAppStore = defineStore("app", {
       api.budgets.getRelatedObjective(budget).then((res: Objective) => {
         this.currentBudgetObjective = res;
       });
+    },
+    async selectDate(month: number, year: number) {
+      const operationsStore = useOperationsStore();
+      const start = moment().month(month).year(year).startOf("month");
+      const end = moment().month(month).year(year).endOf("month");
+
+      this.currentDate = {
+        startAt: start,
+        endAt: end,
+      };
+
+      operationsStore.fetchAll(start.unix(), end.unix());
     },
   },
 });

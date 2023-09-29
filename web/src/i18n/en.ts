@@ -92,5 +92,6 @@ export default {
     create: "Create",
     save: "Save",
     delete: "Delete",
+    select: "Select"
   },
 };

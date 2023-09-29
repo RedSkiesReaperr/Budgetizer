@@ -62,6 +62,21 @@ const budgetLayoutStore = useBudgetLayoutStore();
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 
+    <div class="w6">
+      <VueDatePicker
+        v-model="selectedDate"
+        month-picker
+        required
+        :clearable="false"
+        month-name-format="short"
+        @update:model-value="onDateChanged"
+        :locale="$i18n.locale"
+        :select-text="$t('actions.select')"
+        :cancel-text="$t('actions.cancel')"
+      ></VueDatePicker>
+    </div>
+    <v-spacer></v-spacer>
+
     <v-tooltip :text="$t('budget.appbar.change_budget')" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn
@@ -71,6 +86,7 @@ const budgetLayoutStore = useBudgetLayoutStore();
         ></v-btn>
       </template>
     </v-tooltip>
+
     <LanguageSwitch />
   </v-app-bar>
 
@@ -82,22 +98,38 @@ const budgetLayoutStore = useBudgetLayoutStore();
   </v-main>
 </template>
 
+<style>
+header.v-toolbar {
+  overflow: visible !important;
+}
+</style>
 <script lang="ts">
 import { useAppStore } from "@/stores/app";
+import moment from "moment";
+const appStore = useAppStore();
 
 export default {
   beforeCreate() {
-    const appStore = useAppStore();
-
     if (Object.keys(appStore.currentBudget).length <= 0) {
       this.$router.push(routes.selector);
     }
   },
+  data: () => ({
+    selectedDate: {
+      month: appStore.currentDate.startAt.month(),
+      year: appStore.currentDate.startAt.year(),
+    },
+  }),
   computed: {
     translatedTitle(): string {
       const count = this.$route.meta.pluralized === true ? 2 : 1;
 
       return this.$t(this.$route.meta.titleKey as string, count);
+    },
+  },
+  methods: {
+    onDateChanged: (modelDate: { month: any; year: any }) => {
+      appStore.selectDate(modelDate.month, modelDate.year);
     },
   },
 };

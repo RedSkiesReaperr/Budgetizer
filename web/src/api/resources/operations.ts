@@ -33,8 +33,15 @@ export default {
   updateOne: updateOne,
 };
 
-async function getAll(): Promise<Operation[]> {
-  return (await client.get<ApiResponse<Operation[]>>("/operations")).data.data;
+async function getAll(
+  startAtTimestamp: number,
+  endAtTimestamp: number
+): Promise<Operation[]> {
+  return (
+    await client.get<ApiResponse<Operation[]>>(
+      `/operations?filter[start_at]=${startAtTimestamp}&filter[end_at]=${endAtTimestamp}`
+    )
+  ).data.data;
 }
 
 async function getOne(operationId: string): Promise<Operation> {
