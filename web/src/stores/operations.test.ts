@@ -67,7 +67,6 @@ describe("operations Store", () => {
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([]);
       await store.fetchAll(moment(), moment());
-      console.log("FINISH")
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([expenseOperation]);
     });

@@ -113,7 +113,6 @@ export const useAppStore = defineStore("app", {
       const start = moment().month(month).year(year).startOf("month");
       const end = moment().month(month).year(year).endOf("month");
 
-      console.log(start, end)
       this.currentDate = {
         startAt: start,
         endAt: end,

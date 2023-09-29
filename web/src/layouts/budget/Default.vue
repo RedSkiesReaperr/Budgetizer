@@ -105,7 +105,7 @@ header.v-toolbar {
 </style>
 <script lang="ts">
 import { useAppStore } from "@/stores/app";
-import moment from "moment";
+
 const appStore = useAppStore();
 
 export default {

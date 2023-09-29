@@ -538,7 +538,6 @@ export default {
       this.createDialog = false;
     },
     openDeleteDialog(line: Line) {
-      console.log(line);
       this.deletingLine = line;
       this.deletingLineIndex = this.appStore.currentBudgetLines.indexOf(line);
       this.deleteDialog = true;
