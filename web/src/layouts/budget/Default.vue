@@ -116,8 +116,8 @@ export default {
   },
   data: () => ({
     selectedDate: {
-      month: appStore.currentDate.startAt.month(),
-      year: appStore.currentDate.startAt.year(),
+      month: appStore.currentDateStartAt.month(),
+      year: appStore.currentDateEndAt.year(),
     },
   }),
   computed: {

@@ -9,17 +9,24 @@ import { Operation } from "@/api/resources/operations";
 import { useOperationsStore } from "@/stores/operations";
 import BasicCard from "@/components/BasicCard.vue";
 import OperationsTable from "@/components/OperationsTable.vue";
+import {useAppStore} from "@/stores/app";
 
 export default {
   setup() {
     const operationsStore = useOperationsStore();
+    const appStore = useAppStore()
 
-    return { operationsStore };
+    return { operationsStore, appStore };
   },
   data() {
     return {
       operations: [] as Array<Operation>,
     };
+  },
+  mounted() {
+    if (this.operationsStore.expenses.length <= 0) {
+      this.operationsStore.fetchAll(this.appStore.currentDateStartAt.clone(), this.appStore.currentDateEndAt.clone())
+    }
   },
   components: { BasicCard, OperationsTable },
 };

@@ -9,13 +9,22 @@ import {
 } from "@/services/calculations";
 import moment from "moment";
 import { useOperationsStore } from "./operations";
+import { useStorage } from '@vueuse/core'
 
 export const useAppStore = defineStore("app", {
   state: () => ({
-    currentDate: {
-      startAt: moment().startOf("month"),
-      endAt: moment().endOf("month"),
-    },
+    currentDateStartAt: useStorage('currentDateStartAt', moment().startOf("month"), undefined, {
+      serializer: {
+        read: (v: string): moment.Moment => moment(v),
+        write: (v: moment.Moment): string => v.toString()
+      }
+    }),
+    currentDateEndAt: useStorage('currentDateEndAt', moment().endOf("month"), undefined, {
+      serializer: {
+        read: (v: string): moment.Moment => moment(v),
+        write: (v: moment.Moment): string => v.toString()
+      }
+    }),
     currentBudget: {} as Budget,
     currentBudgetLines: [] as Line[],
     currentBudgetObjective: {} as Objective,
@@ -113,10 +122,8 @@ export const useAppStore = defineStore("app", {
       const start = moment().month(month).year(year).startOf("month");
       const end = moment().month(month).year(year).endOf("month");
 
-      this.currentDate = {
-        startAt: start,
-        endAt: end,
-      };
+      this.currentDateStartAt = start
+      this.currentDateEndAt = end
 
       operationsStore.fetchAll(start, end);
     },
