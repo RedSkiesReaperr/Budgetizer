@@ -10,6 +10,7 @@ export default {
   action: "Action | Actions",
   saving: "Saving | Savings",
   information: "Information | Informations",
+  no_data: "No data to display",
   budget_selector: {
     title: "Which budget to analyse ?",
     select_btn: "Analyse",
