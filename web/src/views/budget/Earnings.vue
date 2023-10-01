@@ -25,7 +25,7 @@ export default {
   },
   mounted() {
     if (this.operationsStore.incomes.length <= 0) {
-      this.operationsStore.fetchAll(this.appStore.currentDateStartAt.clone(), this.appStore.currentDateEndAt.clone())
+      this.operationsStore.fetchAll(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt)
     }
   },
   components: { BasicCard, OperationsTable },
