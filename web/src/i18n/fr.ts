@@ -53,6 +53,7 @@ export default {
       auto_transport: "Auto & Transports",
       beauty_care: "Beauté & Soins",
       taxes: "Taxes",
+      salary: "Salaire",
     },
     edition: {
       title: "Editer une opération",

@@ -71,4 +71,18 @@ describe("operations Store", () => {
       expect(store.expenses).toStrictEqual([expenseOperation]);
     });
   });
+
+  describe("all", () => {
+    it("returns array of incomes & expenses", async () => {
+      vi.spyOn(OperationsRequests, "getAll").mockImplementationOnce(() =>
+        Promise.resolve<Operation[]>([incomeOperation, expenseOperation])
+      );
+
+      const store = useOperationsStore();
+      expect(store.incomes).toStrictEqual([]);
+      expect(store.expenses).toStrictEqual([]);
+      await store.fetchAll(moment(), moment());
+      expect(store.all).toStrictEqual([incomeOperation, expenseOperation]);
+    })
+  })
 });

@@ -32,4 +32,7 @@ export const useOperationsStore = defineStore("operations", {
         });
     },
   },
+  getters: {
+    all: (state): Operation[] => [...state.incomes, ...state.expenses],
+  }
 });
