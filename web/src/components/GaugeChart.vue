@@ -46,9 +46,7 @@ export default {
               },
               value: {
                 color: undefined,
-                formatter: function (val: any) {
-                  return `${val.toFixed(2)} %`;
-                },
+                formatter: () => `${this.percentageValue.toFixed(2)} %`,
               },
             },
           },
@@ -63,8 +61,11 @@ export default {
       };
     },
     calculateSeries(): number[] {
-      return [(this.$props.value * 100) / this.$props.maxValue];
+      return [(this.percentageValue > 100) ? 100 : this.percentageValue]
     },
+    percentageValue(): number {
+      return (this.$props.value * 100) / this.$props.maxValue;
+    }
   },
   methods: {},
   components: { VueApexCharts },
