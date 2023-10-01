@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="appStore.currentBudgetObjective.attributes"
     class="mb-6 d-flex flex-row justify-center flex-wrap flex-grow-1"
     :style="{ gap: '18px' }"
   >
