@@ -17,6 +17,7 @@ describe("Categories service", () => {
       { rawCategory: "auto_transport", expected: "#1abc9c" },
       { rawCategory: "beauty_care", expected: "#ff9ff3" },
       { rawCategory: "taxes", expected: "#bdc3c7" },
+      { rawCategory: "salary", expected: "#27ae60" },
       { rawCategory: "this_is_unknown", expected: "#9e9e9e" },
     ];
 
@@ -38,6 +39,7 @@ describe("Categories service", () => {
       { rawCategory: "auto_transport", expected: "mdi-plane-car" },
       { rawCategory: "beauty_care", expected: "mdi-star-four-points-outline" },
       { rawCategory: "taxes", expected: "mdi-cash-multiple" },
+      { rawCategory: "salary", expected: "mdi-cash-100" },
       { rawCategory: "this_is_unknown", expected: "mdi-crosshairs-question" },
     ];
 
@@ -71,6 +73,7 @@ describe("Categories service", () => {
         expected: "operation.categories.beauty_care",
       },
       { rawCategory: "taxes", expected: "operation.categories.taxes" },
+      { rawCategory: "salary", expected: "operation.categories.salary" },
       {
         rawCategory: "this_is_unknown",
         expected: "operation.categories.unknown",

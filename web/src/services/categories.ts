@@ -8,6 +8,7 @@ export const knownCategories = [
   "auto_transport",
   "beauty_care",
   "taxes",
+  "salary"
 ];
 
 export function getCategoryColor(rawCategory: string): string {
@@ -30,6 +31,8 @@ export function getCategoryColor(rawCategory: string): string {
       return "#ff9ff3";
     case "taxes":
       return "#bdc3c7";
+    case "salary":
+      return "#27ae60";
     default:
       return "#9e9e9e";
   }
@@ -55,6 +58,8 @@ export function getCategoryIcon(rawCategory: string): string {
       return "mdi-star-four-points-outline";
     case "taxes":
       return "mdi-cash-multiple";
+    case "salary":
+      return "mdi-cash-100";
     default:
       return "mdi-crosshairs-question";
   }
