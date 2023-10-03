@@ -1,7 +1,8 @@
 // Utilities
 import api from "@/api";
-import { Operation } from "@/api/resources/operations";
-import { defineStore } from "pinia";
+import {Operation} from "@/api/resources/operations";
+import {defineStore} from "pinia";
+import moment from "moment";
 
 export const useOperationsStore = defineStore("operations", {
   state: () => ({
@@ -34,5 +35,6 @@ export const useOperationsStore = defineStore("operations", {
   },
   getters: {
     all: (state): Operation[] => [...state.incomes, ...state.expenses],
+    totalExpenses: (state): number => state.expenses.reduce((sum, op) => sum + op.attributes.amount, 0)
   }
 });

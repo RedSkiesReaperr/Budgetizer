@@ -30,6 +30,15 @@ export const useAppStore = defineStore("app", {
     currentBudgetObjective: {} as Objective,
   }),
   getters: {
+    currentDays(state) {
+      const days: moment.Moment[] = []
+
+      for(let i = state.currentDateStartAt.clone(); i.isBefore(this.currentDateEndAt.clone()); i.add(1, "days")) {
+        days.push(i.clone())
+      }
+
+      return days
+    },
     // Income
     forecastIncome: (state): number =>
       state.currentBudgetLines
