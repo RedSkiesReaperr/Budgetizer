@@ -1,56 +1,57 @@
+<script setup lang="ts">
+interface Props {
+  subtitle: string;
+  operations: Operation[];
+  xAxisLabels: string[];
+  curveColor?: string;
+}
+
+withDefaults(defineProps<Props>(), {
+  curveColor: "#DCE6EC"
+});
+</script>
+
 <template>
   <vue-apex-charts
-      type="area"
-      :options="chartOptions"
-      :series="chartSeries"
-      height="100%"
+    type="area"
+    :options="chartOptions"
+    :series="chartSeries"
+    height="100%"
   ></vue-apex-charts>
 </template>
 
 <script lang="ts">
 import VueApexCharts from "vue3-apexcharts";
-import {useOperationsStore} from "@/stores/operations";
-import {useAppStore} from "@/stores/app";
 import moment from "moment";
 import {Operation} from "@/api/resources/operations";
 
 export default {
-  setup() {
-    const operationsStore = useOperationsStore()
-    const appStore = useAppStore()
-
-    return {operationsStore, appStore}
-  },
   computed: {
     dataAvailable(): boolean {
-      return this.totalExpenses > 0
+      return this.operationsSum > 0
     },
     chartOptions() {
       return {
         chart: {
           type: 'area',
           sparkline: {
-            enabled: true
+            enabled: true,
           },
           animations: {
             enabled: true,
           },
         },
-        fill: {
-          opacity: 1,
-        },
-        labels: this.chartLabels,
+        labels: this.$props.xAxisLabels,
         yaxis: {
           show: false,
-          min: 0,
         },
         xaxis: {
           show: false,
           type: 'datetime',
         },
-        colors: ['#DCE6EC'],
+        colors: [this.$props.curveColor],
         title: {
-          text: `${this.totalExpenses.toFixed(2)}€`,
+          text: `${this.operationsSum.toFixed(2)}€`,
           offsetX: 30,
           offsetY: 20,
           style: {
@@ -58,8 +59,7 @@ export default {
           }
         },
         subtitle: {
-          enabled: false,
-          text: this.$t('expense', 2),
+          text: this.$props.subtitle,
           offsetX: 30,
           offsetY: 50,
           style: {
@@ -72,7 +72,7 @@ export default {
             formatter: function (value: number): string {
               return `${value.toFixed(2)} €`
             }
-          }
+          },
         },
         noData: {
           text: this.$t('no_data'),
@@ -86,41 +86,27 @@ export default {
             fontFamily: undefined
           }
         },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              show: false
-            }
-          }
-        }],
       }
     },
-    totalExpenses() {
-      return Math.abs(this.operationsStore.totalExpenses)
-    },
-    chartLabels() {
-      return this.appStore.currentDays.map((value) => value.format("YYYY-MM-DD"))
+    operationsSum(): number {
+      return Math.abs(this.$props.operations.reduce((sum, op) => sum + op.attributes.amount, 0))
     },
     chartSeries() {
-      const data: number[] = this.appStore.currentDays.map((value: moment.Moment) => {
-        return Math.abs(this.expensesAmountForDay(value))
+      const data: number[] = this.$props.xAxisLabels.map((value: string) => {
+        return Math.abs(this.operationsAmountForDay(moment(value)))
       })
 
       return [{
-        name: this.$t('expense', 2),
+        name: this.$props.subtitle,
         data: (this.dataAvailable) ? data : []
       }]
     },
   },
   methods: {
-    expensesAmountForDay(day: moment.Moment): number {
-      return this.operationsStore.expenses
-          .filter((op: Operation) => moment(op.attributes.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"))
-          .reduce((sum, op) => sum + op.attributes.amount, 0)
+    operationsAmountForDay(day: moment.Moment): number {
+      return this.$props.operations
+        .filter((op: Operation) => moment(op.attributes.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"))
+        .reduce((sum, op) => sum + op.attributes.amount, 0)
     }
   },
   components: {VueApexCharts},
