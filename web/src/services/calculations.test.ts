@@ -40,9 +40,9 @@ describe("Calculations service", () => {
 
     describe("sum<Line>()", () => {
       const lines: Line[] = [
-        {attributes: {amount: 982.73, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "", relationships: {budget: {links: {self: "", related: ""}}}},
-        {attributes: {amount: 273.02, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "", relationships: {budget: {links: {self: "", related: ""}}}},
-        {attributes: {amount: 94.87, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "", relationships: {budget: {links: {self: "", related: ""}}}},
+        {attributes: {amount: 982.73, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines", relationships: {budget: {links: {self: "", related: ""}}}},
+        {attributes: {amount: 273.02, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines", relationships: {budget: {links: {self: "", related: ""}}}},
+        {attributes: {amount: 94.87, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines", relationships: {budget: {links: {self: "", related: ""}}}},
       ]
 
       it("returns correct sum", () => {
