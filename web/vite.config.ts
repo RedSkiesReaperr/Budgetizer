@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
@@ -8,6 +9,11 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    coverage: {
+      all: true
+    }
+  },
   plugins: [
     vue({
       template: { transformAssetUrls }
