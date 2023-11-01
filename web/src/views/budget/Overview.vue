@@ -38,6 +38,7 @@ import {useOperationsStore} from "@/stores/operations";
 import {useAppStore} from "@/stores/app";
 import CategoriesPieChart from "@/components/CategoriesPieChart.vue";
 import OperationsSparkLineChart from "@/components/OperationsSparkLineChart.vue";
+import {daysInRangeAsStr} from "@/services/dates";
 
 export default {
   setup() {
@@ -52,8 +53,8 @@ export default {
     }
   },
   computed: {
-    daysChartLabels() {
-      return this.appStore.currentDays.map((value) => value.format("YYYY-MM-DD"))
+    daysChartLabels(): string[] {
+      return daysInRangeAsStr(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt, "YYYY-MM-DD")
     },
   },
   components: {BasicCard, CategoriesPieChart, OperationsSparkLineChart}

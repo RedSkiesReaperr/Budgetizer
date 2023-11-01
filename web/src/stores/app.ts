@@ -1,15 +1,16 @@
 // Utilities
-import { defineStore } from "pinia";
-import { Budget, Objective } from "@/api/resources/budgets";
+import {defineStore} from "pinia";
+import {Budget, Objective} from "@/api/resources/budgets";
 import api from "@/api";
-import { Line } from "@/api/resources/lines";
+import {Line} from "@/api/resources/lines";
 import {
-  percentageToValue,
+  percentageToValue, sum,
   variationPercentage,
 } from "@/services/calculations";
 import moment from "moment";
-import { useOperationsStore } from "./operations";
-import { useStorage } from '@vueuse/core'
+import {useOperationsStore} from "./operations";
+import {useStorage} from '@vueuse/core'
+import {linesForTypes} from "@/services/lines";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
@@ -30,24 +31,10 @@ export const useAppStore = defineStore("app", {
     currentBudgetObjective: {} as Objective,
   }),
   getters: {
-    currentDays(state) {
-      const days: moment.Moment[] = []
-
-      for(let i = state.currentDateStartAt.clone(); i.isBefore(this.currentDateEndAt.clone()); i.add(1, "days")) {
-        days.push(i.clone())
-      }
-
-      return days
-    },
     // Income
-    forecastIncome: (state): number =>
-      state.currentBudgetLines
-        .filter((l) => l.attributes.lineType === "income")
-        .reduce((sum, op) => sum + op.attributes.amount, 0),
-    forecastVital: (state): number =>
-      state.currentBudgetLines
-        .filter((l) => l.attributes.lineType === "vital")
-        .reduce((sum, op) => sum + op.attributes.amount, 0),
+    forecastIncome: (state): number => sum(linesForTypes(state.currentBudgetLines, ["income"])),
+    forecastVital: (state): number => sum(linesForTypes(state.currentBudgetLines, ["vital"])),
+    forecastNonEssential: (state): number => sum(linesForTypes(state.currentBudgetLines, ["non_essential"])),
     forecastVitalDiffValue(state): number {
       return (
         this.forecastVital -
@@ -67,10 +54,6 @@ export const useAppStore = defineStore("app", {
       );
     },
     // Non essential
-    forecastNonEssential: (state): number =>
-      state.currentBudgetLines
-        .filter((l) => l.attributes.lineType === "non_essential")
-        .reduce((sum, op) => sum + op.attributes.amount, 0),
     forecastNonEssentialDiffValue(state): number {
       return (
         this.forecastNonEssential -

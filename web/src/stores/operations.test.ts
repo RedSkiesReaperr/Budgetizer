@@ -82,7 +82,7 @@ describe("operations Store", () => {
       expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([]);
       await store.fetchAll(moment(), moment());
-      expect(store.all).toStrictEqual([incomeOperation, expenseOperation]);
+      expect(store.operations).toStrictEqual([incomeOperation, expenseOperation]);
     })
   })
 });

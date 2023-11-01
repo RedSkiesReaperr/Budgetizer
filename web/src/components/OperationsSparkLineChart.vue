@@ -13,10 +13,10 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <vue-apex-charts
-    type="area"
-    :options="chartOptions"
-    :series="chartSeries"
-    height="100%"
+      type="area"
+      :options="chartOptions"
+      :series="chartSeries"
+      height="100%"
   ></vue-apex-charts>
 </template>
 
@@ -24,12 +24,11 @@ withDefaults(defineProps<Props>(), {
 import VueApexCharts from "vue3-apexcharts";
 import moment from "moment";
 import {Operation} from "@/api/resources/operations";
+import {operationsForDay} from "@/services/operations";
+import {sum} from "@/services/calculations";
 
 export default {
   computed: {
-    dataAvailable(): boolean {
-      return this.operationsSum > 0
-    },
     chartOptions() {
       return {
         chart: {
@@ -51,7 +50,7 @@ export default {
         },
         colors: [this.$props.curveColor],
         title: {
-          text: `${this.operationsSum.toFixed(2)}€`,
+          text: `${this.titleValue.toFixed(2)}€`,
           offsetX: 30,
           offsetY: 20,
           style: {
@@ -88,8 +87,11 @@ export default {
         },
       }
     },
-    operationsSum(): number {
-      return Math.abs(this.$props.operations.reduce((sum, op) => sum + op.attributes.amount, 0))
+    dataAvailable(): boolean {
+      return this.titleValue > 0
+    },
+    titleValue(): number {
+      return Math.abs(sum(this.$props.operations))
     },
     chartSeries() {
       const data: number[] = this.$props.xAxisLabels.map((value: string) => {
@@ -104,9 +106,7 @@ export default {
   },
   methods: {
     operationsAmountForDay(day: moment.Moment): number {
-      return this.$props.operations
-        .filter((op: Operation) => moment(op.attributes.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD"))
-        .reduce((sum, op) => sum + op.attributes.amount, 0)
+      return sum(operationsForDay(this.$props.operations, day))
     }
   },
   components: {VueApexCharts},

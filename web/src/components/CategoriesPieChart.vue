@@ -10,6 +10,8 @@
 import VueApexCharts from "vue3-apexcharts";
 import {getCategoryTranslationKey, getCategoryColor, knownCategories} from "@/services/categories";
 import {useOperationsStore} from "@/stores/operations";
+import {operationsForCategories} from "@/services/operations";
+import {sum} from "@/services/calculations";
 
 export default {
   setup() {
@@ -43,7 +45,7 @@ export default {
         tooltip: {
           enabled: true,
           y: {
-            formatter: function(value: number): string {
+            formatter: function (value: number): string {
               return `${value.toFixed(2)} €`
             }
           }
@@ -83,11 +85,9 @@ export default {
     },
     chartSeries(): number[] {
       const series = this.categories.map((cat: string) => {
-        const sum = this.operationsStore.all
-          .filter((l) => l.attributes.category === cat)
-          .reduce((sum, op) => sum + op.attributes.amount, 0)
+        const ops = operationsForCategories(this.operationsStore.operations, [cat])
 
-        return Math.abs(sum)
+        return Math.abs(sum(ops))
       })
 
       return (series.every((s: number) => s === 0)) ? [] : series
