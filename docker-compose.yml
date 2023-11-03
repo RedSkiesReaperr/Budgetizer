@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        - RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+    env_file: .env
