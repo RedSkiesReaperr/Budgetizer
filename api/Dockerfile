@@ -5,7 +5,8 @@ ARG RAILS_MASTER_KEY
 # Install system dependencies
 RUN apk add --no-cache \
     build-base \
-    postgresql
+    postgresql \
+    libpq-dev
 
 # Configure environment
 ENV RAILS_ENV production

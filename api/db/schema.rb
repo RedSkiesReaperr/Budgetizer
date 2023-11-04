@@ -11,8 +11,11 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_07_25_213515) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "budgets", force: :cascade do |t|
-    t.integer "objective_id"
+    t.bigint "objective_id"
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -25,7 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_25_213515) do
     t.integer "line_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "budget_id"
+    t.bigint "budget_id"
     t.integer "category", default: 0
     t.index ["budget_id"], name: "index_lines_on_budget_id"
   end
