@@ -11,9 +11,11 @@ class ApplicationController < ActionController::API
   protected
 
   def set_locale
-    locale_header = request.headers['locale'].to_sym
+    locale_header = request.headers['locale'].try(:to_sym)
 
-    I18n.locale = I18n.available_locales.include?(locale_header) ? locale_header : I18n.default_locale
+    return unless I18n.available_locales.include?(locale_header)
+
+    I18n.locale = locale_header
   end
 
   def configure_permitted_parameters
