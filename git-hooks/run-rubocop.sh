@@ -2,7 +2,7 @@
 
 set -e
 
-cd "${0%/*}/.."
+cd "${0%/*}/../api"
 
 echo "Running rubocop"
 bundle exec rubocop
