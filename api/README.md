@@ -6,7 +6,8 @@ BudgetizerApi is a backend Ruby on Rails project designed to manage and track pe
 
 - Ruby v3.2.2
 - Ruby on Rails v7.0.6
-- SQLite 3.42+
+- PostgreSQL v16
+- Go v1.21.3
 
 ## Getting Started
 
@@ -14,7 +15,7 @@ To get a copy of the project up and running on your local machine, follow these 
 
 1. Clone the repository:
     ```shell
-    git clone https://github.com/RedSkiesReaperr/BudgetizerApi.git
+    git clone https://github.com/RedSkiesReaperr/Budgetizer.git
     ```
 
 2. Install the required gems by running the following command in the project directory:
@@ -51,6 +52,8 @@ BudgetizerApi relies on the following gems:
 - **brakeman**: A security scanning tool that detects potential security vulnerabilities in the
   code. [GitHub Repo](https://github.com/presidentbeef/brakeman). Use with: `bundle exec brakeman --color -o tmp/brakeman.html`
 - **jsonapi-resources**: A gem for building JSON:API compliant APIs. [GitHub Repo](https://github.com/cerebris/jsonapi-resources)
+- **devise**: Flexible authentication solution for Rails based on Warden. [GitHub Repo](https://github.com/heartcombo/devise)
+- **devise_token_auth**: Token based authentication for Rails JSON APIs. [GitHub Repo](https://github.com/lynndylanhurley/devise_token_auth)
 
 ## Developers
 #### Setup pre-commit hooks : `chmod +x ./scripts/*.sh && ./scripts/install-hooks.sh`
