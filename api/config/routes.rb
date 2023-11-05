@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
+  mount_devise_token_auth_for 'User', at: 'auth'
+
   jsonapi_resources :operations
   jsonapi_resources :lines
   jsonapi_resources :budgets
