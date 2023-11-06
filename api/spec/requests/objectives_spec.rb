@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Objectives' do
+  let(:user) { create(:user) }
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'GET /objectives' do
@@ -11,8 +12,10 @@ RSpec.describe 'Objectives' do
 
     before do
       objectives
-      get objectives_url, headers:
+      call_endpoint('GET', objectives_url, nil, headers)
     end
+
+    it_behaves_like 'authenticated request', 'GET', '/objectives'
 
     it { expect(response).to have_http_status(:ok) }
 
@@ -30,11 +33,13 @@ RSpec.describe 'Objectives' do
 
     before do
       objective
-      get objective_url(objective_id), headers:
+      call_endpoint('GET', objective_url(objective_id), nil, headers)
     end
 
     context 'when objective does not exists' do
       let(:objective_id) { -1 }
+
+      it_behaves_like 'authenticated request', 'GET', '/objectives/-1'
 
       it { expect(response).to have_http_status(:not_found) }
     end

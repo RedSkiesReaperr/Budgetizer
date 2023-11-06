@@ -7,6 +7,7 @@ class ApplicationController < ActionController::API
   prepend_before_action :set_locale
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate_user!, unless: :devise_controller?
 
   protected
 

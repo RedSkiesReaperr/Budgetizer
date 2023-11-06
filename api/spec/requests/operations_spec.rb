@@ -3,12 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Operations' do
+  let(:user) { create(:user) }
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'POST /operations' do
     before do
-      post operations_url, headers:
+      call_endpoint('POST', operations_url, nil, headers)
     end
+
+    it_behaves_like 'authenticated request', 'POST', '/operations'
 
     it { expect(response).to have_http_status(:method_not_allowed) }
   end
@@ -27,11 +30,13 @@ RSpec.describe 'Operations' do
 
     before do
       operations
-      get operations_url(filters), headers:
+      call_endpoint('GET', operations_url(filters), nil, headers)
     end
 
     context 'without filters' do
       let(:filters) { {} }
+
+      it_behaves_like 'authenticated request', 'GET', '/operations'
 
       it { expect(response).to have_http_status(:ok) }
 
@@ -68,11 +73,13 @@ RSpec.describe 'Operations' do
 
     before do
       operation
-      get operation_url(operation_id), headers:
+      call_endpoint('GET', operation_url(operation_id), nil, headers)
     end
 
     context 'when operation does not exists' do
       let(:operation_id) { -1 }
+
+      it_behaves_like 'authenticated request', 'GET', '/operations/-1'
 
       it { expect(response).to have_http_status(:not_found) }
     end
@@ -96,7 +103,7 @@ RSpec.describe 'Operations' do
 
     before do
       operation
-      patch operation_url(operation.id), headers:, params: body.to_json
+      call_endpoint('PATCH', operation_url(operation.id), body.to_json, headers)
     end
 
     context 'when editing a not editable field' do
@@ -111,6 +118,8 @@ RSpec.describe 'Operations' do
           }
         }
       end
+
+      it_behaves_like 'authenticated request', 'PATCH', '/operations/-1'
 
       it { expect(response).to have_http_status(:bad_request) }
     end
@@ -149,8 +158,10 @@ RSpec.describe 'Operations' do
 
     before do
       operation
-      delete operation_url(operation.id), headers:
+      call_endpoint('DELETE', operation_url(operation.id), nil, headers)
     end
+
+    it_behaves_like 'authenticated request', 'DELETE', '/operations/-1'
 
     it { expect(response).to have_http_status(:method_not_allowed) }
   end

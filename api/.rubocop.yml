@@ -15,3 +15,6 @@ Rails:
 
 Style/Documentation:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false

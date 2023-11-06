@@ -54,6 +54,3 @@ BudgetizerApi relies on the following gems:
 - **jsonapi-resources**: A gem for building JSON:API compliant APIs. [GitHub Repo](https://github.com/cerebris/jsonapi-resources)
 - **devise**: Flexible authentication solution for Rails based on Warden. [GitHub Repo](https://github.com/heartcombo/devise)
 - **devise_token_auth**: Token based authentication for Rails JSON APIs. [GitHub Repo](https://github.com/lynndylanhurley/devise_token_auth)
-
-## Developers
-#### Setup pre-commit hooks : `chmod +x ./scripts/*.sh && ./scripts/install-hooks.sh`

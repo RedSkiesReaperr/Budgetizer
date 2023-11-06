@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Lines' do
+  let(:user) { create(:user) }
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'GET /lines' do
@@ -11,8 +12,10 @@ RSpec.describe 'Lines' do
 
     before do
       lines
-      get lines_url, headers:
+      call_endpoint('GET', lines_url, nil, headers)
     end
+
+    it_behaves_like 'authenticated request', 'GET', '/lines'
 
     it { expect(response).to have_http_status(:ok) }
 
@@ -30,11 +33,13 @@ RSpec.describe 'Lines' do
 
     before do
       line
-      get line_url(line_id), headers:
+      call_endpoint('GET', line_url(line_id), nil, headers)
     end
 
     context 'when line does not exists' do
       let(:line_id) { -1 }
+
+      it_behaves_like 'authenticated request', 'GET', '/lines/-1'
 
       it { expect(response).to have_http_status(:not_found) }
     end
@@ -60,8 +65,10 @@ RSpec.describe 'Lines' do
 
     before do
       line
-      delete line_url(line.id), headers:
+      call_endpoint('DELETE', line_url(line.id), nil, headers)
     end
+
+    it_behaves_like 'authenticated request', 'DELETE', '/lines/-1'
 
     it { expect(response).to have_http_status(:no_content) }
 
@@ -75,7 +82,7 @@ RSpec.describe 'Lines' do
 
     before do
       line
-      patch line_url(line.id), headers:, params: body.to_json
+      call_endpoint('PATCH', line_url(line.id), body.to_json, headers)
     end
 
     context 'when editing a not editable field' do
@@ -90,6 +97,8 @@ RSpec.describe 'Lines' do
           }
         }
       end
+
+      it_behaves_like 'authenticated request', 'PATCH', '/lines/-1'
 
       it { expect(response).to have_http_status(:bad_request) }
     end
@@ -109,6 +118,7 @@ RSpec.describe 'Lines' do
           }
         }
       end
+
       let(:data) { JSON.parse(response.parsed_body)['data'] }
 
       it { expect(response).to have_http_status(:ok) }
