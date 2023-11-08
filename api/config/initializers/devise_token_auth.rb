@@ -9,7 +9,7 @@ DeviseTokenAuth.setup do |config|
 
   # By default, users will need to re-authenticate after 2 weeks. This setting
   # determines how long tokens will remain valid after they are issued.
-  # config.token_lifespan = 2.weeks
+  config.token_lifespan = 2.weeks
 
   # Limiting the token_cost to just 4 in testing will increase the performance of
   # your test suite dramatically. The possible cost value is within range from 4
@@ -63,4 +63,14 @@ DeviseTokenAuth.setup do |config|
   # devise confirmable module. If you want to use devise confirmable module and
   # send email, set it to true. (This is a setting for compatibility)
   # config.send_confirmation_email = true
+
+  # Setup cookie
+  config.cookie_enabled = true
+  config.cookie_attributes = {
+    httponly: true,
+    encrypt: true,
+    secure: true,
+    expires: config.token_lifespan.from_now,
+    same_site: true
+  }
 end
