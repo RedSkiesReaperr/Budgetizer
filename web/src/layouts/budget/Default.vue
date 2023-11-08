@@ -7,87 +7,52 @@ const budgetLayoutStore = useBudgetLayoutStore();
 </script>
 
 <template>
-  <v-navigation-drawer
-    floating
-    location="left"
-    elevation="0"
-    expand-on-hover
-    :rail="budgetLayoutStore.isRailMode"
-    @update:rail="(_) => budgetLayoutStore.invertIsExpanded()"
-  >
+  <v-navigation-drawer floating location="left" elevation="0" expand-on-hover :rail="budgetLayoutStore.isRailMode"
+    @update:rail="(_) => budgetLayoutStore.invertIsExpanded()">
     <v-list>
-      <v-list-item
-        title="Budgetizer"
-        prepend-icon="mdi-piggy-bank-outline"
-      ></v-list-item>
+      <v-list-item title="Budgetizer" prepend-icon="mdi-piggy-bank-outline"></v-list-item>
     </v-list>
 
     <v-list density="compact" nav>
-      <v-list-subheader
-        v-if="budgetLayoutStore.isRailMode && !budgetLayoutStore.isExpanded"
-      >
+      <v-list-subheader v-if="budgetLayoutStore.isRailMode && !budgetLayoutStore.isExpanded">
         <v-icon icon="mdi-dots-horizontal" />
       </v-list-subheader>
       <v-list-subheader v-else>{{
         $t("budget.sidebar.general")
       }}</v-list-subheader>
 
-      <v-list-item
-        prepend-icon="mdi-all-inclusive"
-        :title="$t('overview')"
-        to="overview"
-      />
-      <v-list-item
-        prepend-icon="mdi-weather-partly-cloudy"
-        :title="$t('forecast', 2)"
-        to="forecasts"
-      />
-      <v-list-item
-        prepend-icon="mdi-bank-transfer-in"
-        :title="$t('earning', 2)"
-        to="earnings"
-      />
-      <v-list-item
-        prepend-icon="mdi-bank-transfer-out"
-        :title="$t('expense', 2)"
-        to="expenses"
-      />
+      <v-list-item prepend-icon="mdi-all-inclusive" :title="$t('overview')" to="overview" />
+      <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)" to="forecasts" />
+      <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" to="earnings" />
+      <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" to="expenses" />
     </v-list>
   </v-navigation-drawer>
 
   <v-app-bar flat color="background">
-    <v-app-bar-nav-icon
-      @click="(_) => budgetLayoutStore.invertIsRailMode()"
-      elevation="0"
-    ></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="(_) => budgetLayoutStore.invertIsRailMode()" elevation="0"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 
     <div class="w6">
-      <VueDatePicker
-        v-model="selectedDate"
-        month-picker
-        required
-        :clearable="false"
-        month-name-format="short"
-        @update:model-value="onDateChanged"
-        :locale="$i18n.locale"
-        :select-text="$t('actions.select')"
-        :cancel-text="$t('actions.cancel')"
-      ></VueDatePicker>
+      <VueDatePicker v-model="selectedDate" month-picker required :clearable="false" month-name-format="short"
+        @update:model-value="onDateChanged" :locale="$i18n.locale" :select-text="$t('actions.select')"
+        :cancel-text="$t('actions.cancel')"></VueDatePicker>
     </div>
     <v-spacer></v-spacer>
 
     <v-tooltip :text="$t('budget.appbar.change_budget')" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn
-          :to="routes.selector"
-          v-bind="props"
-          icon="mdi-swap-horizontal"
-        ></v-btn>
+        <v-btn :to="routes.selector" v-bind="props" icon="mdi-swap-horizontal"></v-btn>
       </template>
     </v-tooltip>
 
     <LanguageSwitch />
+
+    <v-tooltip :text="$t('budget.appbar.logout')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-logout" @click="logout"></v-btn>
+      </template>
+    </v-tooltip>
+
   </v-app-bar>
 
   <v-main>
@@ -105,6 +70,7 @@ header.v-toolbar {
 </style>
 <script lang="ts">
 import { useAppStore } from "@/stores/app";
+import api from "@/api";
 
 const appStore = useAppStore();
 
@@ -131,6 +97,11 @@ export default {
     onDateChanged: (modelDate: { month: any; year: any }) => {
       appStore.selectDate(modelDate.month, modelDate.year);
     },
+    logout() {
+      api.auth.signOut().finally(() => {
+        this.$router.push(routes.login)
+      })
+    }
   },
 };
 </script>

@@ -18,6 +18,7 @@ export default {
   budget: {
     appbar: {
       change_budget: "Sélectionner un autre budget",
+      logout: "Se déconnecter",
     },
     sidebar: {
       general: "Général",
@@ -94,6 +95,12 @@ export default {
     create: "Créer",
     save: "Sauvegarder",
     delete: "Supprimer",
-    select: "Sélectionner"
+    select: "Sélectionner",
+    login: "Se connecter",
   },
+  email: "Adresse email",
+  password: "Mot de passe",
+  login: {
+    error_title: "Nous n'avons pas pu vous connecter",
+  }
 };

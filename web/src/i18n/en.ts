@@ -18,6 +18,7 @@ export default {
   budget: {
     appbar: {
       change_budget: "Select another budget",
+      logout: "Log out",
     },
     sidebar: {
       general: "General",
@@ -94,6 +95,12 @@ export default {
     create: "Create",
     save: "Save",
     delete: "Delete",
-    select: "Select"
+    select: "Select",
+    login: "Log in",
   },
+  email: "Email",
+  password: "Password",
+  login: {
+    error_title: "We were unable to log you in",
+  }
 };
