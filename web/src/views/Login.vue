@@ -7,14 +7,19 @@
 
   <v-container class="w-25">
     <BasicCard :loading="isLoggingIn">
-      <v-text-field v-model="email" type="email" :label="$t('email')" variant="outlined"></v-text-field>
-      <v-text-field v-model="password" type="password" :label="$t('password')" variant="outlined"></v-text-field>
-      <v-btn block @click="login" prepend-icon="mdi-login" variant="tonal" color="#27ae60">{{ $t('actions.login') }}</v-btn>
+      <v-form @submit.prevent="login">
+        <v-text-field v-model="email" type="email" :label="$t('email')" variant="outlined"></v-text-field>
+        <v-text-field v-model="password" type="password" :label="$t('password')" variant="outlined"></v-text-field>
+        <v-btn block type="submit" @click="login" prepend-icon="mdi-login" variant="tonal" color="#27ae60">{{
+          $t('actions.login')
+        }}</v-btn>
+      </v-form>
     </BasicCard>
   </v-container>
 
   <v-container id="login-error" class="w-50">
-    <v-alert v-model="hasErrors" icon="mdi-alert-circle-outline" location="bottom" :title="$t('login.error_title')" type="error">
+    <v-alert :closable="true" v-model="hasError" icon="mdi-alert-circle-outline" location="bottom" :title="$t('login.error_title')"
+      type="error">
       <li v-for="(err, index) in errors" v-bind:key="index">
         {{ err }}
       </li>
@@ -24,7 +29,7 @@
 
 <style>
 #login-error {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 25%;
 }
@@ -41,6 +46,7 @@ export default {
       email: '',
       password: '',
       isLoggingIn: false,
+      hasError: false,
       errors: [] as String[],
     };
   },
@@ -50,20 +56,19 @@ export default {
         this.$router.push(routes.budget.overview);
       }).catch(() => { });
   },
-  computed: {
-    hasErrors() {
-      return this.errors.length > 0
-    }
-  },
   methods: {
     login() {
+      this.hasError = false
       this.isLoggingIn = true
+
       api.auth.signIn(this.email, this.password)
         .then(() => {
           this.$router.push(routes.selector);
+          this.hasError = false
         })
         .catch((err) => {
           this.errors = err.response.data.errors
+          this.hasError = true
         })
         .finally(() => {
           this.isLoggingIn = false
