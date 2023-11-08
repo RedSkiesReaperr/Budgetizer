@@ -7,8 +7,13 @@ const client = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/vnd.api+json",
-    "locale": i18n.global.locale.value
   },
+});
+
+client.interceptors.request.use(function (config) {
+  config.headers["Locale"] = i18n.global.locale.value
+
+  return config;
 });
 
 export default client;
