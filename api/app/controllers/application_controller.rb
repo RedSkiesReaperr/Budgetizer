@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
   protected
 
   def set_locale
-    locale_header = request.headers['locale'].try(:to_sym)
+    locale_header = request.headers['Locale'].try(:to_sym)
 
     return unless I18n.available_locales.include?(locale_header)
 
