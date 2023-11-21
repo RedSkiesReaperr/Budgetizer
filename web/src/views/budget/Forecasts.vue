@@ -20,9 +20,9 @@
       <template v-slot:info>{{
         $t("forecast_page.card_info", {
           type: $t(f.translationKey),
-          budgetTargetAmount: f.objectiveTarget.toFixed(2),
-          valueAmount: f.totalAmount.toFixed(2),
-          diffValue: f.diffAmount.toFixed(2),
+          budgetTargetAmount: formatNumber(f.objectiveTarget),
+          valueAmount: formatNumber(f.totalAmount),
+          diffValue: formatNumber(f.diffAmount),
           diffPerentage: f.diffPercentage,
         })
       }}</template>
@@ -326,6 +326,7 @@ import {
   getCategoryTranslationKey,
 } from "@/services/categories";
 import { VForm } from "vuetify/lib/components/index.mjs";
+import {formatNumber} from '@/services/formatters'
 
 export default {
   setup() {
@@ -334,6 +335,7 @@ export default {
     return {
       appStore,
       getTypeColor,
+      formatNumber,
     };
   },
   data() {
@@ -463,10 +465,10 @@ export default {
       };
     },
     formattedAmount(rawAmount: number): string {
-      return `${rawAmount.toFixed(2)} €`;
+      return `${formatNumber(rawAmount)} €`;
     },
     formattedPercentage(value: number): string {
-      const perc = value.toFixed(2);
+      const perc = formatNumber(value);
 
       return value >= 0 ? `+${perc}` : perc;
     },

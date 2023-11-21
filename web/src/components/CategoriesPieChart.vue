@@ -12,6 +12,7 @@ import {getCategoryTranslationKey, getCategoryColor, knownCategories} from "@/se
 import {useOperationsStore} from "@/stores/operations";
 import {operationsForCategories} from "@/services/operations";
 import {sum} from "@/services/calculations";
+import { formatNumber } from "@/services/formatters";
 
 export default {
   setup() {
@@ -46,7 +47,7 @@ export default {
           enabled: true,
           y: {
             formatter: function (value: number): string {
-              return `${value.toFixed(2)} €`
+              return `${formatNumber(value)} €`
             }
           }
         },

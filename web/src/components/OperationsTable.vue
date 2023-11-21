@@ -9,6 +9,7 @@ import {
   getCategoryTranslationKey,
 } from "@/services/categories";
 import { copyOperation } from "@/services/operations";
+import { formatNumber } from "@/services/formatters";
 
 interface Props {
   data: Operation[];
@@ -296,7 +297,7 @@ export default {
       return amount > 0;
     },
     formattedAmount(rawAmount: number): string {
-      const amount = rawAmount.toFixed(2);
+      const amount = formatNumber(rawAmount);
 
       return rawAmount > 0 ? `+${amount} €` : `${amount} €`;
     },

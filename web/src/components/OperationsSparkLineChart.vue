@@ -26,6 +26,7 @@ import moment from "moment";
 import {Operation} from "@/api/resources/operations";
 import {operationsForDay} from "@/services/operations";
 import {sum} from "@/services/calculations";
+import { formatNumber } from "@/services/formatters";
 
 export default {
   computed: {
@@ -50,7 +51,7 @@ export default {
         },
         colors: [this.$props.curveColor],
         title: {
-          text: `${this.titleValue.toFixed(2)}€`,
+          text: `${formatNumber(this.titleValue)}€`,
           offsetX: 30,
           offsetY: 20,
           style: {
@@ -69,7 +70,7 @@ export default {
           enabled: true,
           y: {
             formatter: function (value: number): string {
-              return `${value.toFixed(2)} €`
+              return `${formatNumber(value)} €`
             }
           },
         },

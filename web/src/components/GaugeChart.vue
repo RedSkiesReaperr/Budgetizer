@@ -18,6 +18,7 @@ withDefaults(defineProps<Props>(), {});
 </template>
 
 <script lang="ts">
+import { formatNumber } from "@/services/formatters";
 import VueApexCharts from "vue3-apexcharts";
 
 export default {
@@ -46,7 +47,7 @@ export default {
               },
               value: {
                 color: undefined,
-                formatter: () => `${this.percentageValue.toFixed(2)} %`,
+                formatter: () => `${formatNumber(this.percentageValue)} %`,
               },
             },
           },
