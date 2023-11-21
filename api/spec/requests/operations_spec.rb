@@ -7,13 +7,54 @@ RSpec.describe 'Operations' do
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'POST /operations' do
+    let(:body) do
+      { file: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/attachments/operations.csv'),
+                                           'text/csv') }
+    end
+    let(:data) do
+      [
+        { date: Time.zone.today, label: 'today label', amount: -23.1, comment: '', pointed: false, op_type: :vital,
+          category: :to_categorize }
+      ]
+    end
+
     before do
-      call_endpoint('POST', operations_url, nil, headers)
+      call_endpoint('POST', operations_url, body, headers)
     end
 
     it_behaves_like 'authenticated request', 'POST', '/operations'
 
-    it { expect(response).to have_http_status(:method_not_allowed) }
+    context 'when no operations csv is sent' do
+      let(:body) { nil }
+
+      it { expect(response).to have_http_status(:bad_request) }
+
+      it { expect(response.parsed_body).to have_key('success') }
+
+      it { expect(response.parsed_body).to have_key('errors') }
+    end
+
+    context 'when import fails' do
+      let(:body) do
+        { file: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/attachments/unprocessable_operations.csv'),
+                                             'text/csv') }
+      end
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+
+      it { expect(Operation.count).to eq(0) }
+    end
+
+    context 'when import succeed' do
+      let(:body) do
+        { file: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/attachments/operations.csv'),
+                                             'text/csv') }
+      end
+
+      it { expect(response).to have_http_status(:created) }
+
+      it { expect(Operation.count).to eq(3) }
+    end
   end
 
   describe 'GET /operations' do
