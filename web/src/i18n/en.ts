@@ -102,5 +102,6 @@ export default {
   password: "Password",
   login: {
     error_title: "We were unable to log you in",
-  }
+  },
+  something_went_wrong: "Oops! Something went wrong."
 };

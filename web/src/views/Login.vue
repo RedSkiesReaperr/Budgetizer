@@ -17,14 +17,7 @@
     </BasicCard>
   </v-container>
 
-  <v-container id="login-error" class="w-50">
-    <v-alert :closable="true" v-model="hasError" icon="mdi-alert-circle-outline" location="bottom" :title="$t('login.error_title')"
-      type="error">
-      <li v-for="(err, index) in errors" v-bind:key="index">
-        {{ err }}
-      </li>
-    </v-alert>
-  </v-container>
+  <Alert></Alert>
 </template>
 
 <style>
@@ -39,15 +32,21 @@
 import api from '@/api';
 import BasicCard from '@/components/BasicCard.vue';
 import routes from "@/router/routes";
+import Alert from "@/components/Alert.vue";
+import { AlertType, useAlertStore } from '@/stores/alert';
+import { AxiosError } from 'axios';
 
 export default {
+  setup() {
+    const alertStore = useAlertStore()
+
+    return { alertStore }
+  },
   data() {
     return {
       email: '',
       password: '',
       isLoggingIn: false,
-      hasError: false,
-      errors: [] as String[],
     };
   },
   beforeCreate() {
@@ -58,24 +57,25 @@ export default {
   },
   methods: {
     login() {
-      this.hasError = false
+      this.alertStore.hide()
       this.isLoggingIn = true
 
       api.auth.signIn(this.email, this.password)
         .then(() => {
           this.$router.push(routes.selector);
-          this.hasError = false
+          this.alertStore.hide()
         })
-        .catch((err) => {
-          this.errors = err.response.data.errors
-          this.hasError = true
+        .catch((err: AxiosError<{ errors: string[], success: boolean }>) => {
+          const errors = err.response?.data.errors.join('. ') || this.$t("something_went_wrong")
+
+          this.alertStore.show(AlertType.Error, this.$t("login.error_title"), errors)
         })
         .finally(() => {
           this.isLoggingIn = false
         })
     }
   },
-  components: { BasicCard }
+  components: { BasicCard, Alert }
 };
 </script>
   

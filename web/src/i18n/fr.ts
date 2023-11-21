@@ -102,5 +102,6 @@ export default {
   password: "Mot de passe",
   login: {
     error_title: "Nous n'avons pas pu vous connecter",
-  }
+  },
+  something_went_wrong: "Oups! Quelque chose s'est mal passé."
 };
