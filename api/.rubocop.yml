@@ -18,3 +18,13 @@ Style/Documentation:
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
+
+RSpec/MessageChain:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: true
+  CountRepeatedAttributes: false
