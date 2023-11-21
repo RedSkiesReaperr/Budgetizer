@@ -61,6 +61,13 @@ export default {
       title: "Edit an operation",
       error: "Error while editing",
     },
+    import: {
+      action: "Import operations",
+      success_title: "Import successfull",
+      success_message: "All operations has been imported",
+      error_title: "Import failed",
+    }
+
   },
   line: {
     attributes: {
@@ -97,6 +104,7 @@ export default {
     delete: "Delete",
     select: "Select",
     login: "Log in",
+    select_file: "Select file"
   },
   email: "Email",
   password: "Password",

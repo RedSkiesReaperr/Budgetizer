@@ -28,10 +28,15 @@ interface UpdatePayload {
   category?: string;
 }
 
+export interface ImportResponse {
+  success: boolean
+}
+
 export default {
   getAll: getAll,
   getOne: getOne,
   updateOne: updateOne,
+  importFile: importFile,
 };
 
 async function getAll(
@@ -62,6 +67,19 @@ async function updateOne(
         id: operationId,
         attributes: updatePayload,
       },
+    })
+  ).data.data;
+}
+
+async function importFile(file: File): Promise<ImportResponse> {
+  const formData = new FormData()
+  formData.append("file", file)
+
+  return (
+    await client.post<ApiResponse<ImportResponse>>(`/operations`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     })
   ).data.data;
 }

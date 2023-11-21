@@ -61,6 +61,12 @@ export default {
       title: "Editer une opération",
       error: "Erreur lors de l'édition",
     },
+    import: {
+      action: "Importer des opérations",
+      success_title: "Import réussi",
+      success_message: "Toutes les opération ont été importées avec succès",
+      error_title: "Erreur lors de l'importation",
+    }
   },
   line: {
     attributes: {
@@ -97,6 +103,7 @@ export default {
     delete: "Supprimer",
     select: "Sélectionner",
     login: "Se connecter",
+    select_file: "Sélectionner un fichier"
   },
   email: "Adresse email",
   password: "Mot de passe",
