@@ -1,4 +1,4 @@
-# Budgetizer
+# Budgetizer [![CircleCI](https://dl.circleci.com/status-badge/img/gh/RedSkiesReaperr/Budgetizer/tree/main.svg?style=svg&circle-token=1faf810455d3d60cf39045452c72b28dc095d422)](https://dl.circleci.com/status-badge/redirect/gh/RedSkiesReaperr/Budgetizer/tree/main)
 
 ## Requirements
 
