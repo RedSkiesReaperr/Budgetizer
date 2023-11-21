@@ -8,7 +8,6 @@ FactoryBot.define do
     comment { Faker::Quote.yoda }
     pointed { false }
     op_type { :unknown }
-    identifier { Faker::Alphanumeric.alpha(number: 30) }
     category { :to_categorize }
   end
 end

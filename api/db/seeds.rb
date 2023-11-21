@@ -53,7 +53,6 @@ NUMBER_OF_OPERATIONS.times do
             end
 
   Operation.create(
-    identifier: SecureRandom.uuid,
     category: Faker::Number.within(range: 0...Operation.categories.size),
     date:,
     label:,
