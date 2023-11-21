@@ -121,7 +121,7 @@ const props = defineProps<Props>();
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                  v-model="editedOperation.attributes.amount"
+                  :model-value="formatNumber(editedOperation.attributes.amount)"
                   :label="$t('operation.attributes.amount')"
                   variant="outlined"
                   disabled
