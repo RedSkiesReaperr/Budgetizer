@@ -10,6 +10,10 @@ class ApplicationController < ActionController::API
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, unless: :devise_controller?
 
+  rescue_from ActionController::ParameterMissing do |e|
+    render status: :bad_request, json: { success: false, errors: [e.message] }
+  end
+
   protected
 
   def set_locale
