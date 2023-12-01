@@ -11,6 +11,7 @@
 NUMBER_OF_BUDGETS = Faker::Number.within(range: 0..10)
 NUMBER_OF_LINES_PER_BUDGET = Faker::Number.within(range: 30..60)
 NUMBER_OF_OPERATIONS = Faker::Number.within(range: 1000..10_000)
+NUMBER_OF_NOTES = Faker::Number.within(range: 0..50)
 
 User.create(provider: 'email',
             uid: 'john.doe@gmail.com',
@@ -61,4 +62,13 @@ NUMBER_OF_OPERATIONS.times do
     pointed:,
     op_type:
   )
+end
+
+NUMBER_OF_NOTES.times do
+  title = Faker::Dessert.variety
+  description = Faker::ChuckNorris.fact
+  month = Faker::Number.within(range: 1...12)
+  year = Faker::Number.within(range: 2020...2025)
+
+  Note.create(title:, description:, month:, year:)
 end

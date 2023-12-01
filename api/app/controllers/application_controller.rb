@@ -14,6 +14,11 @@ class ApplicationController < ActionController::API
     render status: :bad_request, json: { success: false, errors: [e.message] }
   end
 
+  # Context is needed by api resources to access current_user
+  def context
+    { current_user: }
+  end
+
   protected
 
   def set_locale

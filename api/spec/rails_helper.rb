@@ -10,6 +10,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'faker'
 require 'support/factory_bot'
+require 'support/shoulda_matchers'
 
 # Load shared examples
 require 'support/request_examples_spec'

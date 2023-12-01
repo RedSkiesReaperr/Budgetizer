@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_19_165224) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_30_174858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_19_165224) do
     t.bigint "budget_id"
     t.integer "category", default: 0
     t.index ["budget_id"], name: "index_lines_on_budget_id"
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
   create_table "objectives", force: :cascade do |t|
@@ -77,4 +88,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_19_165224) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "notes", "users"
 end
