@@ -114,7 +114,7 @@
                   </v-col>
                   <v-col cols="12" md="3">
                     <v-text-field
-                      v-model="editedLine.attributes.amount"
+                      :model-value="formatNumber(editedLine.attributes.amount)"
                       :label="$t('operation.attributes.amount')"
                       variant="outlined"
                       type="number"
@@ -268,8 +268,8 @@
         transition="fade-transition"
       >
         <v-card>
-          <v-card-title class="text-h5"
-            >{{ $t("line.deletion.title") }}
+          <v-card-title class="text-h5">
+            {{ $t("line.deletion.title") }}
           </v-card-title>
           <v-card-text>
             <p>{{ $t("line.deletion.body") }}</p>
@@ -284,7 +284,7 @@
             </p>
             <p>
               <b>{{ $t("line.attributes.amount") }}:</b>
-              <i>{{ deletingLine.attributes.amount }}</i>
+              <i>{{ formattedAmount(deletingLine.attributes.amount) }}</i>
             </p>
             <p>
               <b>{{ $t("line.attributes.type") }}:</b>
