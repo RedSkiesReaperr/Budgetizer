@@ -51,20 +51,20 @@
       >
         <template v-slot:[`item.attributes.lineType`]="{ item }">
           <TypeChip
-            :raw-type="item.columns['attributes.lineType']"
+            :raw-type="item.attributes.lineType"
             size="small"
           ></TypeChip>
         </template>
 
         <template v-slot:[`item.attributes.amount`]="{ item }">
-          <span>{{ formattedAmount(item.columns["attributes.amount"]) }}</span>
+          <span>{{ formattedAmount(item.attributes.amount) }}</span>
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             size="small"
             class="me-2"
-            @click="editLine(item.raw)"
+            @click="editLine(item)"
             color="blue"
           >
             mdi-square-edit-outline
@@ -72,7 +72,7 @@
           <v-icon
             size="small"
             class="me-2"
-            @click="openDeleteDialog(item.raw)"
+            @click="openDeleteDialog(item)"
             color="red"
           >
             mdi-trash-can-outline
@@ -311,7 +311,6 @@
 
 <script lang="ts">
 import { useAppStore } from "@/stores/app";
-import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import BasicCard from "@/components/BasicCard.vue";
 import InfoCard from "@/components/InfoCard.vue";
 import GaugeChart from "@/components/GaugeChart.vue";
@@ -559,6 +558,6 @@ export default {
         });
     },
   },
-  components: { VDataTable, GaugeChart, BasicCard, TypeChip, InfoCard },
+  components: { GaugeChart, BasicCard, TypeChip, InfoCard },
 };
 </script>

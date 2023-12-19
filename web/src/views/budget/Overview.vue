@@ -27,6 +27,7 @@
   </div>
   <v-container><v-divider></v-divider></v-container>
   <NotesSlider :notes="notesStore.notes" :loading="notesStore.fetching"></NotesSlider>
+  <Alert></Alert>
 </template>
 
 <script lang="ts">
@@ -41,6 +42,7 @@ import api from "@/api";
 import {AlertType, useAlertStore} from "@/stores/alert";
 import {AxiosError} from "axios";
 import {useNotesStore} from "@/stores/notes";
+import Alert from "@/components/Alert.vue";
 
 export default {
   setup() {
@@ -99,6 +101,6 @@ export default {
         })
     },
   },
-  components: {BasicCard, CategoriesPieChart, OperationsSparkLineChart, NotesSlider}
+  components: {Alert, BasicCard, CategoriesPieChart, OperationsSparkLineChart, NotesSlider}
 }
 </script>

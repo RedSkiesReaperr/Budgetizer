@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { Operation } from "@/api/resources/operations";
-import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import TypeChip from "@/components/TypeChip.vue";
 import CategoryChip from "@/components/CategoryChip.vue";
 import api from "@/api";
@@ -26,7 +25,7 @@ const props = defineProps<Props>();
   >
     <template v-slot:[`item.attributes.date`]="{ item }">
       <span>{{
-        new Date(item.columns["attributes.date"]).toLocaleDateString(
+        new Date(item.attributes.date).toLocaleDateString(
           $i18n.locale
         )
       }}</span>
@@ -34,14 +33,14 @@ const props = defineProps<Props>();
 
     <template v-slot:[`item.attributes.opType`]="{ item }">
       <TypeChip
-        :raw-type="item.columns['attributes.opType']"
+        :raw-type="item.attributes.opType"
         size="small"
       ></TypeChip>
     </template>
 
     <template v-slot:[`item.attributes.category`]="{ item }">
       <CategoryChip
-        :raw-category="item.columns['attributes.category']"
+        :raw-category="item.attributes.category"
         size="small"
       ></CategoryChip>
     </template>
@@ -49,15 +48,15 @@ const props = defineProps<Props>();
     <template v-slot:[`item.attributes.amount`]="{ item }">
       <span
         :style="{
-          color: isIncome(item.columns['attributes.amount']) ? 'green' : 'red',
+          color: isIncome(item.attributes.amount) ? 'green' : 'red',
         }"
-        ><b>{{ formattedAmount(item.columns["attributes.amount"]) }}</b></span
+        ><b>{{ formattedAmount(item.attributes.amount) }}</b></span
       >
     </template>
 
     <template v-slot:[`item.attributes.comment`]="{ item }">
       <span :style="{ opacity: 0.8 }">
-        <i>{{ item.columns["attributes.comment"] }}</i>
+        <i>{{ item.attributes.comment }}</i>
       </span>
     </template>
 
@@ -65,14 +64,14 @@ const props = defineProps<Props>();
       <span>
         <v-icon
           icon="mdi-check-circle"
-          :color="item.columns['attributes.pointed'] ? 'green' : 'grey'"
-          v-on:click="pointOperation(item.raw)"
+          :color="item.attributes.pointed ? 'green' : 'grey'"
+          v-on:click="pointOperation(item)"
         />
       </span>
     </template>
 
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon size="small" class="me-2" @click="editOperation(item.raw)">
+      <v-icon size="small" class="me-2" @click="editOperation(item)">
         mdi-square-edit-outline
       </v-icon>
     </template>

@@ -17,14 +17,14 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     currentDateStartAt: useStorage('currentDateStartAt', moment().startOf("month"), undefined, {
       serializer: {
-        read: (v: string): moment.Moment => moment(v),
-        write: (v: moment.Moment): string => v.toString()
+        read: (v: string): moment.Moment => moment(v, "YYYY-DD-MM"),
+        write: (v: moment.Moment): string => v.format("YYYY-DD-MM")
       }
     }),
     currentDateEndAt: useStorage('currentDateEndAt', moment().endOf("month"), undefined, {
       serializer: {
-        read: (v: string): moment.Moment => moment(v),
-        write: (v: moment.Moment): string => v.toString()
+        read: (v: string): moment.Moment => moment(v, "YYYY-DD-MM"),
+        write: (v: moment.Moment): string => v.format("YYYY-DD-MM")
       }
     }),
     currentBudget: {} as Budget,

@@ -1,4 +1,8 @@
 export default {
+  10: '10',
+  25: '25',
+  50: '50',
+  100: '100',
   locales: {
     fr: "French",
     en: "English",
