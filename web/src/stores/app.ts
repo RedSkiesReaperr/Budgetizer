@@ -12,7 +12,6 @@ import {useOperationsStore} from "./operations";
 import {useStorage} from '@vueuse/core'
 import {linesForTypes} from "@/services/lines";
 import {useNotesStore} from "@/stores/notes";
-import notes from "@/api/resources/notes";
 
 export const useAppStore = defineStore("app", {
   state: () => ({

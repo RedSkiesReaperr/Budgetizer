@@ -39,7 +39,6 @@ import OperationsSparkLineChart from "@/components/OperationsSparkLineChart.vue"
 import {daysInRangeAsStr} from "@/services/dates";
 import api from "@/api";
 import {AlertType, useAlertStore} from "@/stores/alert";
-import Alert from "@/components/Alert.vue";
 import {AxiosError} from "axios";
 import {useNotesStore} from "@/stores/notes";
 
@@ -100,6 +99,6 @@ export default {
         })
     },
   },
-  components: {BasicCard, CategoriesPieChart, OperationsSparkLineChart, Alert, NotesSlider}
+  components: {BasicCard, CategoriesPieChart, OperationsSparkLineChart, NotesSlider}
 }
 </script>

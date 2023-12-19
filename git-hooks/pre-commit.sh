@@ -3,6 +3,11 @@
 echo "Initializing rbenv"
 eval "$(rbenv init -)"
 
+echo "Initializing nvm"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 echo "Running pre-push hook"
 
 ./git-hooks/run-rubocop.sh

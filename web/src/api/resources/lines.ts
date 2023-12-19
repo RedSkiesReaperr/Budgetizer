@@ -1,6 +1,5 @@
 import client from "@/api/client";
 import {ApiResponse} from "../responses";
-import {Budget} from "@/api/resources/budgets";
 
 export interface Line {
   id: string;
