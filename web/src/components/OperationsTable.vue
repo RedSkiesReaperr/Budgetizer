@@ -1,18 +1,13 @@
 <script lang="ts" setup>
-import { Operation } from "@/api/resources/operations";
+import {Operation} from "@/api/resources/operations";
 import TypeChip from "@/components/TypeChip.vue";
 import CategoryChip from "@/components/CategoryChip.vue";
-import api from "@/api";
-import {
-  knownCategories,
-  getCategoryTranslationKey,
-} from "@/services/categories";
-import { copyOperation } from "@/services/operations";
-import { formatNumber } from "@/services/formatters";
+import Alert from "@/components/Alert.vue";
 
 interface Props {
   data: Operation[];
 }
+
 const props = defineProps<Props>();
 </script>
 
@@ -25,10 +20,10 @@ const props = defineProps<Props>();
   >
     <template v-slot:[`item.attributes.date`]="{ item }">
       <span>{{
-        new Date(item.attributes.date).toLocaleDateString(
-          $i18n.locale
-        )
-      }}</span>
+          new Date(item.attributes.date).toLocaleDateString(
+            $i18n.locale
+          )
+        }}</span>
     </template>
 
     <template v-slot:[`item.attributes.opType`]="{ item }">
@@ -50,7 +45,7 @@ const props = defineProps<Props>();
         :style="{
           color: isIncome(item.attributes.amount) ? 'green' : 'red',
         }"
-        ><b>{{ formattedAmount(item.attributes.amount) }}</b></span
+      ><b>{{ formattedAmount(item.attributes.amount) }}</b></span
       >
     </template>
 
@@ -185,14 +180,6 @@ const props = defineProps<Props>();
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-alert
-            closable
-            v-model="editError"
-            :text="$t('operation.edition.error')"
-            type="error"
-            variant="tonal"
-          ></v-alert>
-          <v-spacer></v-spacer>
           <v-btn color="blue-darken-1" variant="text" @click="closeEditDialog">
             {{ $t("actions.cancel") }}
           </v-btn>
@@ -203,17 +190,25 @@ const props = defineProps<Props>();
       </v-card>
     </v-dialog>
   </v-row>
+  <Alert></Alert>
 </template>
 
 <script lang="ts">
+import {AlertType, useAlertStore} from "@/stores/alert";
+import {
+  knownCategories,
+  getCategoryTranslationKey,
+} from "@/services/categories";
+import {copyOperation} from "@/services/operations";
+import {formatNumber} from "@/services/formatters";
+import api from "@/api";
+
 export default {
   data() {
     return {
       itemsPerPage: 20,
       editDialog: false,
       editLoading: false,
-      editError: false,
-      defaultOperation: {} as Operation,
       editedOperation: {} as Operation,
       editedOperationIndex: -1,
     };
@@ -265,8 +260,8 @@ export default {
     },
     typeItems() {
       return [
-        { value: "income", title: this.$t("operation.types.income") },
-        { value: "vital", title: this.$t("operation.types.vital") },
+        {value: "income", title: this.$t("operation.types.income")},
+        {value: "vital", title: this.$t("operation.types.vital")},
         {
           value: "non_essential",
           title: this.$t("operation.types.non_essential"),
@@ -312,12 +307,14 @@ export default {
       const newPointedValue = !item.attributes.pointed;
 
       await api.operations
-        .updateOne(item.id, { pointed: newPointedValue })
+        .updateOne(item.id, {pointed: newPointedValue})
         .then(() => {
           item.attributes.pointed = newPointedValue;
         });
     },
     async saveOperation() {
+      const alertStore = useAlertStore()
+
       if (this.editedOperationIndex > -1) {
         const editPayload = {
           label: this.editedOperation.attributes.label,
@@ -332,10 +329,11 @@ export default {
           .updateOne(this.editedOperation.id, editPayload)
           .then((res) => {
             Object.assign(this.$props.data[this.editedOperationIndex], res);
+            alertStore.show(AlertType.Success, this.$t('operation.edition.success_title'), this.$t("operation.edition.success_message"))
             this.closeEditDialog();
           })
           .catch(() => {
-            this.editError = true;
+            alertStore.show(AlertType.Error, this.$t('operation.edition.error'), this.$t("something_went_wrong"))
           })
           .finally(() => {
             this.editLoading = false;

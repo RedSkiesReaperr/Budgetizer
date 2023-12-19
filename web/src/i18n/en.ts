@@ -64,6 +64,8 @@ export default {
     edition: {
       title: "Edit an operation",
       error: "Error while editing",
+      success_title: "Operation successfully updated !",
+      success_message: "Operation informations have been updated",
     },
     import: {
       action: "Import operations",

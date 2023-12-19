@@ -64,6 +64,8 @@ export default {
     edition: {
       title: "Editer une opération",
       error: "Erreur lors de l'édition",
+      success_title: "Opération mise à jour !",
+      success_message: "Les informations de l'opération ont été mises à jour",
     },
     import: {
       action: "Importer des opérations",
