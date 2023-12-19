@@ -1,5 +1,8 @@
 // Composables
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory, RouteLocationNormalized} from "vue-router";
+import api from "@/api";
+
+const UNAUTHENTICATED_ROUTES = ['root', 'login', 'any']
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -57,5 +60,17 @@ const router = createRouter({
     },
   ],
 });
+
+router.beforeEach(async (to: RouteLocationNormalized) => {
+  if (to.name && !UNAUTHENTICATED_ROUTES.includes(to.name.toString())) {
+    try {
+      await api.auth.validateSession()
+    } catch (e) {
+      if (to.name !== "login") {
+        return {name: 'login'}
+      }
+    }
+  }
+})
 
 export default router;
