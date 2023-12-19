@@ -31,7 +31,6 @@ import { Budget } from "@/api/resources/budgets";
 import BasicCard from "@/components/BasicCard.vue";
 import { useBudgetsStore } from "@/stores/budgets";
 import { useAppStore } from "@/stores/app";
-import routes from "@/router/routes";
 
 export default {
   setup() {
@@ -51,7 +50,7 @@ export default {
   methods: {
     selectBudget(budget: Budget) {
       this.appStore.selectBudget(budget);
-      this.$router.push(routes.budget.overview);
+      this.$router.push({name: 'dashboardOverview'});
     },
   },
   components: { BasicCard },

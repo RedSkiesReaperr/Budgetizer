@@ -1,51 +1,59 @@
 // Composables
-import { createRouter, createWebHistory } from "vue-router";
-import routes from "./routes";
+import {createRouter, createWebHistory} from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
       path: "/",
-      redirect: { path: routes.login },
+      name: "root",
+      redirect: { name: "login" },
     },
     {
-      path: routes.login,
+      path: "/login",
+      name: "login",
       component: () => import("@/views/Login.vue"),
     },
     {
-      path: routes.selector,
+      path: "/selector",
+      name: "budgetSelector",
       component: () => import("@/views/BudgetSelector.vue"),
     },
     {
-      path: routes.budget.base,
-      component: () => import("@/layouts/budget/Default.vue"),
+      path: "/dashboard",
+      name: "dashboardBase",
+      component: () => import("@/layouts/Dashboard.vue"),
       children: [
         {
           path: "overview",
-          name: "Overview",
+          name: "dashboardOverview",
           component: () => import("@/views/budget/Overview.vue"),
           meta: { titleKey: "overview", pluralized: false },
         },
         {
-          path: "forecasts",
-          name: "Forecasts",
+          path: "forecast",
+          name: "dashboardForecast",
           component: () => import("@/views/budget/Forecasts.vue"),
           meta: { titleKey: "forecast", pluralized: true },
         },
         {
           path: "earnings",
-          name: "Earnings",
+          name: "dashboardEarnings",
           component: () => import("@/views/budget/Earnings.vue"),
           meta: { titleKey: "earning", pluralized: true },
         },
         {
           path: "expenses",
-          name: "Expenses",
+          name: "dashboardExpenses",
           component: () => import("@/views/budget/Expenses.vue"),
           meta: { titleKey: "expense", pluralized: true },
-        },
+        }
       ],
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'any',
+      component: () => import("@/views/errors/404.vue"),
     },
   ],
 });

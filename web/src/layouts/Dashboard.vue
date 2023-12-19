@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useBudgetLayoutStore } from "@/stores/budgetLayout";
 import LanguageSwitch from "@/components/LanguageSwitch.vue";
-import routes from "@/router/routes";
 
 const budgetLayoutStore = useBudgetLayoutStore();
 </script>
@@ -21,10 +20,10 @@ const budgetLayoutStore = useBudgetLayoutStore();
         $t("budget.sidebar.general")
       }}</v-list-subheader>
 
-      <v-list-item prepend-icon="mdi-all-inclusive" :title="$t('overview')" to="overview" />
-      <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)" to="forecasts" />
-      <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" to="earnings" />
-      <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" to="expenses" />
+      <v-list-item prepend-icon="mdi-all-inclusive" :title="$t('overview')" :to="{name: 'dashboardOverview'}" />
+      <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)" :to="{name: 'dashboardForecast'}" />
+      <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" :to="{name: 'dashboardEarnings'}" />
+      <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" :to="{name: 'dashboardExpenses'}" />
     </v-list>
   </v-navigation-drawer>
 
@@ -41,7 +40,7 @@ const budgetLayoutStore = useBudgetLayoutStore();
 
     <v-tooltip :text="$t('budget.appbar.change_budget')" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn :to="routes.selector" v-bind="props" icon="mdi-swap-horizontal"></v-btn>
+        <v-btn :to="{name: 'budgetSelector'}" v-bind="props" icon="mdi-swap-horizontal"></v-btn>
       </template>
     </v-tooltip>
 
@@ -77,7 +76,7 @@ const appStore = useAppStore();
 export default {
   beforeCreate() {
     if (Object.keys(appStore.currentBudget).length <= 0) {
-      this.$router.push(routes.selector);
+      this.$router.push({name: 'budgetSelector'});
     }
   },
   data: () => ({
@@ -99,7 +98,7 @@ export default {
     },
     logout() {
       api.auth.signOut().finally(() => {
-        this.$router.push(routes.login)
+        this.$router.push({name: 'login'})
       })
     }
   },

@@ -10,7 +10,7 @@
       <v-form @submit.prevent="login">
         <v-text-field v-model="email" type="email" :label="$t('email')" variant="outlined" autocomplete="username"></v-text-field>
         <v-text-field v-model="password" type="password" :label="$t('password')" variant="outlined" autocomplete="current-password"></v-text-field>
-        <v-btn block type="submit" prepend-icon="mdi-login" variant="tonal" color="#27ae60">{{
+        <v-btn type="submit" prepend-icon="mdi-login" variant="tonal" color="#27ae60" block>{{
           $t('actions.login')
         }}</v-btn>
       </v-form>
@@ -20,18 +20,9 @@
   <Alert></Alert>
 </template>
 
-<style>
-#login-error {
-  position: fixed;
-  bottom: 0;
-  left: 25%;
-}
-</style>
-
 <script lang="ts">
 import api from '@/api';
 import BasicCard from '@/components/BasicCard.vue';
-import routes from "@/router/routes";
 import Alert from "@/components/Alert.vue";
 import { AlertType, useAlertStore } from '@/stores/alert';
 import { AxiosError } from 'axios';
@@ -52,7 +43,7 @@ export default {
   beforeCreate() {
     api.auth.validateSession()
       .then(() => {
-        this.$router.push(routes.budget.overview);
+        this.$router.push({name: 'dashboardOverview'});
       }).catch(() => { });
   },
   methods: {
@@ -62,7 +53,7 @@ export default {
 
       api.auth.signIn(this.email, this.password)
         .then(() => {
-          this.$router.push(routes.selector);
+          this.$router.push({name: 'budgetSelector'});
           this.alertStore.hide()
         })
         .catch((err: AxiosError<{ errors: string[], success: boolean }>) => {
