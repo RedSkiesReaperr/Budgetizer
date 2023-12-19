@@ -111,5 +111,7 @@ export default {
   login: {
     error_title: "We were unable to log you in",
   },
-  something_went_wrong: "Oops! Something went wrong."
+  something_went_wrong: "Oops! Something went wrong.",
+  note: "Note | Notes",
+  no_note: "No note available"
 };

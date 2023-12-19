@@ -110,5 +110,7 @@ export default {
   login: {
     error_title: "Nous n'avons pas pu vous connecter",
   },
-  something_went_wrong: "Oups! Quelque chose s'est mal passé."
+  something_went_wrong: "Oups! Quelque chose s'est mal passé.",
+  note: "Note | Notes",
+  no_note: "Aucune note disponible"
 };

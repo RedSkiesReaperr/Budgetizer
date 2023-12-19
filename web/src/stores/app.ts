@@ -11,6 +11,8 @@ import moment from "moment";
 import {useOperationsStore} from "./operations";
 import {useStorage} from '@vueuse/core'
 import {linesForTypes} from "@/services/lines";
+import {useNotesStore} from "@/stores/notes";
+import notes from "@/api/resources/notes";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
@@ -111,6 +113,7 @@ export const useAppStore = defineStore("app", {
     },
     async selectDate(month: number, year: number) {
       const operationsStore = useOperationsStore();
+      const notesStore = useNotesStore();
       const start = moment().month(month).year(year).startOf("month");
       const end = moment().month(month).year(year).endOf("month");
 
@@ -118,6 +121,7 @@ export const useAppStore = defineStore("app", {
       this.currentDateEndAt = end
 
       operationsStore.fetchAll(start, end);
+      notesStore.fetchAll(start);
     },
   },
 });

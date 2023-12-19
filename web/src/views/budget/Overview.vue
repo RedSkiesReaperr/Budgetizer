@@ -5,7 +5,7 @@
       <div class="h-75 d-flex flex-row flex-grow-1 align-center">
         <div class="d-flex flex-col flex-grow-1 justify-center">
           <v-btn color="#27ae60" prepend-icon="mdi-cloud-upload-outline" rounded="lg" :loading="isSelecting"
-            @click="handleFileImport">
+                 @click="handleFileImport">
             {{ $t("actions.select_file") }}
           </v-btn>
         </div>
@@ -15,38 +15,42 @@
 
     <BasicCard class="h-25 w-25 px-0 py-0 flex-grow-0" :loading="operationsStore.fetching">
       <OperationsSparkLineChart :subtitle="$t('earning', 2)" :operations="operationsStore.incomes"
-        :x-axis-labels="daysChartLabels" curve-color="#00b894" />
+                                :x-axis-labels="daysChartLabels" curve-color="#00b894"/>
     </BasicCard>
     <BasicCard class="h-25 w-25 px-0 py-0 flex-grow-0" :loading="operationsStore.fetching">
       <OperationsSparkLineChart :subtitle="$t('expense', 2)" :operations="operationsStore.expenses"
-        :x-axis-labels="daysChartLabels" curve-color="#d63031" />
+                                :x-axis-labels="daysChartLabels" curve-color="#d63031"/>
     </BasicCard>
     <BasicCard class="pb-4 w-25 flex-grow-0" :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
-      <CategoriesPieChart />
+      <CategoriesPieChart/>
     </BasicCard>
   </div>
-  <Alert></Alert>
+  <v-container><v-divider></v-divider></v-container>
+  <NotesSlider :notes="notesStore.notes" :loading="notesStore.fetching"></NotesSlider>
 </template>
 
 <script lang="ts">
 import BasicCard from "@/components/BasicCard.vue";
-import { useOperationsStore } from "@/stores/operations";
-import { useAppStore } from "@/stores/app";
+import NotesSlider from "@/components/NotesSlider.vue";
+import {useOperationsStore} from "@/stores/operations";
+import {useAppStore} from "@/stores/app";
 import CategoriesPieChart from "@/components/CategoriesPieChart.vue";
 import OperationsSparkLineChart from "@/components/OperationsSparkLineChart.vue";
-import { daysInRangeAsStr } from "@/services/dates";
+import {daysInRangeAsStr} from "@/services/dates";
 import api from "@/api";
-import { AlertType, useAlertStore } from "@/stores/alert";
+import {AlertType, useAlertStore} from "@/stores/alert";
 import Alert from "@/components/Alert.vue";
-import { AxiosError } from "axios";
+import {AxiosError} from "axios";
+import {useNotesStore} from "@/stores/notes";
 
 export default {
   setup() {
-    const operationsStore = useOperationsStore();
+    const operationsStore = useOperationsStore()
     const appStore = useAppStore()
     const alertStore = useAlertStore()
+    const notesStore = useNotesStore()
 
-    return { operationsStore, appStore, alertStore };
+    return {operationsStore, appStore, alertStore, notesStore};
   },
   data() {
     return {
@@ -57,6 +61,10 @@ export default {
   mounted() {
     if (this.operationsStore.expenses.length <= 0) {
       this.operationsStore.fetchAll(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt)
+    }
+
+    if (this.notesStore.notes.length <= 0) {
+      this.notesStore.fetchAll(this.appStore.currentDateStartAt)
     }
   },
   computed: {
@@ -70,7 +78,7 @@ export default {
 
       window.addEventListener('focus', () => {
         this.isSelecting = false
-      }, { once: true });
+      }, {once: true});
 
       (this.$refs.uploader as any).click();
     },
@@ -92,6 +100,6 @@ export default {
         })
     },
   },
-  components: { BasicCard, CategoriesPieChart, OperationsSparkLineChart, Alert }
+  components: {BasicCard, CategoriesPieChart, OperationsSparkLineChart, Alert, NotesSlider}
 }
 </script>

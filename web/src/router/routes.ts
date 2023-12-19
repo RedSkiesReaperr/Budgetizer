@@ -6,6 +6,6 @@ export default {
     overview: "/budget/overview",
     forecasts: "/budget/forecasts",
     earnings: "/budget/earnings",
-    expenses: "/budget/earnings",
+    expenses: "/budget/expenses",
   },
 };
