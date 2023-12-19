@@ -194,10 +194,10 @@ const props = defineProps<Props>();
           ></v-alert>
           <v-spacer></v-spacer>
           <v-btn color="blue-darken-1" variant="text" @click="closeEditDialog">
-            Close
+            {{ $t("actions.cancel") }}
           </v-btn>
           <v-btn color="blue-darken-1" variant="text" @click="saveOperation">
-            Save
+            {{ $t("actions.save") }}
           </v-btn>
         </v-card-actions>
       </v-card>
