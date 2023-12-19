@@ -10,7 +10,7 @@
       <v-form @submit.prevent="login">
         <v-text-field v-model="email" type="email" :label="$t('email')" variant="outlined"></v-text-field>
         <v-text-field v-model="password" type="password" :label="$t('password')" variant="outlined"></v-text-field>
-        <v-btn block type="submit" @click="login" prepend-icon="mdi-login" variant="tonal" color="#27ae60">{{
+        <v-btn block type="submit" prepend-icon="mdi-login" variant="tonal" color="#27ae60">{{
           $t('actions.login')
         }}</v-btn>
       </v-form>
