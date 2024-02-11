@@ -1,0 +1,23 @@
+steps:
+  - id: "build image"
+    name: "gcr.io/cloud-builders/docker"
+    entrypoint: 'bash'
+    args: ["-c", "docker build --build-arg VITE_API_BASE=${_API_BASE} -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . "]
+    dir: 'web'
+
+  - id: "push image"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}', '--region', '${_REGION}']
+
+substitutions:
+  _SERVICE_NAME: default
+  _API_BASE: default
+
+availableSecrets:
+
+images:
+  - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"

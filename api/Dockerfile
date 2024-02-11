@@ -1,31 +1,26 @@
 FROM ruby:3.2.2-alpine
 
-ARG RAILS_MASTER_KEY
-
-# Install system dependencies
 RUN apk add --no-cache \
     build-base \
     postgresql \
     libpq-dev
 
-# Configure environment
-ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES true
-ENV RAILS_LOG_TO_STDOUT true
-ENV RAILS_MASTER_KEY=$RAILS_MASTER_KEY
-
-# Configure bundler
-RUN bundle config --global frozen 1
-RUN bundle config set --local without 'development test'
-
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
 
-COPY . .
+RUN gem install bundler && \
+    bundle config set --local deployment 'true' && \
+    bundle config set --local without 'development test' && \
+    bundle install
 
-ENTRYPOINT ["./entrypoint.sh" ]
-EXPOSE 3000
+COPY . /app
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENV RAILS_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV RAILS_LOG_TO_STDOUT=true
+ARG MASTER_KEY
+ENV RAILS_MASTER_KEY=${MASTER_KEY}
+
+EXPOSE 8080
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]

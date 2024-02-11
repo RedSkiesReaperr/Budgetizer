@@ -27,4 +27,5 @@ test:
 
 production:
   <<: *default
-  database: budgetizer_production
+  database: <%= Rails.application.credentials.database.name %>
+  host: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= Rails.application.credentials.database.connection_name %>"

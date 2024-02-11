@@ -71,6 +71,6 @@ DeviseTokenAuth.setup do |config|
     encrypt: true,
     secure: true,
     expires: config.token_lifespan.from_now,
-    same_site: true
+    same_site: :none
   }
 end
