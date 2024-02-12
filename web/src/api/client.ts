@@ -3,7 +3,7 @@ import axios from "axios";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE,
-  timeout: 1000,
+  timeout: 5000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/vnd.api+json",
