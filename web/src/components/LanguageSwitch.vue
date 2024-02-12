@@ -32,10 +32,17 @@
 </template>
 
 <script lang="ts">
+import enIco from "@/assets/en.svg"
+import frIco from "@/assets/fr.svg"
+
+const flagsPaths: {[locale:string]: string} = {
+  en: enIco,
+  fr: frIco
+}
 
 export default {
   data: () => ({
-    overlay: false
+    overlay: false,
   }),
   computed: {
     currentLocaleFlagPath() {
@@ -49,7 +56,7 @@ export default {
   },
   methods: {
     localeFlagPath(locale: string): string {
-      return `/src/assets/${locale}.svg`
+      return flagsPaths[locale]
     },
     changeLocale(newLocale: string) {
       if (newLocale !== this.$i18n.locale) {
