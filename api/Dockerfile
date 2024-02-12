@@ -23,4 +23,4 @@ ARG MASTER_KEY
 ENV RAILS_MASTER_KEY=${MASTER_KEY}
 
 EXPOSE 8080
-CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb", "-b", "0.0.0.0", "-p", "8080"]
