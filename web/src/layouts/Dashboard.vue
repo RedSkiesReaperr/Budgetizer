@@ -24,6 +24,7 @@ const budgetLayoutStore = useBudgetLayoutStore();
       <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)" :to="{name: 'dashboardForecast'}" />
       <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" :to="{name: 'dashboardEarnings'}" />
       <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" :to="{name: 'dashboardExpenses'}" />
+      <v-list-item prepend-icon="mdi-shape-plus" :title="$t('category', 2)" :to="{name: 'dashboardCategories'}" />
     </v-list>
   </v-navigation-drawer>
 

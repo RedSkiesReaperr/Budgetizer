@@ -11,6 +11,7 @@ export default {
   expense: "Dépense | Dépenses",
   overview: "Vue d'ensemble",
   forecast: "Prévision | Prévisions",
+  category: "Catégorie | Catégories",
   action: "Action | Actions",
   saving: "Economie | Economies",
   information: "Information | Informations",
@@ -50,6 +51,7 @@ export default {
       unknown: "Inconnu",
     },
     categories: {
+      unknown: "Catégorie inconnue",
       to_categorize: "A catégoriser",
       home: "Logement",
       bank: "Banque",
@@ -118,5 +120,7 @@ export default {
   },
   something_went_wrong: "Oups! Quelque chose s'est mal passé.",
   note: "Note | Notes",
-  no_note: "Aucune note disponible"
+  no_note: "Aucune note disponible",
+  color: "Couleur | Couleurs",
+  icon: "Icone | Icones",
 };

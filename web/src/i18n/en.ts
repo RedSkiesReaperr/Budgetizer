@@ -11,6 +11,7 @@ export default {
   expense: "Expense | Expenses",
   overview: "Overview",
   forecast: "Forecast | Forecasts",
+  category: "Category | Categories",
   action: "Action | Actions",
   saving: "Saving | Savings",
   information: "Information | Informations",
@@ -50,6 +51,7 @@ export default {
       unknown: "Unknown",
     },
     categories: {
+      unknown: "Unknown category",
       to_categorize: "To categorize",
       home: "Home",
       bank: "Bank",
@@ -119,5 +121,7 @@ export default {
   },
   something_went_wrong: "Oops! Something went wrong.",
   note: "Note | Notes",
-  no_note: "No note available"
+  no_note: "No note available",
+  color: "Color | Colors",
+  icon: "Icon | Icons",
 };

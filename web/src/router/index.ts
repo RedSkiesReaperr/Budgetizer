@@ -50,6 +50,12 @@ const router = createRouter({
           name: "dashboardExpenses",
           component: () => import("@/views/budget/Expenses.vue"),
           meta: { titleKey: "expense", pluralized: true },
+        },
+        {
+          path: "categories",
+          name: "dashboardCategories",
+          component: () => import("@/views/budget/Categories.vue"),
+          meta: { titleKey: "category", pluralized: true },
         }
       ],
     },
