@@ -123,4 +123,9 @@ export default {
   no_note: "Aucune note disponible",
   color: "Couleur | Couleurs",
   icon: "Icone | Icones",
+  404: {
+    title: "Page introuvable",
+    text: "Nous ne savons pas ce que vous recherchiez mais cela n'existe pas.",
+    button: "Revenir en lieu sûr",
+  }
 };

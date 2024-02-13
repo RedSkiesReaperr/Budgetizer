@@ -124,4 +124,9 @@ export default {
   no_note: "No note available",
   color: "Color | Colors",
   icon: "Icon | Icons",
+  404: {
+    title: "Page not found",
+    text: "We don't know what you were looking for, but it doesn't exist.",
+    button: "Come back to a safe place",
+  }
 };
