@@ -3,8 +3,8 @@
 FactoryBot.define do
   factory :category do
     user
-    key { 'category_key' }
+    key { "category_#{Faker::Alphanumeric.alpha(number: 10)}" }
     color { Faker::Color.hex_color }
-    icon { '#2980b9' }
+    icon { 'mdi-icon' }
   end
 end

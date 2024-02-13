@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   jsonapi_resources :budgets
   jsonapi_resources :objectives
   jsonapi_resources :notes
+  jsonapi_resources :categories
 end
