@@ -3,8 +3,8 @@
     <div class="mb-6" :style="{ textAlign: 'center' }">
       <h1>Budgetizer</h1>
     </div>
+    <LanguageSwitch id="login-language-switch"></LanguageSwitch>
   </v-container>
-
   <v-container class="w-25">
     <BasicCard :loading="isLoggingIn">
       <v-form @submit.prevent="login">
@@ -20,12 +20,20 @@
   <Alert></Alert>
 </template>
 
+<style>
+#login-language-switch {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+</style>
 <script lang="ts">
 import api from '@/api';
 import BasicCard from '@/components/BasicCard.vue';
 import Alert from "@/components/Alert.vue";
 import { AlertType, useAlertStore } from '@/stores/alert';
 import { AxiosError } from 'axios';
+import LanguageSwitch from "@/components/LanguageSwitch.vue";
 
 export default {
   setup() {
@@ -66,6 +74,6 @@ export default {
         })
     }
   },
-  components: { BasicCard, Alert }
+  components: {LanguageSwitch, BasicCard, Alert }
 };
 </script>
