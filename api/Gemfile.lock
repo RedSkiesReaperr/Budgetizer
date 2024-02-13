@@ -288,6 +288,8 @@ GEM
       tty-which (~> 0.5.0)
       virtus (~> 2.0)
     sexp_processor (4.17.0)
+    shoulda-callback-matchers (1.1.4)
+      activesupport (>= 3)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
     simplecov (0.22.0)
@@ -343,6 +345,7 @@ DEPENDENCIES
   rubocop-rspec
   ruby-lsp
   rubycritic
+  shoulda-callback-matchers (~> 1.1)
   shoulda-matchers
   simplecov
   tzinfo-data
