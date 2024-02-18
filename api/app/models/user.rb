@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :notes, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :lines, dependent: :destroy
+  has_many :operations, dependent: :destroy
   has_one :objective, dependent: :destroy
 
   after_create :create_default_categories

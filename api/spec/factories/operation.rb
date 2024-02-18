@@ -9,5 +9,6 @@ FactoryBot.define do
     pointed { false }
     op_type { :unknown }
     category { :to_categorize }
+    user
   end
 end

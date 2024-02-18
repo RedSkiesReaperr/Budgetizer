@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Operation < ApplicationRecord
+  belongs_to :user
+
   enum :op_type, %i[unknown income vital non_essential], default: 0
   enum :category, %i[to_categorize home bank shopping food subscriptions auto_transport beauty_care taxes salary],
        default: 0

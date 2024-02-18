@@ -7,7 +7,7 @@ class OperationBuilder
 
   def initialize
     @operation = { date: nil, label: nil, amount: nil, comment: '',
-                   pointed: false, op_type: nil, category: nil }
+                   pointed: false, op_type: nil, category: nil, user_id: nil }
   end
 
   def result
@@ -48,5 +48,9 @@ class OperationBuilder
 
   def build_category(category = :to_categorize)
     operation[:category] = category
+  end
+
+  def build_user(user)
+    operation[:user_id] = user.id
   end
 end

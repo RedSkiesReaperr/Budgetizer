@@ -64,7 +64,8 @@ NUMBER_OF_OPERATIONS.times do
     amount:,
     comment:,
     pointed:,
-    op_type:
+    op_type:,
+    user:
   )
 end
 

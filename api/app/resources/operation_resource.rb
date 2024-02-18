@@ -18,4 +18,9 @@ class OperationResource < JSONAPI::Resource
   def self.updatable_fields(context)
     super - [:date]
   end
+
+  def self.records(options = {})
+    context = options[:context]
+    context[:current_user].operations
+  end
 end

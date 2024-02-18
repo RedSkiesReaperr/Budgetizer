@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class OperationBuildingDirector
-  def initialize
+  def initialize(user)
     reset_with!(nil)
+
+    @user = user
   end
 
   def build_operation(raw_data)
@@ -15,18 +17,19 @@ class OperationBuildingDirector
     builder.build_pointed(false)
     builder.build_op_type(data.label, data.supplier, data.amount)
     builder.build_category
+    builder.build_user(@user)
     builder.result
   end
 
   private
 
   def data_struct
-    @data_struct ||= Struct.new(:date, :label, :amount, :comment, :supplier)
+    @data_struct ||= Struct.new(:date, :label, :amount, :comment, :supplier, :user_id)
   end
 
   def data
     @data ||= data_struct.new(@raw_data[:date_op], @raw_data[:label], @raw_data[:amount],
-                              @raw_data[:comment], @raw_data[:supplier_found])
+                              @raw_data[:comment], @raw_data[:supplier_found], @raw_data[:user_id])
   end
 
   def reset_with!(raw)

@@ -60,10 +60,10 @@ RSpec.describe 'Operations' do
   describe 'GET /operations' do
     let(:operations) do
       [
-        create(:operation, date: Time.zone.yesterday),
-        create(:operation, date: Time.zone.today),
-        create(:operation, date: Time.zone.tomorrow),
-        create(:operation, date: Time.zone.today + 2)
+        create(:operation, user:, date: Time.zone.yesterday),
+        create(:operation, user:, date: Time.zone.today),
+        create(:operation, user:, date: Time.zone.tomorrow),
+        create(:operation, user:, date: Time.zone.today + 2)
       ]
     end
 
@@ -110,7 +110,7 @@ RSpec.describe 'Operations' do
   end
 
   describe 'GET /operations/{id}' do
-    let(:operation) { create(:operation) }
+    let(:operation) { create(:operation, user:) }
 
     before do
       operation
@@ -140,7 +140,7 @@ RSpec.describe 'Operations' do
   end
 
   describe 'PATCH /operations/{id}' do
-    let(:operation) { create(:operation) }
+    let(:operation) { create(:operation, user:) }
 
     before do
       operation

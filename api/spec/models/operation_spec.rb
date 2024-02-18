@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Operation do
+  describe 'Associations' do
+    it { is_expected.to belong_to(:user) }
+  end
+
   describe 'Validations' do
     describe ':date' do
       it { is_expected.to validate_presence_of(:date) }

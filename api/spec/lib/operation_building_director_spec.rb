@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe OperationBuildingDirector do
+  let(:user) { create(:user) }
+
   describe '.build_operation' do
     let(:builder) { instance_double(OperationBuilder) }
     let(:res) do
-      described_class.new.build_operation({ date_op: Time.zone.today, label: 'label', amount: 87.24, comment: 'comment',
-                                            supplier_found: 'supplier' })
+      described_class.new(user).build_operation({ date_op: Time.zone.today, label: 'label', amount: 87.24,
+                                                  comment: 'comment', supplier_found: 'supplier' })
     end
 
     before do
@@ -18,6 +20,7 @@ RSpec.describe OperationBuildingDirector do
       allow(builder).to receive(:build_pointed).with(false)
       allow(builder).to receive(:build_op_type).with('label', 'supplier', 87.24)
       allow(builder).to receive(:build_category)
+      allow(builder).to receive(:build_user).with(user)
       allow(builder).to receive(:result).and_return('builded operation')
     end
 

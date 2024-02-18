@@ -6,7 +6,7 @@ class OperationsController < ApplicationController
                                        validator: OperationsCsv::Validator.new,
                                        sanitizer: OperationsCsv::Sanitizer.new)
 
-    director = OperationBuildingDirector.new
+    director = OperationBuildingDirector.new(current_user)
     operations = processor.process.map { |line| director.build_operation(line) }
 
     Operation.create!(operations)
