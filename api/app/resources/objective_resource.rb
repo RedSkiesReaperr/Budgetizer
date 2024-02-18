@@ -2,6 +2,4 @@
 
 class ObjectiveResource < JSONAPI::Resource
   immutable
-
-  attributes :vital, :non_essential, :saving
 end
