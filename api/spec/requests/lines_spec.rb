@@ -7,7 +7,7 @@ RSpec.describe 'Lines' do
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'GET /lines' do
-    let(:lines) { create_list(:line, 4) }
+    let(:lines) { create_list(:line, 4, user:) }
     let(:data) { JSON.parse(response.parsed_body)['data'] }
 
     before do
@@ -27,7 +27,7 @@ RSpec.describe 'Lines' do
   end
 
   describe 'GET /lines/{id}' do
-    let(:line) { create(:line) }
+    let(:line) { create(:line, user:) }
 
     before do
       line
@@ -57,7 +57,7 @@ RSpec.describe 'Lines' do
   end
 
   describe 'DELETE /lines/{id}' do
-    let(:line) { create(:line) }
+    let(:line) { create(:line, user:) }
 
     before do
       line
@@ -74,7 +74,7 @@ RSpec.describe 'Lines' do
   end
 
   describe 'PATCH /lines/{id}' do
-    let(:line) { create(:line) }
+    let(:line) { create(:line, user:) }
 
     before do
       line
