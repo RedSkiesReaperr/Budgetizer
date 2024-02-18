@@ -5,7 +5,7 @@ FactoryBot.define do
     label { Faker::Company.name }
     amount { Faker::Number.decimal(l_digits: 2) }
     line_type { :vital }
-    budget
     category { :to_categorize }
+    user
   end
 end

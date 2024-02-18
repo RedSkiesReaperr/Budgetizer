@@ -6,6 +6,8 @@ RSpec.describe User do
   describe 'Associations' do
     it { is_expected.to have_many(:notes).dependent(:destroy) }
     it { is_expected.to have_many(:categories).dependent(:destroy) }
+    it { is_expected.to have_many(:lines).dependent(:destroy) }
+    it { is_expected.to have_one(:objective).dependent(:destroy) }
   end
 
   describe 'Callbacks' do

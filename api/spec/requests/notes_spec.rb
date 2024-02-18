@@ -7,10 +7,11 @@ RSpec.describe 'Notes' do
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'GET /notes' do
-    let(:notes) { create_list(:note, 4, user:) }
+    let(:notes) { create_list(:note, 4, user:, month: Time.zone.today.month, year: Time.zone.today.year) }
     let(:data) { JSON.parse(response.parsed_body)['data'] }
 
     before do
+      notes
       call_endpoint('GET', notes_url, nil, headers)
     end
 
@@ -23,8 +24,6 @@ RSpec.describe 'Notes' do
     it { expect(data).to all(have_type('notes')) }
 
     it { expect(data).to all have_jsonapi_attributes(:title, :description, :month, :year).exactly }
-
-    it { expect(data).to all have_relationships(:budget).exactly }
   end
 
   describe 'GET /notes/{id}' do

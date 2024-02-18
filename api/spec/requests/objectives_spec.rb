@@ -24,8 +24,6 @@ RSpec.describe 'Objectives' do
     it { expect(data).to all(have_type('objectives')) }
 
     it { expect(data).to all have_jsonapi_attributes(:vital, :nonEssential, :saving).exactly }
-
-    it { expect(data).to all have_relationships(:budget).exactly }
   end
 
   describe 'GET /objectives/{id}' do
@@ -55,8 +53,6 @@ RSpec.describe 'Objectives' do
       it { expect(data).to have_type('objectives') }
 
       it { expect(data).to have_jsonapi_attributes(:vital, :nonEssential, :saving).exactly }
-
-      it { expect(data).to have_relationships(:budget).exactly }
     end
   end
 

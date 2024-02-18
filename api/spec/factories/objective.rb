@@ -5,5 +5,6 @@ FactoryBot.define do
     vital { 50 }
     non_essential { 30 }
     saving { 20 }
+    user
   end
 end

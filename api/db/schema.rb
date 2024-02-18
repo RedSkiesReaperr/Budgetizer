@@ -10,17 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_12_142621) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_14_100428) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "budgets", force: :cascade do |t|
-    t.bigint "objective_id"
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["objective_id"], name: "index_budgets_on_objective_id"
-  end
 
   create_table "categories", force: :cascade do |t|
     t.bigint "user_id"
@@ -39,9 +31,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_12_142621) do
     t.integer "line_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "budget_id"
     t.integer "category", default: 0
-    t.index ["budget_id"], name: "index_lines_on_budget_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_lines_on_user_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -61,6 +53,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_12_142621) do
     t.integer "saving", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_objectives_on_user_id", unique: true
   end
 
   create_table "operations", force: :cascade do |t|
@@ -100,5 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_12_142621) do
   end
 
   add_foreign_key "categories", "users"
+  add_foreign_key "lines", "users"
   add_foreign_key "notes", "users"
+  add_foreign_key "objectives", "users"
 end

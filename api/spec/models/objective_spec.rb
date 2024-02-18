@@ -3,45 +3,50 @@
 require 'rails_helper'
 
 describe Objective do
-  let(:objective) { create(:objective) }
+  subject { described_class.create!(vital: 50, non_essential: 30, saving: 20, user:) }
 
-  before do
-    allow(objective.budget).to receive(:forecast_income).and_return(3201.87)
+  let(:user) { create(:user) }
+
+  describe 'Associations' do
+    it { is_expected.to belong_to(:user) }
   end
 
-  describe '.vital_value' do
-    it { expect(objective.vital_value).to eq(1600.935) }
-  end
+  describe 'Validations' do
+    describe ':vital' do
+      it { is_expected.to validate_presence_of(:vital) }
+      it { is_expected.to validate_numericality_of(:vital) }
+    end
 
-  describe '.non_essential_value' do
-    it { expect(objective.non_essential_value).to eq(960.5609999999999) }
-  end
+    describe ':non_essential' do
+      it { is_expected.to validate_presence_of(:non_essential) }
+      it { is_expected.to validate_numericality_of(:non_essential) }
+    end
 
-  describe '.saving_value' do
-    it { expect(objective.saving_value).to eq(640.3739999999999) }
-  end
+    describe ':saving' do
+      it { is_expected.to validate_presence_of(:saving) }
+      it { is_expected.to validate_numericality_of(:saving) }
+    end
 
-  describe 'sum_is_one_hundred validation' do
-    context 'when sum of objective fields are not equal to 100' do
+    context 'when sum of fields are not equal to 100' do
       let(:vital) { 99 }
       let(:non_essential) { 10 }
       let(:saving) { 10 }
 
       it {
         expect do
-          described_class.create!(vital:, non_essential:, saving:)
+          described_class.create!(vital:, non_essential:, saving:, user:)
         end.to raise_error(ActiveRecord::RecordInvalid)
       }
     end
 
-    context 'when sum of objective fields are equal to 100' do
+    context 'when sum of fields are equal to 100' do
       let(:vital) { 70 }
       let(:non_essential) { 15 }
       let(:saving) { 15 }
 
       it {
         expect do
-          described_class.create!(vital:, non_essential:, saving:)
+          described_class.create!(vital:, non_essential:, saving:, user:)
         end.not_to raise_error(ActiveRecord::RecordInvalid)
       }
     end

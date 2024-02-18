@@ -8,10 +8,10 @@ Rails.application.routes.draw do
 
   mount_devise_token_auth_for 'User', at: 'auth'
 
-  jsonapi_resources :operations
-  jsonapi_resources :lines
-  jsonapi_resources :budgets
-  jsonapi_resources :objectives
-  jsonapi_resources :notes
   jsonapi_resources :categories
+  jsonapi_resources :forecasts
+  jsonapi_resources :lines
+  jsonapi_resources :notes
+  jsonapi_resources :objectives
+  jsonapi_resources :operations
 end
