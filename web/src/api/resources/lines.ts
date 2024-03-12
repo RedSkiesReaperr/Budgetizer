@@ -13,14 +13,6 @@ export interface Line {
     lineType: string;
     category: string;
   };
-  relationships: {
-    budget: {
-      links: {
-        self: string;
-        related: string;
-      };
-    };
-  };
 }
 
 interface UpdatePayload {
@@ -37,10 +29,15 @@ interface CreatePayload {
 }
 
 export default {
+  getAll: getAll,
   createOne: createOne,
   updateOne: updateOne,
   deleteOne: deleteOne,
 };
+
+async function getAll(): Promise<Line[]> {
+  return (await client.get<ApiResponse<Line[]>>("/lines")).data.data;
+}
 
 async function updateOne(
   lineId: string,
@@ -57,23 +54,12 @@ async function updateOne(
   ).data.data;
 }
 
-async function createOne(
-  budgetId: string,
-  createPayload: CreatePayload
-): Promise<Line> {
+async function createOne(createPayload: CreatePayload): Promise<Line> {
   return (
     await client.post<ApiResponse<Line>>("/lines", {
       data: {
         type: "lines",
         attributes: createPayload,
-        relationships: {
-          budget: {
-            data: {
-              type: "budgets",
-              id: budgetId,
-            },
-          },
-        },
       },
     })
   ).data.data;

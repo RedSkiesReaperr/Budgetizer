@@ -1,7 +1,6 @@
-// Utilities
 import {defineStore} from 'pinia'
 
-export const useBudgetLayoutStore = defineStore('budgetLayout', {
+export const useDashboardLayoutStore = defineStore('dashboardLayout', {
   state: () => ({
     isRailMode: true,
     isExpanded: false

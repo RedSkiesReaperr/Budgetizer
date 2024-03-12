@@ -16,13 +16,8 @@ export default {
   saving: "Saving | Savings",
   information: "Information | Informations",
   no_data: "No data to display",
-  budget_selector: {
-    title: "Which budget to analyse ?",
-    select_btn: "Analyse",
-  },
-  budget: {
+  dashboard: {
     appbar: {
-      change_budget: "Select another budget",
       logout: "Log out",
     },
     sidebar: {
@@ -85,21 +80,21 @@ export default {
       amount: "Amount",
     },
     edition: {
-      title: "Edit a budget line",
+      title: "Edit a dashboard line",
       error: "Error while editing",
     },
     creation: {
-      title: "Create a budget line",
+      title: "Create a line",
       error: "Error while creating",
     },
     deletion: {
       title: "Confirm deletion ?",
-      body: "If you confirm the deletion informations about this budget line can no longer be retrieved.",
+      body: "If you confirm the deletion informations about this dashboard line can no longer be retrieved.",
     },
   },
   forecast_page: {
     card_info:
-      "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPerentage}%).",
+      "Budget objective for '{type}' type is {budgetTargetAmount}€. The forecast is {valueAmount}€. This represents a difference of {diffValue}€ ({diffPercentage}).",
   },
   form_validations: {
     required: "is mandatory",

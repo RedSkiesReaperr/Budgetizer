@@ -18,11 +18,6 @@ const router = createRouter({
       component: () => import("@/views/Login.vue"),
     },
     {
-      path: "/selector",
-      name: "budgetSelector",
-      component: () => import("@/views/BudgetSelector.vue"),
-    },
-    {
       path: "/dashboard",
       name: "dashboardBase",
       component: () => import("@/layouts/Dashboard.vue"),
@@ -30,31 +25,31 @@ const router = createRouter({
         {
           path: "overview",
           name: "dashboardOverview",
-          component: () => import("@/views/budget/Overview.vue"),
+          component: () => import("@/views/dashboard/Overview.vue"),
           meta: { titleKey: "overview", pluralized: false },
         },
         {
           path: "forecast",
           name: "dashboardForecast",
-          component: () => import("@/views/budget/Forecasts.vue"),
+          component: () => import("@/views/dashboard/Forecasts.vue"),
           meta: { titleKey: "forecast", pluralized: true },
         },
         {
           path: "earnings",
           name: "dashboardEarnings",
-          component: () => import("@/views/budget/Earnings.vue"),
+          component: () => import("@/views/dashboard/Earnings.vue"),
           meta: { titleKey: "earning", pluralized: true },
         },
         {
           path: "expenses",
           name: "dashboardExpenses",
-          component: () => import("@/views/budget/Expenses.vue"),
+          component: () => import("@/views/dashboard/Expenses.vue"),
           meta: { titleKey: "expense", pluralized: true },
         },
         {
           path: "categories",
           name: "dashboardCategories",
-          component: () => import("@/views/budget/Categories.vue"),
+          component: () => import("@/views/dashboard/Categories.vue"),
           meta: { titleKey: "category", pluralized: true },
         }
       ],

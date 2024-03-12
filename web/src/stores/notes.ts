@@ -1,4 +1,3 @@
-// Utilities
 import api from "@/api";
 import {defineStore} from "pinia";
 import {Note} from "@/api/resources/notes";
@@ -16,12 +15,8 @@ export const useNotesStore = defineStore("notes", {
       const year = referenceDate.year()
 
       api.notes.getAll(month, year)
-        .then((res: Note[]) => {
-          this.notes = res
-        })
-        .finally(() => {
-          this.fetching = false;
-        });
+        .then((res: Note[]) => this.notes = res)
+        .finally(() => this.fetching = false);
     },
   }
 });

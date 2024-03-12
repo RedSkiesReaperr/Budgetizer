@@ -61,7 +61,7 @@ export default {
 
       api.auth.signIn(this.email, this.password)
         .then(() => {
-          this.$router.push({name: 'budgetSelector'});
+          this.$router.push({name: 'dashboardOverview'});
           this.alertStore.hide()
         })
         .catch((err: AxiosError<{ errors: string[], success: boolean }>) => {

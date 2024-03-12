@@ -1,53 +1,49 @@
 <script setup lang="ts">
-import { useBudgetLayoutStore } from "@/stores/budgetLayout";
+import {useDashboardLayoutStore} from "@/stores/dashboardLayout";
 import LanguageSwitch from "@/components/LanguageSwitch.vue";
 
-const budgetLayoutStore = useBudgetLayoutStore();
+const dashboardLayoutStore = useDashboardLayoutStore();
 </script>
 
 <template>
-  <v-navigation-drawer floating location="left" elevation="0" expand-on-hover :rail="budgetLayoutStore.isRailMode"
-    @update:rail="(_) => budgetLayoutStore.invertIsExpanded()">
+  <v-navigation-drawer floating location="left" elevation="0" expand-on-hover :rail="dashboardLayoutStore.isRailMode"
+                       @update:rail="(_) => dashboardLayoutStore.invertIsExpanded()">
     <v-list>
       <v-list-item title="Budgetizer" prepend-icon="mdi-piggy-bank-outline"></v-list-item>
     </v-list>
 
     <v-list density="compact" nav>
-      <v-list-subheader v-if="budgetLayoutStore.isRailMode && !budgetLayoutStore.isExpanded">
-        <v-icon icon="mdi-dots-horizontal" />
+      <v-list-subheader v-if="dashboardLayoutStore.isRailMode && !dashboardLayoutStore.isExpanded">
+        <v-icon icon="mdi-dots-horizontal"/>
       </v-list-subheader>
       <v-list-subheader v-else>{{
-        $t("budget.sidebar.general")
-      }}</v-list-subheader>
+          $t("dashboard.sidebar.general")
+        }}
+      </v-list-subheader>
 
-      <v-list-item prepend-icon="mdi-all-inclusive" :title="$t('overview')" :to="{name: 'dashboardOverview'}" />
-      <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)" :to="{name: 'dashboardForecast'}" />
-      <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" :to="{name: 'dashboardEarnings'}" />
-      <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" :to="{name: 'dashboardExpenses'}" />
-      <v-list-item prepend-icon="mdi-shape-plus" :title="$t('category', 2)" :to="{name: 'dashboardCategories'}" />
+      <v-list-item prepend-icon="mdi-all-inclusive" :title="$t('overview')" :to="{name: 'dashboardOverview'}"/>
+      <v-list-item prepend-icon="mdi-weather-partly-cloudy" :title="$t('forecast', 2)"
+                   :to="{name: 'dashboardForecast'}"/>
+      <v-list-item prepend-icon="mdi-bank-transfer-in" :title="$t('earning', 2)" :to="{name: 'dashboardEarnings'}"/>
+      <v-list-item prepend-icon="mdi-bank-transfer-out" :title="$t('expense', 2)" :to="{name: 'dashboardExpenses'}"/>
+      <v-list-item prepend-icon="mdi-shape-plus" :title="$t('category', 2)" :to="{name: 'dashboardCategories'}"/>
     </v-list>
   </v-navigation-drawer>
 
   <v-app-bar flat color="background">
-    <v-app-bar-nav-icon @click="(_) => budgetLayoutStore.invertIsRailMode()" elevation="0"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="(_) => dashboardLayoutStore.invertIsRailMode()" elevation="0"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 
     <div class="w6">
       <VueDatePicker v-model="selectedDate" month-picker required :clearable="false" month-name-format="short"
-        @update:model-value="onDateChanged" :locale="$i18n.locale" :select-text="$t('actions.select')"
-        :cancel-text="$t('actions.cancel')"></VueDatePicker>
+                     @update:model-value="onDateChanged" :locale="$i18n.locale" :select-text="$t('actions.select')"
+                     :cancel-text="$t('actions.cancel')"></VueDatePicker>
     </div>
     <v-spacer></v-spacer>
 
-    <v-tooltip :text="$t('budget.appbar.change_budget')" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn :to="{name: 'budgetSelector'}" v-bind="props" icon="mdi-swap-horizontal"></v-btn>
-      </template>
-    </v-tooltip>
+    <LanguageSwitch/>
 
-    <LanguageSwitch />
-
-    <v-tooltip :text="$t('budget.appbar.logout')" location="bottom">
+    <v-tooltip :text="$t('dashboard.appbar.logout')" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon="mdi-logout" @click="logout"></v-btn>
       </template>
@@ -58,7 +54,7 @@ const budgetLayoutStore = useBudgetLayoutStore();
   <v-main>
     <div class="px-6 pb-6">
       <h5 class="text-h5 mb-6">{{ translatedTitle }}</h5>
-      <router-view />
+      <router-view/>
     </div>
   </v-main>
 </template>
@@ -69,17 +65,17 @@ header.v-toolbar {
 }
 </style>
 <script lang="ts">
-import { useAppStore } from "@/stores/app";
+import {useAppStore} from "@/stores/app";
 import api from "@/api";
 
 const appStore = useAppStore();
 
 export default {
-  beforeCreate() {
-    if (Object.keys(appStore.currentBudget).length <= 0) {
-      this.$router.push({name: 'budgetSelector'});
-    }
-  },
+  // beforeCreate() {
+  //   if (Object.keys(appStore.currentBudget).length <= 0) {
+  //     this.$router.push({name: 'budgetSelector'});
+  //   }
+  // },
   data: () => ({
     selectedDate: {
       month: appStore.currentDateStartAt.month(),

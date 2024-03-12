@@ -9,7 +9,6 @@ describe("Lines service", () => {
       id: "",
       type: "lines",
       links: {self: ""},
-      relationships: {budget: {links: {self: "", related: ""}}}
     }
 
     it("returns a real copy", () => {
@@ -24,21 +23,18 @@ describe("Lines service", () => {
         id: "",
         type: "lines",
         links: {self: ""},
-        relationships: {budget: {links: {self: "", related: ""}}}
       },
       {
         attributes: {amount: 289.33, label: "", lineType: "TypeB", category: ""},
         id: "",
         type: "lines",
         links: {self: ""},
-        relationships: {budget: {links: {self: "", related: ""}}}
       },
       {
         attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
         id: "",
         type: "lines",
         links: {self: ""},
-        relationships: {budget: {links: {self: "", related: ""}}}
       }
     ]
 
@@ -48,14 +44,12 @@ describe("Lines service", () => {
         id: "",
         type: "lines",
         links: {self: ""},
-        relationships: {budget: {links: {self: "", related: ""}}}
       },
       {
         attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
         id: "",
         type: "lines",
         links: {self: ""},
-        relationships: {budget: {links: {self: "", related: ""}}}
       }
     ]
 

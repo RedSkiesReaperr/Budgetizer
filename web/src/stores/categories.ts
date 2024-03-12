@@ -1,4 +1,3 @@
-// Utilities
 import api from "@/api";
 import {Category} from "@/api/resources/categories";
 import {defineStore} from "pinia";
@@ -13,12 +12,8 @@ export const useCategoriesStore = defineStore("categories", {
       this.fetching = true;
 
       api.categories.getAll()
-        .then((res: Category[]) => {
-          this.categories = res;
-        })
-        .finally(() => {
-          this.fetching = false;
-        })
+        .then((res: Category[]) => this.categories = res)
+        .finally(() => this.fetching = false)
     },
   },
 });

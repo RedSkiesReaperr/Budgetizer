@@ -16,13 +16,8 @@ export default {
   saving: "Economie | Economies",
   information: "Information | Informations",
   no_data: "Pas de données à afficher",
-  budget_selector: {
-    title: "Quel budget analyser ?",
-    select_btn: "Analyser",
-  },
-  budget: {
+  dashboard: {
     appbar: {
-      change_budget: "Sélectionner un autre budget",
       logout: "Se déconnecter",
     },
     sidebar: {
@@ -84,21 +79,21 @@ export default {
       amount: "Montant",
     },
     edition: {
-      title: "Editer une ligne de budget",
+      title: "Editer une ligne de dashboard",
       error: "Erreur lors de l'édition",
     },
     creation: {
-      title: "Créer une ligne de budget",
+      title: "Créer une ligne",
       error: "Erreur lors de la création",
     },
     deletion: {
       title: "Confirmer la suppression ?",
-      body: "Si vous confirmez la suppression, les informations de cette ligne de budget ne pourront plus être récupérées.",
+      body: "Si vous confirmez la suppression, les informations de cette ligne de dashboard ne pourront plus être récupérées.",
     },
   },
   forecast_page: {
     card_info:
-      "L'objectif budgetaire pour le type '{type}' est de {budgetTargetAmount}€. Les prévisions sont de {valueAmount}€. Cela représente une différence de {diffValue}€, soit {diffPerentage}%.",
+      "L'objectif budgetaire pour le type '{type}' est de {budgetTargetAmount}€. Les prévisions sont de {valueAmount}€. Cela représente une différence de {diffValue}€, soit {diffPercentage}.",
   },
   form_validations: {
     required: "est obligatoire",
