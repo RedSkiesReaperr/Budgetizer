@@ -97,7 +97,7 @@ export default {
   },
   form_validations: {
     required: "est obligatoire",
-    gt: "doit être dupérieur à {limit}",
+    gt: "doit être supérieur à {limit}",
   },
   actions: {
     cancel: "Annuler",
