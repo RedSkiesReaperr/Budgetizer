@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {formatNumber} from "@/services/formatters";
+import {LineFormMode} from "@/components/LineForm.vue";
 
 interface Props {
   lines: Line[];
@@ -70,47 +70,15 @@ const props = defineProps<Props>();
               ></v-progress-circular>
             </v-overlay>
 
-            <v-row>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  v-model="editedLine.attributes.label"
-                  :label="$t('operation.attributes.label')"
-                  variant="outlined"
-                  clearable
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="editedLine.attributes.amount"
-                  :label="$t('operation.attributes.amount')"
-                  variant="outlined"
-                  type="number"
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="3">
-                <v-select
-                  v-model="editedLine.attributes.lineType"
-                  small-chips
-                  default="editedLine.attributes.lineType"
-                  :label="$t('operation.attributes.type')"
-                  :items="availableTypes"
-                  item-value="value"
-                  variant="outlined"
-                >
-                  <template v-slot:item="{ props, item }">
-                    <v-list-item v-bind="props" :title="$t(getTypeTranslationKey(item.value))"></v-list-item>
-                  </template>
-                  <template #selection="{ item }">
-                    <TypeChip
-                      :raw-type="item.value"
-                      size="small"
-                    ></TypeChip>
-                  </template>
-                </v-select>
-              </v-col>
-            </v-row>
+            <LineForm
+              ref="lineFormEdit"
+              :mode="LineFormMode.EDIT"
+              :target="editedLine"
+              :on-submitting="editSubmitting"
+              :on-submit-success="editSucceed"
+              :on-submit-failed="editFailed"
+              :on-submitted="editSubmitted"
+            />
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -130,7 +98,7 @@ const props = defineProps<Props>();
           >
             {{ $t("actions.cancel") }}
           </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="saveLine">
+          <v-btn color="blue-darken-1" variant="text" @click="submitEdit">
             {{ $t("actions.save") }}
           </v-btn>
         </v-card-actions>
@@ -186,7 +154,7 @@ const props = defineProps<Props>();
 
 <script lang="ts">
 import TypeChip from "@/components/TypeChip.vue";
-import {getTypeTranslationKey} from "@/services/types";
+import LineForm from "@/components/LineForm.vue";
 import {Line} from "@/api/resources/lines";
 import api from "@/api";
 import {copyLine} from "@/services/lines";
@@ -196,7 +164,6 @@ export default {
   data() {
     return {
       itemsPerPage: 30,
-      availableTypes: ["income", "vital", "non_essential"],
       // Delete Line
       deleteDialog: false,
       deletingLine: {} as Line,
@@ -205,9 +172,7 @@ export default {
       editDialog: false,
       editLoading: false,
       editError: false,
-      defaultLine: {} as Line,
       editedLine: {} as Line,
-      editedLineIndex: -1,
     };
   },
   computed: {
@@ -238,31 +203,27 @@ export default {
   },
   methods: {
     editLine(item: Line) {
-      this.editedLineIndex = this.$props.lines.indexOf(item)
       this.editedLine = copyLine(item);
       this.editDialog = true;
     },
     closeEditDialog() {
       this.editDialog = false;
+      this.editError = false
     },
-    async saveLine() {
-      if (this.editedLineIndex > -1) {
-        const editPayload = {
-          label: this.editedLine.attributes.label,
-          amount: this.editedLine.attributes.amount,
-          lineType: this.editedLine.attributes.lineType,
-          category: this.editedLine.attributes.category,
-        };
-
-        this.editLoading = true;
-        await api.lines
-          .updateOne(this.editedLine.id, editPayload)
-          .then(() => {
-            this.$props.onLinesChanged().then(() => this.closeEditDialog())
-          })
-          .catch(() => this.editError = true)
-          .finally(() => this.editLoading = false);
-      }
+    submitEdit() {
+      (this.$refs.lineFormEdit as any).$refs.form.requestSubmit()
+    },
+    editSubmitting() {
+      this.editLoading = true
+    },
+    editSucceed() {
+      this.$props.onLinesChanged().then(() => this.closeEditDialog())
+    },
+    editFailed() {
+      this.editError = true
+    },
+    editSubmitted() {
+      this.editLoading = false
     },
     openDeleteDialog(line: Line) {
       this.deletingLine = line;
@@ -279,6 +240,6 @@ export default {
         .finally(() => this.deleteDialog = false);
     },
   },
-  components: {TypeChip},
+  components: {TypeChip, LineForm},
 };
 </script>
