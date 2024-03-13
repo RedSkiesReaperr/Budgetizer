@@ -7,7 +7,7 @@
     <InfoCard
       v-for="(f, i) in forecast()"
       v-bind:key="i"
-      :loading="linesStore.lines.length <= 0"
+      :loading="linesStore.fetching"
     >
       <template v-slot:main>
         <GaugeChart
@@ -33,7 +33,7 @@
   <div class="d-flex flex-row flex-wrap">
     <BasicCard
       class="pb-10 flex-grow-1"
-      :loading="linesStore.fetching || linesStore.lines.length <= 0"
+      :loading="linesStore.fetching"
     >
       <v-btn
         icon="mdi-plus-circle-outline"
