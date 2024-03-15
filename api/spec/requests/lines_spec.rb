@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Lines' do
   let(:user) { create(:user) }
+  let(:category) { create(:category, user:) }
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'GET /lines' do
@@ -23,7 +24,7 @@ RSpec.describe 'Lines' do
 
     it { expect(data).to all(have_type('lines')) }
 
-    it { expect(data).to all have_jsonapi_attributes(:label, :amount, :lineType).exactly }
+    it { expect(data).to all have_jsonapi_attributes(:label, :amount, :lineType, :categoryId).exactly }
   end
 
   describe 'GET /lines/{id}' do
@@ -52,7 +53,7 @@ RSpec.describe 'Lines' do
 
       it { expect(data).to have_type('lines') }
 
-      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType).exactly }
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :categoryId).exactly }
     end
   end
 
@@ -108,7 +109,8 @@ RSpec.describe 'Lines' do
             attributes: {
               label: 'new label',
               amount: 999.99,
-              lineType: 'income'
+              lineType: 'income',
+              categoryId: category.id
             }
           }
         }
@@ -122,7 +124,7 @@ RSpec.describe 'Lines' do
 
       it { expect(data).to have_type('lines') }
 
-      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType) }
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :categoryId) }
     end
   end
 end

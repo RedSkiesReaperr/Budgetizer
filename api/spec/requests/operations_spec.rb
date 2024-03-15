@@ -4,17 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Operations' do
   let(:user) { create(:user) }
+  let(:category) { create(:category, user:) }
   let(:headers) { { 'Content-Type': 'application/vnd.api+json' } }
 
   describe 'POST /operations' do
     let(:body) do
       { file: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/attachments/operations.csv'),
                                            'text/csv') }
-    end
-    let(:data) do
-      [
-        { date: Time.zone.today, label: 'today label', amount: -23.1, comment: '', pointed: false, op_type: :vital }
-      ]
     end
 
     before do
@@ -84,7 +80,9 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to all(have_type('operations')) }
 
-      it { expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
+      it {
+        expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :categoryId)
+      }
     end
 
     context 'with start_at filter' do
@@ -134,7 +132,7 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to have_type('operations') }
 
-      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
+      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :categoryId) }
     end
   end
 
@@ -175,7 +173,8 @@ RSpec.describe 'Operations' do
               amount: 999.99,
               comment: 'new comment',
               pointed: true,
-              opType: 'income'
+              opType: 'income',
+              categoryId: category.id
             }
           }
         }
@@ -188,7 +187,7 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to have_type('operations') }
 
-      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
+      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :categoryId) }
     end
   end
 

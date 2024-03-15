@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OperationResource < JSONAPI::Resource
-  attributes :date, :label, :amount, :comment, :pointed, :op_type
+  attributes :date, :label, :amount, :comment, :pointed, :op_type, :category_id
 
   filter :start_at,
          verify: ->(values, _context) { Time.zone.parse(values.first) },
