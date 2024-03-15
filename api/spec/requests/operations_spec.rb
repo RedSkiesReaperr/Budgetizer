@@ -13,8 +13,7 @@ RSpec.describe 'Operations' do
     end
     let(:data) do
       [
-        { date: Time.zone.today, label: 'today label', amount: -23.1, comment: '', pointed: false, op_type: :vital,
-          category: :to_categorize }
+        { date: Time.zone.today, label: 'today label', amount: -23.1, comment: '', pointed: false, op_type: :vital }
       ]
     end
 
@@ -85,7 +84,7 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to all(have_type('operations')) }
 
-      it { expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :category) }
+      it { expect(data).to all have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
     end
 
     context 'with start_at filter' do
@@ -135,7 +134,7 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to have_type('operations') }
 
-      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :category) }
+      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
     end
   end
 
@@ -176,8 +175,7 @@ RSpec.describe 'Operations' do
               amount: 999.99,
               comment: 'new comment',
               pointed: true,
-              opType: 'income',
-              category: 'bank'
+              opType: 'income'
             }
           }
         }
@@ -190,7 +188,7 @@ RSpec.describe 'Operations' do
 
       it { expect(data).to have_type('operations') }
 
-      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType, :category) }
+      it { expect(data).to have_jsonapi_attributes(:date, :label, :amount, :comment, :pointed, :opType) }
     end
   end
 

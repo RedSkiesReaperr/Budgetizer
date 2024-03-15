@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Line do
   describe 'Associations' do
     it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:category).optional }
   end
 
   describe 'Validations' do
@@ -19,5 +20,7 @@ RSpec.describe Line do
     describe ':line_type' do
       it { is_expected.to validate_presence_of(:line_type) }
     end
+
+    it { is_expected.to validates_with(CategoryValidator) }
   end
 end

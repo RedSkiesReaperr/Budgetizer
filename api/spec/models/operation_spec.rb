@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Operation do
   describe 'Associations' do
     it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:category).optional }
   end
 
   describe 'Validations' do
@@ -23,6 +24,8 @@ RSpec.describe Operation do
     describe ':op_type' do
       it { is_expected.to validate_presence_of(:op_type) }
     end
+
+    it { is_expected.to validates_with(CategoryValidator) }
   end
 
   describe 'Scopes' do

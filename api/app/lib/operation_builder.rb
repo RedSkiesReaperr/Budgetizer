@@ -46,7 +46,7 @@ class OperationBuilder
     operation[:op_type] = Operation.op_types[type]
   end
 
-  def build_category(category = :to_categorize)
+  def build_category(category = nil)
     operation[:category] = category
   end
 

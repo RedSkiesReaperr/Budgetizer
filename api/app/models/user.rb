@@ -16,7 +16,6 @@ class User < ApplicationRecord
   after_create :create_default_categories
 
   DEFAULT_CATEGORIES = [
-    { key: 'to_categorize', color: '#9e9e9e', icon: 'mdi-shape-plus-outline' },
     { key: 'home', color: '#2980b9', icon: 'mdi-home-circle-outline' },
     { key: 'bank', color: '#d35400', icon: 'mdi-bank-outline' },
     { key: 'shopping', color: '#e74c3c', icon: 'mdi-shopping-outline' },

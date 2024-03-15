@@ -20,6 +20,13 @@ user = User.create!(provider: 'email',
                     nickname: 'John.Doe',
                     email: 'john.doe@gmail.com')
 
+User.create!(provider: 'email',
+             uid: 'foo.bar@gmail.com',
+             password: '123foobar',
+             name: 'Foo',
+             nickname: 'Foo.Bar',
+             email: 'foo.bar@gmail.com')
+
 variation = Faker::Number.within(range: 0..20)
 vital = 50 - (variation / Faker::Number.within(range: 1..10))
 non_essential = 30 + (variation / Faker::Number.within(range: 1..5))
@@ -36,7 +43,9 @@ end
 
 NUMBER_OF_LINES_PER_USER.times do
   amount = Faker::Number.within(range: -500.0..500.0)
-  category = Faker::Number.within(range: 0...Line.categories.size)
+  user_categories = user.categories
+  category_index = Faker::Number.within(range: 0...user_categories.size)
+  category = Faker::Boolean.boolean ? user_categories[category_index] : nil # Some lines need to have an empty category
   line_type = if amount.positive?
                 :income
               else
@@ -49,6 +58,9 @@ NUMBER_OF_OPERATIONS.times do
   date = Faker::Date.between(from: 6.months.ago, to: 1.day.ago)
   label = "#{Faker::Invoice.reference} #{Faker::Company.name}"
   amount = Faker::Number.within(range: -500.0..500.0)
+  user_categories = user.categories
+  category_index = Faker::Number.within(range: 0...user_categories.size)
+  category = Faker::Boolean.boolean ? user_categories[category_index] : nil # Some operations needs an empty category
   comment = Faker::Boolean.boolean ? Faker::ChuckNorris.fact : nil
   pointed = Faker::Boolean.boolean
   op_type = if amount.positive?
@@ -58,7 +70,7 @@ NUMBER_OF_OPERATIONS.times do
             end
 
   Operation.create!(
-    category: Faker::Number.within(range: 0...Operation.categories.size),
+    category:,
     date:,
     label:,
     amount:,

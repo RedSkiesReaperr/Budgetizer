@@ -8,7 +8,7 @@ FactoryBot.define do
     comment { Faker::Quote.yoda }
     pointed { false }
     op_type { :unknown }
-    category { :to_categorize }
+    category { association :category, user: }
     user
   end
 end

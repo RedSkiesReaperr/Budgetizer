@@ -3,6 +3,9 @@
 class Category < ApplicationRecord
   belongs_to :user
 
+  has_many :lines, dependent: :nullify
+  has_many :operations, dependent: :nullify
+
   validates :key, :color, :icon, presence: true
   validates :key, format: { with: /\A[a-z][_a-z]+[a-z]\z/ }
   validates :color, format: { with: /\A#(\d|[a-z]){6}\z/ }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_18_103635) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_14_173238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,8 +31,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_18_103635) do
     t.integer "line_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "category", default: 0
     t.bigint "user_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_lines_on_category_id"
     t.index ["user_id"], name: "index_lines_on_user_id"
   end
 
@@ -66,8 +67,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_18_103635) do
     t.integer "op_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "category", default: 0
     t.bigint "user_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_operations_on_category_id"
     t.index ["user_id"], name: "index_operations_on_user_id"
   end
 
@@ -96,8 +98,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_18_103635) do
   end
 
   add_foreign_key "categories", "users"
+  add_foreign_key "lines", "categories"
   add_foreign_key "lines", "users"
   add_foreign_key "notes", "users"
   add_foreign_key "objectives", "users"
+  add_foreign_key "operations", "categories"
   add_foreign_key "operations", "users"
 end

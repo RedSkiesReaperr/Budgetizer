@@ -12,6 +12,9 @@ require 'faker'
 require 'support/factory_bot'
 require 'support/shoulda_matchers'
 
+# Load custom matchers
+require 'support/matchers/validates_with'
+
 # Load shared examples
 require 'support/request_examples_spec'
 require 'support/model_validations_examples_spec'

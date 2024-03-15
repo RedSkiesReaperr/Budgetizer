@@ -76,6 +76,6 @@ RSpec.describe OperationBuilder do
   end
 
   describe '.build_category' do
-    it_behaves_like 'builder method', field: :category, test_value: :shopping, expected: :shopping
+    it_behaves_like 'builder method', field: :category, test_value: nil, expected: nil
   end
 end

@@ -7,6 +7,8 @@ RSpec.describe Category do
 
   describe 'Associations' do
     it { is_expected.to belong_to(:user) }
+    it { is_expected.to have_many(:lines).dependent(:nullify) }
+    it { is_expected.to have_many(:operations).dependent(:nullify) }
   end
 
   describe 'Validations' do

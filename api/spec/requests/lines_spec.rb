@@ -23,7 +23,7 @@ RSpec.describe 'Lines' do
 
     it { expect(data).to all(have_type('lines')) }
 
-    it { expect(data).to all have_jsonapi_attributes(:label, :amount, :lineType, :category).exactly }
+    it { expect(data).to all have_jsonapi_attributes(:label, :amount, :lineType).exactly }
   end
 
   describe 'GET /lines/{id}' do
@@ -52,7 +52,7 @@ RSpec.describe 'Lines' do
 
       it { expect(data).to have_type('lines') }
 
-      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :category).exactly }
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType).exactly }
     end
   end
 
@@ -108,8 +108,7 @@ RSpec.describe 'Lines' do
             attributes: {
               label: 'new label',
               amount: 999.99,
-              lineType: 'income',
-              category: 'bank'
+              lineType: 'income'
             }
           }
         }
@@ -123,7 +122,7 @@ RSpec.describe 'Lines' do
 
       it { expect(data).to have_type('lines') }
 
-      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :category) }
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType) }
     end
   end
 end

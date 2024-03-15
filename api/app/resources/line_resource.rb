@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LineResource < JSONAPI::Resource
-  attributes :label, :amount, :line_type, :category
+  attributes :label, :amount, :line_type
 
   def self.records(options = {})
     context = options[:context]
