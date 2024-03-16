@@ -5,7 +5,7 @@ import {Line} from "@/api/resources/lines";
 describe("Lines service", () => {
   describe("copyLine()", () => {
     const original: Line = {
-      attributes: {amount: 289.33, label: "", lineType: "", category: ""},
+      attributes: {amount: 289.33, label: "", lineType: "", categoryId: 1},
       id: "",
       type: "lines",
       links: {self: ""},
@@ -19,19 +19,19 @@ describe("Lines service", () => {
   describe("linesForTypes()", () => {
     const dataset: Line[] = [
       {
-        attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
+        attributes: {amount: 289.33, label: "", lineType: "TypeA", categoryId: 1},
         id: "",
         type: "lines",
         links: {self: ""},
       },
       {
-        attributes: {amount: 289.33, label: "", lineType: "TypeB", category: ""},
+        attributes: {amount: 289.33, label: "", lineType: "TypeB", categoryId: 1},
         id: "",
         type: "lines",
         links: {self: ""},
       },
       {
-        attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
+        attributes: {amount: 289.33, label: "", lineType: "TypeA", categoryId: 1},
         id: "",
         type: "lines",
         links: {self: ""},
@@ -40,13 +40,13 @@ describe("Lines service", () => {
 
     const expected: Line[] = [
       {
-        attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
+        attributes: {amount: 289.33, label: "", lineType: "TypeA", categoryId: 1},
         id: "",
         type: "lines",
         links: {self: ""},
       },
       {
-        attributes: {amount: 289.33, label: "", lineType: "TypeA", category: ""},
+        attributes: {amount: 289.33, label: "", lineType: "TypeA", categoryId: 1},
         id: "",
         type: "lines",
         links: {self: ""},

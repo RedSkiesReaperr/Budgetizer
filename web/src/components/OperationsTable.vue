@@ -3,9 +3,12 @@ import {Operation} from "@/api/resources/operations";
 import TypeChip from "@/components/TypeChip.vue";
 import CategoryChip from "@/components/CategoryChip.vue";
 import Alert from "@/components/Alert.vue";
+import {Category} from "@/api/resources/categories";
+import {getCategoryById} from "@/services/categories";
 
 interface Props {
-  data: Operation[];
+  operations: Operation[];
+  categories: Category[];
 }
 
 const props = defineProps<Props>();
@@ -15,15 +18,11 @@ const props = defineProps<Props>();
   <v-data-table
     :items-per-page="itemsPerPage"
     :headers="headers"
-    :items="props.data"
+    :items="props.operations"
     :sort-by="[{ key: 'attributes.date', order: 'desc' }]"
   >
     <template v-slot:[`item.attributes.date`]="{ item }">
-      <span>{{
-          new Date(item.attributes.date).toLocaleDateString(
-            $i18n.locale
-          )
-        }}</span>
+      <span>{{ new Date(item.attributes.date).toLocaleDateString($i18n.locale) }}</span>
     </template>
 
     <template v-slot:[`item.attributes.opType`]="{ item }">
@@ -35,7 +34,7 @@ const props = defineProps<Props>();
 
     <template v-slot:[`item.attributes.category`]="{ item }">
       <CategoryChip
-        :raw-category="item.attributes.category"
+        :category="getCategoryById(item.attributes.categoryId, props.categories)"
         size="small"
       ></CategoryChip>
     </template>
@@ -140,7 +139,7 @@ const props = defineProps<Props>();
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-select
-                  v-model="editedOperation.attributes.category"
+                  v-model="editedOperation.attributes.categoryId"
                   small-chips
                   :label="$t('operation.attributes.category')"
                   :items="categoryItems"
@@ -150,7 +149,7 @@ const props = defineProps<Props>();
                 >
                   <template #selection="{ item }">
                     <CategoryChip
-                      :raw-category="item.value"
+                      :category="getCategoryById(item.value, props.categories)"
                       size="small"
                     ></CategoryChip>
                   </template>
@@ -195,10 +194,7 @@ const props = defineProps<Props>();
 
 <script lang="ts">
 import {AlertType, useAlertStore} from "@/stores/alert";
-import {
-  knownCategories,
-  getCategoryTranslationKey,
-} from "@/services/categories";
+import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
 import {copyOperation} from "@/services/operations";
 import {formatNumber} from "@/services/formatters";
 import api from "@/api";
@@ -271,11 +267,11 @@ export default {
     categoryItems(): Array<{ value: string; title: string }> {
       let items: Array<{ value: string; title: string }> = [];
 
-      knownCategories.forEach((cat) => {
-        items.push({
-          value: cat,
-          title: this.$t(getCategoryTranslationKey(cat)),
-        });
+      this.$props.categories.forEach((cat: Category) => {
+        const translationKey = getCategoryTranslationKey(cat)
+        const title = (this.$te(translationKey)) ? this.$t(translationKey) : getCategoryReadableKey(cat)
+
+        items.push({value: cat.id, title: title});
       });
 
       return items;
@@ -296,7 +292,7 @@ export default {
       return rawAmount > 0 ? `+${amount} €` : `${amount} €`;
     },
     editOperation(item: Operation) {
-      this.editedOperationIndex = this.$props.data.indexOf(item);
+      this.editedOperationIndex = this.$props.operations.indexOf(item);
       this.editedOperation = copyOperation(item);
       this.editDialog = true;
     },
@@ -321,14 +317,14 @@ export default {
           pointed: this.editedOperation.attributes.pointed,
           comment: this.editedOperation.attributes.comment,
           opType: this.editedOperation.attributes.opType,
-          category: this.editedOperation.attributes.category,
+          categoryId: this.editedOperation.attributes.categoryId,
         };
 
         this.editLoading = true;
         await api.operations
           .updateOne(this.editedOperation.id, editPayload)
           .then((res) => {
-            Object.assign(this.$props.data[this.editedOperationIndex], res);
+            Object.assign(this.$props.operations[this.editedOperationIndex], res);
             alertStore.show(AlertType.Success, this.$t('operation.edition.success_title'), this.$t("operation.edition.success_message"))
             this.closeEditDialog();
           })

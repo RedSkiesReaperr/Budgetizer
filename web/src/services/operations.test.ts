@@ -1,9 +1,23 @@
 import {describe, expect, it} from "vitest";
-import {copyOperation, operationsForCategories, operationsForDay} from "@/services/operations";
+import {copyOperation, getOperationsByCategory, getOperationsByDay} from "@/services/operations";
 import {Operation} from "@/api/resources/operations";
 import moment from "moment/moment";
+import {Category} from "@/api/resources/categories";
 
 describe("Operations service", () => {
+  const category1: Category = {
+    id: "1",
+    type: "categories",
+    links: {
+      self: "my_example_category_link"
+    },
+    attributes: {
+      key: "example_abcdefg2",
+      color: "#9e9e9e",
+      icon: "mdi-example"
+    }
+  }
+
   describe("copyOperation()", () => {
     const original: Operation = {
       attributes: {
@@ -12,7 +26,7 @@ describe("Operations service", () => {
         label: "",
         pointed: true,
         opType: "",
-        category: "",
+        categoryId: -1,
         comment: ""
       }, id: "", type: "", links: {self: ""}
     }
@@ -22,7 +36,7 @@ describe("Operations service", () => {
     });
   });
 
-  describe("operationsForCategories()", () => {
+  describe("getOperationsByCategory()", () => {
     const dataset: Operation[] = [
       {
         attributes: {
@@ -31,7 +45,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryA",
+          categoryId: 1,
           comment: ""
         },
         id: "",
@@ -45,7 +59,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryB",
+          categoryId: 2,
           comment: ""
         },
         id: "",
@@ -53,7 +67,7 @@ describe("Operations service", () => {
         links: {self: ""}
       },
       {
-        attributes: {amount: 76.34, date: "", label: "", pointed: true, opType: "", category: "CategoryA", comment: ""},
+        attributes: {amount: 76.34, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""},
         id: "",
         type: "",
         links: {self: ""}
@@ -68,7 +82,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryA",
+          categoryId: 1,
           comment: ""
         },
         id: "",
@@ -76,7 +90,7 @@ describe("Operations service", () => {
         links: {self: ""}
       },
       {
-        attributes: {amount: 76.34, date: "", label: "", pointed: true, opType: "", category: "CategoryA", comment: ""},
+        attributes: {amount: 76.34, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""},
         id: "",
         type: "",
         links: {self: ""}
@@ -84,11 +98,11 @@ describe("Operations service", () => {
     ]
 
     it("returns a real copy", () => {
-      expect(operationsForCategories(dataset, ["CategoryA"])).toStrictEqual(expected)
+      expect(getOperationsByCategory(category1, dataset)).toStrictEqual(expected)
     });
   })
 
-  describe("operationsForDay()", () => {
+  describe("getOperationsByDay()", () => {
     const dataset: Operation[] = [
       {
         attributes: {
@@ -97,7 +111,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryA",
+          categoryId: 1,
           comment: ""
         },
         id: "",
@@ -111,7 +125,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryB",
+          categoryId: 2,
           comment: ""
         },
         id: "",
@@ -125,7 +139,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryA",
+          categoryId: 1,
           comment: ""
         },
         id: "",
@@ -142,7 +156,7 @@ describe("Operations service", () => {
           label: "",
           pointed: true,
           opType: "",
-          category: "CategoryB",
+          categoryId: 2,
           comment: ""
         },
         id: "",
@@ -154,7 +168,7 @@ describe("Operations service", () => {
     it("returns a real copy", () => {
       const date = moment('2023-08-31', 'YYYY-MM-DD')
 
-      expect(operationsForDay(dataset, date)).toStrictEqual(expected)
+      expect(getOperationsByDay(date, dataset)).toStrictEqual(expected)
     });
   })
 });

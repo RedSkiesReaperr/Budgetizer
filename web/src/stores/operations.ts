@@ -10,7 +10,7 @@ export const useOperationsStore = defineStore("operations", {
   }),
   getters: {
     incomes: (state): Operation[] => state.operations.filter((o) => o.attributes.amount >= 0),
-    expenses: (state): Operation[] => state.operations.filter((o) => o.attributes.amount < 0)
+    expenses: (state): Operation[] => state.operations.filter((o) => o.attributes.amount < 0),
   },
   actions: {
     async fetchAll(startAt: moment.Moment, endAt: moment.Moment) {

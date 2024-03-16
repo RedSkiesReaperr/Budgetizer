@@ -25,7 +25,9 @@
       <CategoriesPieChart/>
     </BasicCard>
   </div>
-  <v-container><v-divider></v-divider></v-container>
+  <v-container>
+    <v-divider></v-divider>
+  </v-container>
   <NotesSlider :notes="notesStore.notes" :loading="notesStore.fetching"></NotesSlider>
   <Alert></Alert>
 </template>
@@ -43,6 +45,7 @@ import {AlertType, useAlertStore} from "@/stores/alert";
 import {AxiosError} from "axios";
 import {useNotesStore} from "@/stores/notes";
 import Alert from "@/components/Alert.vue";
+import {useCategoriesStore} from "@/stores/categories";
 
 export default {
   setup() {
@@ -50,8 +53,9 @@ export default {
     const appStore = useAppStore()
     const alertStore = useAlertStore()
     const notesStore = useNotesStore()
+    const categoriesStore = useCategoriesStore()
 
-    return {operationsStore, appStore, alertStore, notesStore};
+    return {operationsStore, appStore, alertStore, notesStore, categoriesStore};
   },
   data() {
     return {
@@ -62,6 +66,10 @@ export default {
   mounted() {
     if (this.operationsStore.expenses.length <= 0) {
       this.operationsStore.fetchAll(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt)
+    }
+
+    if (this.categoriesStore.categories.length <= 0) {
+      this.categoriesStore.fetchAll()
     }
 
     if (this.notesStore.notes.length <= 0) {

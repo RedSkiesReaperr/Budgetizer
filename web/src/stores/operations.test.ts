@@ -1,8 +1,8 @@
 // stores/counter.spec.ts
-import { setActivePinia, createPinia } from "pinia";
-import { expect, describe, beforeEach, it, vi } from "vitest";
-import { useOperationsStore } from "@/stores/operations";
-import OperationsRequests, { Operation } from "@/api/resources/operations";
+import {setActivePinia, createPinia} from "pinia";
+import {expect, describe, beforeEach, it, vi} from "vitest";
+import {useOperationsStore} from "@/stores/operations";
+import OperationsRequests, {Operation} from "@/api/resources/operations";
 import api from "@/api";
 import moment from "moment";
 
@@ -20,7 +20,7 @@ describe("operations Store", () => {
       comment: "",
       pointed: true,
       opType: "a type",
-      category: "a category",
+      categoryId: 1,
     },
   };
 
@@ -37,52 +37,50 @@ describe("operations Store", () => {
       comment: "",
       pointed: true,
       opType: "a type",
-      category: "a category",
+      categoryId: 2,
     },
   };
+
+  const allOperations: Operation[] = [incomeOperation, expenseOperation];
 
   beforeEach(() => {
     setActivePinia(createPinia());
   });
 
-  describe("fetchAll", () => {
-    it("fills incomes", async () => {
+  describe("getter incomes", () => {
+    it("returns only incomes operations", async () => {
       vi.spyOn(OperationsRequests, "getAll").mockImplementationOnce(() =>
-        Promise.resolve<Operation[]>([incomeOperation])
+        Promise.resolve<Operation[]>(allOperations)
       );
 
       const store = useOperationsStore();
       expect(store.incomes).toStrictEqual([]);
-      expect(store.expenses).toStrictEqual([]);
       await store.fetchAll(moment(), moment());
       expect(store.incomes).toStrictEqual([incomeOperation]);
-      expect(store.expenses).toStrictEqual([]);
     });
+  })
 
-    it("fills expenses", async () => {
-      vi.spyOn(api.operations, "getAll").mockImplementationOnce(() =>
-        Promise.resolve<Operation[]>([expenseOperation])
+  describe("getter expenses", () => {
+    it("returns only expenses operations", async () => {
+      vi.spyOn(OperationsRequests, "getAll").mockImplementationOnce(() =>
+        Promise.resolve<Operation[]>(allOperations)
       );
+
       const store = useOperationsStore();
-      expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([]);
       await store.fetchAll(moment(), moment());
-      expect(store.incomes).toStrictEqual([]);
       expect(store.expenses).toStrictEqual([expenseOperation]);
     });
-  });
-
-  describe("all", () => {
-    it("returns array of incomes & expenses", async () => {
-      vi.spyOn(OperationsRequests, "getAll").mockImplementationOnce(() =>
-        Promise.resolve<Operation[]>([incomeOperation, expenseOperation])
+  })
+  describe("fetchAll", () => {
+    it("fills operations", async () => {
+      vi.spyOn(api.operations, "getAll").mockImplementationOnce(() =>
+        Promise.resolve<Operation[]>(allOperations)
       );
-
       const store = useOperationsStore();
-      expect(store.incomes).toStrictEqual([]);
-      expect(store.expenses).toStrictEqual([]);
+      expect(store.operations).toStrictEqual([]);
       await store.fetchAll(moment(), moment());
       expect(store.operations).toStrictEqual([incomeOperation, expenseOperation]);
-    })
-  })
+    });
+  });
 });

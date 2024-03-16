@@ -11,7 +11,7 @@ export interface Line {
     label: string;
     amount: number;
     lineType: string;
-    category: string;
+    categoryId: number;
   };
 }
 
@@ -19,7 +19,6 @@ interface UpdatePayload {
   label?: string;
   amount?: number;
   lineType?: string;
-  category?: string;
 }
 
 interface CreatePayload {

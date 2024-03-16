@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import {
-  getCategoryIcon,
-  getCategoryColor,
-  getCategoryTranslationKey,
-} from "@/services/categories";
+import {Category} from "@/api/resources/categories";
 
 interface Props {
-  rawCategory: string;
+  category: Category;
   size: string;
 }
 
@@ -17,8 +13,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <v-chip
-    :prepend-icon="getCategoryIcon(props.rawCategory)"
-    :color="getCategoryColor(props.rawCategory)"
+    :prepend-icon="props.category.attributes.icon"
+    :color="props.category.attributes.color"
     :size="props.size"
   >
     {{ translatedText }}
@@ -26,10 +22,19 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <script lang="ts">
+import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
+
 export default {
   computed: {
+    translationKey(): string {
+      return getCategoryTranslationKey(this.$props.category)
+    },
     translatedText(): string {
-      return this.$t(getCategoryTranslationKey(this.$props.rawCategory));
+      if (this.$te(this.translationKey)) {
+        return this.$t(this.translationKey);
+      } else {
+        return getCategoryReadableKey(this.category)
+      }
     },
   },
 };

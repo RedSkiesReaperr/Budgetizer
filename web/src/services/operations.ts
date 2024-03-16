@@ -1,5 +1,6 @@
 import {Operation} from "@/api/resources/operations";
 import moment from "moment/moment";
+import {Category} from "@/api/resources/categories";
 
 export function copyOperation(input: Operation): Operation {
   return {
@@ -9,12 +10,12 @@ export function copyOperation(input: Operation): Operation {
   };
 }
 
-export function operationsForCategories(operations: Operation[], categories: string[]): Operation[] {
-  return operations.filter((op: Operation) => categories.includes(op.attributes.category))
+export function getOperationsByCategory(category: Category, operations: Operation[]): Operation[] {
+  return operations.filter((op: Operation) => op.attributes.categoryId === parseInt(category.id))
 }
 
-export function operationsForDay(operations: Operation[], targetDay: moment.Moment): Operation[] {
-  const formattedTargetDay = targetDay.format("YYYY-MM-DD")
+export function getOperationsByDay(targetDay: moment.Moment, operations: Operation[]): Operation[] {
+  const formattedTargetDay: string = targetDay.format("YYYY-MM-DD")
 
   return operations.filter((op: Operation) => moment(op.attributes.date).format("YYYY-MM-DD") === formattedTargetDay)
 }

@@ -16,7 +16,7 @@ describe("lines Store", () => {
         label: "Line #",
         amount: 53.34,
         lineType: "income",
-        category: "home",
+        categoryId: 1,
       },
     }
   ];

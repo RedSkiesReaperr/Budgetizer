@@ -1,91 +1,90 @@
-import { describe, expect, it } from "vitest";
+import {describe, expect, it} from "vitest";
 import {
-  getCategoryColor,
-  getCategoryIcon,
+  getCategoryById,
+  getCategoryReadableKey,
   getCategoryTranslationKey,
+  MISSING_CATEGORY,
+  UNKNOWN_CATEGORY,
 } from "./categories";
+import {Category} from "@/api/resources/categories";
 
 describe("Categories service", () => {
-  describe("getCategoryColor()", () => {
-    const expectations = [
-      { rawCategory: "to_categorize", expected: "#9e9e9e" },
-      { rawCategory: "home", expected: "#2980b9" },
-      { rawCategory: "bank", expected: "#d35400" },
-      { rawCategory: "shopping", expected: "#e74c3c" },
-      { rawCategory: "food", expected: "#f1c40f" },
-      { rawCategory: "subscriptions", expected: "#9b59b6" },
-      { rawCategory: "auto_transport", expected: "#1abc9c" },
-      { rawCategory: "beauty_care", expected: "#ff9ff3" },
-      { rawCategory: "taxes", expected: "#bdc3c7" },
-      { rawCategory: "salary", expected: "#27ae60" },
-      { rawCategory: "this_is_unknown", expected: "#9e9e9e" },
-    ];
+  const category1: Category = {
+    id: "1",
+    type: "categories",
+    links: {
+      self: "my_example_category_link"
+    },
+    attributes: {
+      key: "example_abcdefg2",
+      color: "#9e9e9e",
+      icon: "mdi-example"
+    }
+  }
 
-    it("returns right color for each Category", () => {
-      expectations.forEach((obj) => {
-        expect(getCategoryColor(obj.rawCategory)).toStrictEqual(obj.expected);
-      });
-    });
-  });
+  const category2: Category = {
+    id: "2",
+    type: "categories",
+    links: {
+      self: "my_example_category_link"
+    },
+    attributes: {
+      key: "hello_world",
+      color: "#9e9e9e",
+      icon: "mdi-hello"
+    }
+  }
 
-  describe("getCategoryIcon()", () => {
-    const expectations = [
-      { rawCategory: "to_categorize", expected: "mdi-shape-plus-outline" },
-      { rawCategory: "home", expected: "mdi-home-circle-outline" },
-      { rawCategory: "bank", expected: "mdi-bank-outline" },
-      { rawCategory: "shopping", expected: "mdi-shopping-outline" },
-      { rawCategory: "food", expected: "mdi-food" },
-      { rawCategory: "subscriptions", expected: "mdi-cash-sync" },
-      { rawCategory: "auto_transport", expected: "mdi-plane-car" },
-      { rawCategory: "beauty_care", expected: "mdi-star-four-points-outline" },
-      { rawCategory: "taxes", expected: "mdi-cash-multiple" },
-      { rawCategory: "salary", expected: "mdi-cash-100" },
-      { rawCategory: "this_is_unknown", expected: "mdi-crosshairs-question" },
-    ];
+  const category89: Category = {
+    id: "89",
+    type: "categories",
+    links: {
+      self: "my_example_category_link"
+    },
+    attributes: {
+      key: "example_abcdefg2",
+      color: "#9e9e9e",
+      icon: "mdi-example"
+    }
+  }
 
-    it("returns right color for each Category", () => {
-      expectations.forEach((obj) => {
-        expect(getCategoryIcon(obj.rawCategory)).toStrictEqual(obj.expected);
-      });
-    });
+  const categories: Category[] = [category1, category2, category89]
+
+  describe("getCategoryById()", () => {
+    describe("when category id is null", () => {
+      it("returns XXX category object", () => {
+        expect(getCategoryById(null, categories)).toStrictEqual(MISSING_CATEGORY);
+      })
+    })
+
+    describe("when category id is of type number", () => {
+      it("returns XXX category object", () => {
+        expect(getCategoryById(2, categories)).toStrictEqual(category2);
+      })
+    })
+
+    describe("when category id is of type string", () => {
+      it("returns XXX category object", () => {
+        expect(getCategoryById("89", categories)).toStrictEqual(category89);
+      })
+    })
+
+    describe("when category is unknown", () => {
+      it("returns XXX category object", () => {
+        expect(getCategoryById(999, categories)).toStrictEqual(UNKNOWN_CATEGORY);
+      })
+    })
   });
 
   describe("getCategoryTranslationKey()", () => {
-    const expectations = [
-      {
-        rawCategory: "to_categorize",
-        expected: "operation.categories.to_categorize",
-      },
-      { rawCategory: "home", expected: "operation.categories.home" },
-      { rawCategory: "bank", expected: "operation.categories.bank" },
-      { rawCategory: "shopping", expected: "operation.categories.shopping" },
-      { rawCategory: "food", expected: "operation.categories.food" },
-      {
-        rawCategory: "subscriptions",
-        expected: "operation.categories.subscriptions",
-      },
-      {
-        rawCategory: "auto_transport",
-        expected: "operation.categories.auto_transport",
-      },
-      {
-        rawCategory: "beauty_care",
-        expected: "operation.categories.beauty_care",
-      },
-      { rawCategory: "taxes", expected: "operation.categories.taxes" },
-      { rawCategory: "salary", expected: "operation.categories.salary" },
-      {
-        rawCategory: "this_is_unknown",
-        expected: "operation.categories.unknown",
-      },
-    ];
+    it("returns right translation key for category", () => {
+      expect(getCategoryTranslationKey(category1)).toStrictEqual(`operation.categories.example_abcdefg2`);
+    });
+  });
 
+  describe("getCategoryReadableKey()", () => {
     it("returns right color for each Category", () => {
-      expectations.forEach((obj) => {
-        expect(getCategoryTranslationKey(obj.rawCategory)).toStrictEqual(
-          obj.expected
-        );
-      });
+      expect(getCategoryReadableKey(category1)).toStrictEqual("Example abcdefg2");
     });
   });
 });

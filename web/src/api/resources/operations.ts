@@ -1,5 +1,5 @@
 import client from "@/api/client";
-import { ApiResponse } from "../responses";
+import {ApiResponse} from "../responses";
 import moment from "moment";
 
 export interface Operation {
@@ -15,7 +15,7 @@ export interface Operation {
     comment: string;
     pointed: boolean;
     opType: string;
-    category: string;
+    categoryId: number;
   };
 }
 
@@ -25,7 +25,7 @@ interface UpdatePayload {
   comment?: string;
   pointed?: boolean;
   opType?: string;
-  category?: string;
+  categoryId?: number;
 }
 
 export interface ImportResponse {

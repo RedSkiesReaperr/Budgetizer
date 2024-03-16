@@ -29,9 +29,9 @@ describe("Calculations service", () => {
   describe("sum()", () => {
     describe("sum<Operation>()", () => {
       const operations: Operation[] = [
-        {attributes: {amount: 289.33, date: "", label: "", pointed: true, opType: "", category: "", comment: ""}, id: "", type: "", links: {self: ""}},
-        {attributes: {amount: 98.13, date: "", label: "", pointed: true, opType: "", category: "", comment: ""}, id: "", type: "", links: {self: ""}},
-        {attributes: {amount: 3.92, date: "", label: "", pointed: true, opType: "", category: "", comment: ""}, id: "", type: "", links: {self: ""}},
+        {attributes: {amount: 289.33, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""}, id: "", type: "", links: {self: ""}},
+        {attributes: {amount: 98.13, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""}, id: "", type: "", links: {self: ""}},
+        {attributes: {amount: 3.92, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""}, id: "", type: "", links: {self: ""}},
       ]
       it("returns correct sum", () => {
         expect(sum(operations)).toEqual(391.38);
@@ -40,9 +40,9 @@ describe("Calculations service", () => {
 
     describe("sum<Line>()", () => {
       const lines: Line[] = [
-        {attributes: {amount: 982.73, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines"},
-        {attributes: {amount: 273.02, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines"},
-        {attributes: {amount: 94.87, label: "", category: "", lineType: ""}, id: "", links: {self: ""}, type: "lines"},
+        {attributes: {amount: 982.73, label: "", categoryId: 1, lineType: ""}, id: "", links: {self: ""}, type: "lines"},
+        {attributes: {amount: 273.02, label: "", categoryId: 1, lineType: ""}, id: "", links: {self: ""}, type: "lines"},
+        {attributes: {amount: 94.87, label: "", categoryId: 1, lineType: ""}, id: "", links: {self: ""}, type: "lines"},
       ]
 
       it("returns correct sum", () => {

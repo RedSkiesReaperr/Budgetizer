@@ -13,10 +13,10 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <vue-apex-charts
-      type="area"
-      :options="chartOptions"
-      :series="chartSeries"
-      height="100%"
+    type="area"
+    :options="chartOptions"
+    :series="chartSeries"
+    height="100%"
   ></vue-apex-charts>
 </template>
 
@@ -24,9 +24,9 @@ withDefaults(defineProps<Props>(), {
 import VueApexCharts from "vue3-apexcharts";
 import moment from "moment";
 import {Operation} from "@/api/resources/operations";
-import {operationsForDay} from "@/services/operations";
+import {getOperationsByDay} from "@/services/operations";
 import {sum} from "@/services/calculations";
-import { formatNumber } from "@/services/formatters";
+import {formatNumber} from "@/services/formatters";
 
 export default {
   computed: {
@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     operationsAmountForDay(day: moment.Moment): number {
-      return sum(operationsForDay(this.$props.operations, day))
+      return sum(getOperationsByDay(day, this.$props.operations))
     }
   },
   components: {VueApexCharts},

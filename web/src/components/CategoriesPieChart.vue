@@ -8,24 +8,25 @@
 
 <script lang="ts">
 import VueApexCharts from "vue3-apexcharts";
-import {getCategoryTranslationKey, getCategoryColor, knownCategories} from "@/services/categories";
+import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
 import {useOperationsStore} from "@/stores/operations";
-import {operationsForCategories} from "@/services/operations";
+import {useCategoriesStore} from "@/stores/categories";
 import {sum} from "@/services/calculations";
-import { formatNumber } from "@/services/formatters";
+import {formatNumber} from "@/services/formatters";
+import {Category} from "@/api/resources/categories";
+import {getOperationsByCategory} from "@/services/operations";
 
 export default {
   setup() {
     const operationsStore = useOperationsStore()
+    const categoriesStore = useCategoriesStore();
 
-    return {operationsStore}
-  },
-  data() {
-    return {
-      categories: knownCategories.filter((cat: string) => cat !== "salary")
-    };
+    return {operationsStore, categoriesStore}
   },
   computed: {
+    categories(): Category[] {
+      return this.categoriesStore.expenseCategories
+    },
     chartOptions() {
       return {
         chart: {
@@ -33,9 +34,7 @@ export default {
         },
         dataLabels: {
           enabled: true,
-          formatter: function (val: number) {
-            return `${val.toFixed(0)}%`
-          },
+          formatter: (val: number) => `${val.toFixed(0)}%`,
           style: {
             fontSize: '12px'
           }
@@ -46,9 +45,7 @@ export default {
         tooltip: {
           enabled: true,
           y: {
-            formatter: function (value: number): string {
-              return `${formatNumber(value)} €`
-            }
+            formatter: (value: number) => `${formatNumber(value)} €`,
           }
         },
         noData: {
@@ -79,14 +76,14 @@ export default {
       }
     },
     colors(): string[] {
-      return this.categories.map((cat: string) => getCategoryColor(cat))
+      return this.categories.map((cat: Category) => cat.attributes.color)
     },
     labels(): string[] {
-      return this.categories.map((cat: string) => this.$t(getCategoryTranslationKey(cat)))
+      return this.categories.map((cat: Category) => this.translatedLabel(cat))
     },
     chartSeries(): number[] {
-      const series = this.categories.map((cat: string) => {
-        const ops = operationsForCategories(this.operationsStore.operations, [cat])
+      const series = this.categories.map((cat: Category) => {
+        const ops = getOperationsByCategory(cat, this.operationsStore.operations)
 
         return Math.abs(sum(ops))
       })
@@ -94,7 +91,17 @@ export default {
       return (series.every((s: number) => s === 0)) ? [] : series
     },
   },
-  methods: {},
+  methods: {
+    translatedLabel(cat: Category): string {
+      const translationKey = getCategoryTranslationKey(cat)
+
+      if (this.$te(translationKey)) {
+        return this.$t(translationKey);
+      } else {
+        return getCategoryReadableKey(cat)
+      }
+    }
+  },
   components: {VueApexCharts},
 };
 </script>
