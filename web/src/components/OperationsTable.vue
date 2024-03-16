@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-import {Operation} from "@/api/resources/operations";
 import TypeChip from "@/components/TypeChip.vue";
 import CategoryChip from "@/components/CategoryChip.vue";
 import Alert from "@/components/Alert.vue";
 import {Category} from "@/api/resources/categories";
 import {getCategoryById} from "@/services/categories";
+import OperationForm, {OperationFormMode} from "@/components/OperationForm.vue";
 
 interface Props {
   operations: Operation[];
   categories: Category[];
+  onOperationsChanged: () => Promise<any>;
 }
 
 const props = defineProps<Props>();
@@ -93,88 +94,13 @@ const props = defineProps<Props>();
               ></v-progress-circular>
             </v-overlay>
 
-            <v-row>
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field
-                  v-model="editedOperationDate"
-                  :label="$t('operation.attributes.date')"
-                  variant="outlined"
-                  disabled
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  v-model="editedOperation.attributes.label"
-                  :label="$t('operation.attributes.label')"
-                  variant="outlined"
-                  clearable
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  :model-value="formatNumber(editedOperation.attributes.amount)"
-                  :label="$t('operation.attributes.amount')"
-                  variant="outlined"
-                  disabled
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="4">
-                <v-select
-                  v-model="editedOperation.attributes.opType"
-                  small-chips
-                  default="editingOperation.attributes.opType"
-                  :label="$t('operation.attributes.type')"
-                  :items="typeItems"
-                  item-title="title"
-                  item-value="value"
-                  variant="outlined"
-                >
-                  <template #selection="{ item }">
-                    <TypeChip :raw-type="item.value" size="small"></TypeChip>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-select
-                  v-model="editedOperation.attributes.categoryId"
-                  small-chips
-                  :label="$t('operation.attributes.category')"
-                  :items="categoryItems"
-                  item-title="title"
-                  item-value="value"
-                  variant="outlined"
-                >
-                  <template #selection="{ item }">
-                    <CategoryChip
-                      :category="getCategoryById(item.value, props.categories)"
-                      size="small"
-                    ></CategoryChip>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="2">
-                <v-switch
-                  v-model="editedOperation.attributes.pointed"
-                  :label="$t('operation.attributes.pointed')"
-                  color="green"
-                  true-icon="mdi-check-circle-outline"
-                  false-icon="mdi-close-circle-outline"
-                  inset
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedOperation.attributes.comment"
-                  :label="$t('operation.attributes.comment')"
-                  required
-                  variant="outlined"
-                  clearable
-                ></v-text-field>
-              </v-col>
-            </v-row>
+            <OperationForm ref="operationFormEdit"
+                           :mode="OperationFormMode.EDIT"
+                           :on-submitting="editSubmitting"
+                           :on-submit-success="editSucceed"
+                           :on-submit-failed="editFailed"
+                           :on-submitted="editSubmitted"
+                           :target="editedOperation"/>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -194,10 +120,12 @@ const props = defineProps<Props>();
 
 <script lang="ts">
 import {AlertType, useAlertStore} from "@/stores/alert";
-import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
 import {copyOperation} from "@/services/operations";
 import {formatNumber} from "@/services/formatters";
 import api from "@/api";
+import {Operation} from "@/api/resources/operations";
+
+const alertStore = useAlertStore()
 
 export default {
   data() {
@@ -206,7 +134,6 @@ export default {
       editDialog: false,
       editLoading: false,
       editedOperation: {} as Operation,
-      editedOperationIndex: -1,
     };
   },
   computed: {
@@ -254,33 +181,6 @@ export default {
         },
       ];
     },
-    typeItems() {
-      return [
-        {value: "income", title: this.$t("operation.types.income")},
-        {value: "vital", title: this.$t("operation.types.vital")},
-        {
-          value: "non_essential",
-          title: this.$t("operation.types.non_essential"),
-        },
-      ];
-    },
-    categoryItems(): Array<{ value: string; title: string }> {
-      let items: Array<{ value: string; title: string }> = [];
-
-      this.$props.categories.forEach((cat: Category) => {
-        const translationKey = getCategoryTranslationKey(cat)
-        const title = (this.$te(translationKey)) ? this.$t(translationKey) : getCategoryReadableKey(cat)
-
-        items.push({value: cat.id, title: title});
-      });
-
-      return items;
-    },
-    editedOperationDate() {
-      return new Date(this.editedOperation.attributes.date).toLocaleDateString(
-        this.$i18n.locale
-      );
-    },
   },
   methods: {
     isIncome(amount: number): boolean {
@@ -291,8 +191,20 @@ export default {
 
       return rawAmount > 0 ? `+${amount} €` : `${amount} €`;
     },
+    editSubmitting() {
+      this.editLoading = true
+    },
+    editSucceed() {
+      alertStore.show(AlertType.Success, this.$t('operation.edition.success_title'), this.$t("operation.edition.success_message"))
+      this.$props.onOperationsChanged().finally(() => this.closeEditDialog())
+    },
+    editFailed() {
+      alertStore.show(AlertType.Error, this.$t('operation.edition.error'), this.$t("something_went_wrong"))
+    },
+    editSubmitted() {
+      this.editLoading = false
+    },
     editOperation(item: Operation) {
-      this.editedOperationIndex = this.$props.operations.indexOf(item);
       this.editedOperation = copyOperation(item);
       this.editDialog = true;
     },
@@ -304,37 +216,10 @@ export default {
 
       await api.operations
         .updateOne(item.id, {pointed: newPointedValue})
-        .then(() => {
-          item.attributes.pointed = newPointedValue;
-        });
+        .then(() => item.attributes.pointed = newPointedValue);
     },
-    async saveOperation() {
-      const alertStore = useAlertStore()
-
-      if (this.editedOperationIndex > -1) {
-        const editPayload = {
-          label: this.editedOperation.attributes.label,
-          pointed: this.editedOperation.attributes.pointed,
-          comment: this.editedOperation.attributes.comment,
-          opType: this.editedOperation.attributes.opType,
-          categoryId: this.editedOperation.attributes.categoryId,
-        };
-
-        this.editLoading = true;
-        await api.operations
-          .updateOne(this.editedOperation.id, editPayload)
-          .then((res) => {
-            Object.assign(this.$props.operations[this.editedOperationIndex], res);
-            alertStore.show(AlertType.Success, this.$t('operation.edition.success_title'), this.$t("operation.edition.success_message"))
-            this.closeEditDialog();
-          })
-          .catch(() => {
-            alertStore.show(AlertType.Error, this.$t('operation.edition.error'), this.$t("something_went_wrong"))
-          })
-          .finally(() => {
-            this.editLoading = false;
-          });
-      }
+    saveOperation() {
+      (this.$refs.operationFormEdit as any).$refs.form.$refs.form.requestSubmit()
     },
   },
 };

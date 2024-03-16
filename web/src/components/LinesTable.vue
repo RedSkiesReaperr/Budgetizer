@@ -211,7 +211,7 @@ export default {
       this.editError = false
     },
     submitEdit() {
-      (this.$refs.lineFormEdit as any).$refs.form.requestSubmit()
+      (this.$refs.lineFormEdit as any).$refs.form.$refs.form.requestSubmit()
     },
     editSubmitting() {
       this.editLoading = true

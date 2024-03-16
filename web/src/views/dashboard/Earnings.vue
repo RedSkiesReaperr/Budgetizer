@@ -1,6 +1,8 @@
 <template>
   <BasicCard class="pb-10" :loading="operationsStore.fetching">
-    <OperationsTable :operations="operationsStore.incomes" :categories="categoriesStore.categories"/>
+    <OperationsTable :operations="operationsStore.incomes"
+                     :categories="categoriesStore.categories"
+                     :on-operations-changed="refreshOperations"/>
   </BasicCard>
 </template>
 
@@ -32,6 +34,11 @@ export default {
 
     if (this.categoriesStore.categories.length <= 0) {
       this.categoriesStore.fetchAll()
+    }
+  },
+  methods: {
+    async refreshOperations(): Promise<any> {
+      return this.operationsStore.fetchAll(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt)
     }
   },
   components: {BasicCard, OperationsTable},

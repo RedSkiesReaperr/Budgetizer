@@ -197,7 +197,7 @@ export default {
       this.createDialog = true;
     },
     submitCreate() {
-      (this.$refs.lineFormEdit as any).$refs.form.requestSubmit()
+      (this.$refs.lineFormEdit as any).$refs.form.$refs.form.requestSubmit()
     },
     createSubmitting() {
       this.createLoading = true

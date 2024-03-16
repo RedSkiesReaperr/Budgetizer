@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {Line} from "@/api/resources/lines";
 import {getTypeTranslationKey} from "@/services/types";
+import Form from "@/components/Form.vue";
 
 interface Props {
   target: Line;
@@ -11,11 +12,17 @@ interface Props {
   onSubmitted: () => void;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 </script>
 
 <template>
-  <v-form ref="form" @submit.prevent="submit">
+  <Form
+    ref="form"
+    :submit-request="submitRequest()"
+    :on-submitting="props.onSubmitting"
+    :on-submit-success="props.onSubmitSuccess"
+    :on-submit-failed="props.onSubmitFailed"
+    :on-submitted="props.onSubmitted">
     <v-row>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
@@ -60,20 +67,15 @@ defineProps<Props>();
         </v-select>
       </v-col>
     </v-row>
-  </v-form>
+  </Form>
 </template>
 
 <script lang="ts">
 import TypeChip from "@/components/TypeChip.vue";
 import api from "@/api";
+import {UpdatePayload, CreatePayload} from "@/api/resources/lines";
 
-export enum LineFormMode {
-  EDIT,
-  CREATE
-}
-
-const editRequest = api.lines.updateOne
-const createRequest = api.lines.createOne
+export enum LineFormMode {EDIT, CREATE}
 
 export default {
   data() {
@@ -98,25 +100,32 @@ export default {
       }
     }
   },
-  methods: {
-    submit() {
-      switch (this.$props.mode) {
-        case LineFormMode.EDIT:
-          this.launch(editRequest(this.targetLine.id, this.targetLine.attributes))
-          break
-        case LineFormMode.CREATE:
-          this.launch(createRequest(this.targetLine.attributes))
-          break
-        default:
-          console.error(`Invalid LineFormMode: ${this.$props.mode}`)
+  computed: {
+    updatePayload(): UpdatePayload {
+      return {
+        label: this.targetLine.attributes.label,
+        amount: this.targetLine.attributes.amount,
+        lineType: this.targetLine.attributes.lineType,
       }
     },
-    async launch(req: Promise<any>) {
-      this.$props.onSubmitting()
-      await req
-        .then(() => this.$props.onSubmitSuccess())
-        .catch(() => this.$props.onSubmitFailed())
-        .finally(() => this.$props.onSubmitted());
+    createPayload(): CreatePayload {
+      return {
+        label: this.targetLine.attributes.label,
+        amount: this.targetLine.attributes.amount,
+        lineType: this.targetLine.attributes.lineType,
+      }
+    },
+  },
+  methods: {
+    submitRequest(): () => Promise<any> {
+      switch (this.$props.mode) {
+        case LineFormMode.EDIT:
+          return () => api.lines.updateOne(this.targetLine.id, this.updatePayload)
+        case LineFormMode.CREATE:
+          return () => api.lines.createOne(this.createPayload)
+        default:
+          return () => new Promise<any>((_, reject) => reject())
+      }
     },
   },
   components: {TypeChip}

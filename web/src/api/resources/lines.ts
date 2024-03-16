@@ -15,13 +15,13 @@ export interface Line {
   };
 }
 
-interface UpdatePayload {
+export interface UpdatePayload {
   label?: string;
   amount?: number;
   lineType?: string;
 }
 
-interface CreatePayload {
+export interface CreatePayload {
   label: string;
   amount: number;
   lineType: string;
