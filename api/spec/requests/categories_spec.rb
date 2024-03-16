@@ -57,10 +57,45 @@ RSpec.describe 'Categories' do
   end
 
   describe 'DELETE /categories/{id}' do
-    it { expect { delete category_url(1), headers: }.to raise_error(ActionController::RoutingError) }
+    let(:category) { create(:category, user:) }
+
+    before do
+      category
+      call_endpoint('DELETE', category_url(category.id), nil, headers)
+    end
+
+    it_behaves_like 'authenticated request', 'DELETE', '/categories/-1'
+
+    it { expect(response).to have_http_status(:no_content) }
+
+    it 'removes the category' do
+      expect { Category.find(category.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
   describe 'PATCH /categories/{id}' do
-    it { expect { patch category_url(1), headers: }.to raise_error(ActionController::RoutingError) }
+    let(:category) { create(:category) }
+
+    before do
+      category
+      call_endpoint('PATCH', category_url(category.id), nil, headers)
+    end
+
+    it_behaves_like 'authenticated request', 'PATCH', '/categories/-1'
+
+    it { expect(response).to have_http_status(:method_not_allowed) }
+  end
+
+  describe 'PUT /categories/{id}' do
+    let(:category) { create(:category) }
+
+    before do
+      category
+      call_endpoint('PUT', category_url(category.id), nil, headers)
+    end
+
+    it_behaves_like 'authenticated request', 'PUT', '/categories/-1'
+
+    it { expect(response).to have_http_status(:method_not_allowed) }
   end
 end
