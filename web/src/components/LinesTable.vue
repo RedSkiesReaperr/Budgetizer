@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {LineFormMode} from "@/components/LineForm.vue";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 interface Props {
   lines: Line[];
@@ -106,50 +107,31 @@ const props = defineProps<Props>();
     </v-dialog>
   </v-row>
 
-  <v-dialog
-    v-model="deleteDialog"
-    persistent
-    width="auto"
-    transition="fade-transition"
-  >
-    <v-card>
-      <v-card-title class="text-h5">
-        {{ $t("line.deletion.title") }}
-      </v-card-title>
-      <v-card-text>
-        <p>{{ $t("line.deletion.body") }}</p>
-        <v-divider class="my-2"></v-divider>
-        <p>
-          <b>{{ $t("line.attributes.id") }}:</b>
-          <i>{{ deletingLine.id }}</i>
-        </p>
-        <p>
-          <b>{{ $t("line.attributes.label") }}:</b>
-          <i>{{ deletingLine.attributes.label }}</i>
-        </p>
-        <p>
-          <b>{{ $t("line.attributes.amount") }}:</b>
-          <i>{{ formatAmount(deletingLine.attributes.amount) }}</i>
-        </p>
-        <p>
-          <b>{{ $t("line.attributes.type") }}:</b>
-          <TypeChip
-            :raw-type="deletingLine.attributes.lineType"
-            size="small"
-          ></TypeChip>
-        </p>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn variant="text" @click="closeDeleteDialog">
-          {{ $t("actions.cancel") }}
-        </v-btn>
-        <v-btn color="red" variant="text" @click="confirmDelete">
-          {{ $t("actions.delete") }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <ConfirmationModal :is-open="deleteDialog" :on-canceled="closeDeleteDialog" :on-confirmed="confirmDelete">
+    <template v-slot:title>{{ $t("line.deletion.title") }}</template>
+    <template v-slot:subtitle>{{ $t("line.deletion.body") }}</template>
+    <template v-slot:content>
+      <p>
+        <b>{{ $t("line.attributes.id") }}:</b>
+        <i>{{ deletingLine.id }}</i>
+      </p>
+      <p>
+        <b>{{ $t("line.attributes.label") }}:</b>
+        <i>{{ deletingLine.attributes.label }}</i>
+      </p>
+      <p>
+        <b>{{ $t("line.attributes.amount") }}:</b>
+        <i>{{ formatAmount(deletingLine.attributes.amount) }}</i>
+      </p>
+      <p>
+        <b>{{ $t("line.attributes.type") }}:</b>
+        <TypeChip
+          :raw-type="deletingLine.attributes.lineType"
+          size="small"
+        ></TypeChip>
+      </p>
+    </template>
+  </ConfirmationModal>
 </template>
 
 <script lang="ts">
@@ -167,7 +149,6 @@ export default {
       // Delete Line
       deleteDialog: false,
       deletingLine: {} as Line,
-      deletingLineIndex: -1,
       // Edit Line
       editDialog: false,
       editLoading: false,
@@ -227,7 +208,6 @@ export default {
     },
     openDeleteDialog(line: Line) {
       this.deletingLine = line;
-      this.deletingLineIndex = this.$props.lines.indexOf(line)
       this.deleteDialog = true;
     },
     closeDeleteDialog() {

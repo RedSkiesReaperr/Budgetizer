@@ -106,7 +106,8 @@ export default {
     delete: "Supprimer",
     select: "Sélectionner",
     login: "Se connecter",
-    select_file: "Sélectionner un fichier"
+    select_file: "Sélectionner un fichier",
+    confirm: "Confirmer"
   },
   email: "Adresse email",
   password: "Mot de passe",

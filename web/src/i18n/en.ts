@@ -107,7 +107,8 @@ export default {
     delete: "Delete",
     select: "Select",
     login: "Log in",
-    select_file: "Select file"
+    select_file: "Select file",
+    confirm: "Confirm"
   },
   email: "Email",
   password: "Password",
