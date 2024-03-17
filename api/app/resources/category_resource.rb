@@ -7,4 +7,9 @@ class CategoryResource < JSONAPI::Resource
     context = options[:context]
     context[:current_user].categories
   end
+
+  def save
+    @model.user ||= context[:current_user]
+    super
+  end
 end

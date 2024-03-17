@@ -56,6 +56,55 @@ RSpec.describe 'Categories' do
     end
   end
 
+  describe 'POST /categories' do
+    before do
+      call_endpoint('POST', categories_url, body.to_json, headers)
+    end
+
+    context 'when a mandatory field is missing' do
+      let(:body) do
+        {
+          data: {
+            type: 'categories',
+            attributes: {
+              key: 'test_key',
+              color: '#azerty'
+            }
+          }
+        }
+      end
+
+      it_behaves_like 'authenticated request', 'POST', '/categories'
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+    end
+
+    context 'when all fields are fulfilled' do
+      let(:body) do
+        {
+          data: {
+            type: 'categories',
+            attributes: {
+              key: 'test_key',
+              color: '#azerty',
+              icon: 'mdi-test'
+            }
+          }
+        }
+      end
+
+      let(:data) { JSON.parse(response.parsed_body)['data'] }
+
+      it { expect(response).to have_http_status(:created) }
+
+      it { expect(data).to have_link(:self) }
+
+      it { expect(data).to have_type('categories') }
+
+      it { expect(data).to have_jsonapi_attributes(:key, :color, :icon) }
+    end
+  end
+
   describe 'DELETE /categories/{id}' do
     let(:category) { create(:category, user:) }
 
