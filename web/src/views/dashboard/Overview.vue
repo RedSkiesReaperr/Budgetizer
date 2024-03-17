@@ -1,33 +1,53 @@
 <template>
-  <div class="mb-8 d-flex flex-row flex-wrap" :style="{ gap: '18px' }">
-    <BasicCard class="w-25 flex-grow-0" :loading="false">
-      <div class="text-h6">{{ $t("operation.import.action") }}</div>
-      <div class="h-75 d-flex flex-row flex-grow-1 align-center">
-        <div class="d-flex flex-col flex-grow-1 justify-center">
-          <v-btn color="#27ae60" prepend-icon="mdi-cloud-upload-outline" rounded="lg" :loading="isSelecting"
-                 @click="handleFileImport">
-            {{ $t("actions.select_file") }}
-          </v-btn>
-        </div>
-      </div>
-      <input ref="uploader" class="d-none" type="file" accept=".csv" @change="onFileChanged">
-    </BasicCard>
+  <v-row>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard class="h-100" :loading="false">
+        <v-row>
+          <v-col class="text-h6 text-center">
+            {{ $t("operation.import.action") }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-center" align-self="center">
+            <v-btn color="#27ae60" prepend-icon="mdi-cloud-upload-outline" rounded="lg" :loading="isSelecting"
+                   @click="handleFileImport">
+              {{ $t("actions.select_file") }}
+            </v-btn>
+          </v-col>
+        </v-row>
+        <input ref="uploader" class="d-none" type="file" accept=".csv" @change="onFileChanged">
+      </BasicCard>
+    </v-col>
 
-    <BasicCard class="h-25 w-25 px-0 py-0 flex-grow-0" :loading="operationsStore.fetching">
-      <OperationsSparkLineChart :subtitle="$t('earning', 2)" :operations="operationsStore.incomes"
-                                :x-axis-labels="daysChartLabels" curve-color="#00b894"/>
-    </BasicCard>
-    <BasicCard class="h-25 w-25 px-0 py-0 flex-grow-0" :loading="operationsStore.fetching">
-      <OperationsSparkLineChart :subtitle="$t('expense', 2)" :operations="operationsStore.expenses"
-                                :x-axis-labels="daysChartLabels" curve-color="#d63031"/>
-    </BasicCard>
-    <BasicCard class="pb-4 w-25 flex-grow-0" :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
-      <CategoriesPieChart/>
-    </BasicCard>
-  </div>
-  <v-container>
-    <v-divider></v-divider>
-  </v-container>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard class="px-0 py-0" :loading="operationsStore.fetching">
+        <OperationsSparkLineChart :subtitle="$t('earning', 2)" :operations="operationsStore.incomes"
+                                  :x-axis-labels="daysChartLabels" curve-color="#00b894"/>
+      </BasicCard>
+    </v-col>
+
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard class="px-0 py-0" :loading="operationsStore.fetching">
+        <OperationsSparkLineChart :subtitle="$t('expense', 2)" :operations="operationsStore.expenses"
+                                  :x-axis-labels="daysChartLabels" curve-color="#d63031"/>
+      </BasicCard>
+    </v-col>
+  </v-row>
+
+  <v-row>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
+        <CategoriesPieChart/>
+      </BasicCard>
+    </v-col>
+  </v-row>
+
+  <v-row>
+    <v-container>
+      <v-divider></v-divider>
+    </v-container>
+  </v-row>
+
   <NotesSlider :notes="notesStore.notes" :loading="notesStore.fetching"></NotesSlider>
   <Alert></Alert>
 </template>
