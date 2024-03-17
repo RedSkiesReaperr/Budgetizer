@@ -14,9 +14,16 @@ export interface Category {
   };
 }
 
+export interface CreatePayload {
+  key: string;
+  color: string;
+  icon: string;
+}
+
 export default {
   getAll: getAll,
   getOne: getOne,
+  createOne: createOne,
   deleteOne: deleteOne,
 };
 
@@ -27,6 +34,17 @@ async function getAll(): Promise<Category[]> {
 async function getOne(categoryId: number): Promise<Category> {
   return (await client.get<ApiResponse<Category>>(`/categories/${categoryId}`)).data
     .data;
+}
+
+async function createOne(createPayload: CreatePayload): Promise<Category> {
+  return (
+    await client.post<ApiResponse<Category>>("/categories", {
+      data: {
+        type: "categories",
+        attributes: createPayload,
+      },
+    })
+  ).data.data;
 }
 
 async function deleteOne(category: Category): Promise<any> {

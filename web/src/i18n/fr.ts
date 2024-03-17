@@ -98,6 +98,11 @@ export default {
   form_validations: {
     required: "est obligatoire",
     gt: "doit être supérieur à {limit}",
+    category: {
+      key: {
+        invalid_format: "ne doit comporter que des lettres minuscules ou des _"
+      }
+    }
   },
   actions: {
     cancel: "Annuler",
@@ -135,6 +140,16 @@ export default {
       deletion: {
         title: "Confirmer la suppression ?",
         subtitle: "Si vous confirmez la suppression, toutes les ressources lieés à cette catégorie seront auront le status \"à catégoriser\".",
+        error: "Erreur lors de la suppression",
+        success_title: "Catégorie supprimée !",
+        success_message: "La catégorie a été supprimée",
+      },
+      creation: {
+        action: "Créer une catégorie",
+        title: "Nouvelle catégorie",
+        error: "Erreur lors de la création",
+        success_title: "Catégorie créée !",
+        success_message: "La catégorie a été créée",
       }
     }
   }

@@ -70,7 +70,6 @@ export default {
       success_message: "All operations has been imported",
       error_title: "Import failed",
     }
-
   },
   line: {
     attributes: {
@@ -99,6 +98,11 @@ export default {
   form_validations: {
     required: "is mandatory",
     gt: "must be greater than {limit}",
+    category: {
+      key: {
+        invalid_format: "should ony contains downcase letters or _"
+      }
+    }
   },
   actions: {
     cancel: "Cancel",
@@ -136,6 +140,16 @@ export default {
       deletion: {
         title: "Confirm deletion ?",
         subtitle: "If you confirm deletion, all resources linked to this category will have status \"to cetegorize\".",
+        error: "Error while deleting",
+        success_title: "Category successfully deleted !",
+        success_message: "Category deleted",
+      },
+      creation: {
+        action: "Create a category",
+        title: "New category",
+        error: "Error while creating",
+        success_title: "Category successfully created !",
+        success_message: "Category created",
       }
     }
   }
