@@ -123,5 +123,19 @@ export default {
     title: "Page introuvable",
     text: "Nous ne savons pas ce que vous recherchiez mais cela n'existe pas.",
     button: "Revenir en lieu sûr",
+  },
+  resource: {
+    category: {
+      attributes: {
+        id: "ID",
+        key: "Clé",
+        color: "Couleur",
+        icon: "Icone",
+      },
+      deletion: {
+        title: "Confirmer la suppression ?",
+        subtitle: "Si vous confirmez la suppression, toutes les ressources lieés à cette catégorie seront auront le status \"à catégoriser\".",
+      }
+    }
   }
 };

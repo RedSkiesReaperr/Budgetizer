@@ -5,6 +5,7 @@ import CategoryChip from "@/components/CategoryChip.vue";
 
 interface Props {
   category: Category;
+  onDelete: (cat: Category) => void;
 }
 
 const props = defineProps<Props>();
@@ -12,6 +13,14 @@ const props = defineProps<Props>();
 
 <template>
   <BasicCard :loading="false">
+    <v-btn
+      icon="mdi-delete-circle"
+      variant="text"
+      color="red"
+      @click="props.onDelete(props.category)"
+      :style="{ position: 'absolute', top: 0, right: 0}">
+    </v-btn>
+
     <v-card-title class="text-subtitle-1 text-center mb-2">{{ title }}
     </v-card-title>
     <v-card-text class="pb-0 d-flex flex-row flex-wrap justify-start align-start align-content-start">

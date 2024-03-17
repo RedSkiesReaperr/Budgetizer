@@ -124,5 +124,19 @@ export default {
     title: "Page not found",
     text: "We don't know what you were looking for, but it doesn't exist.",
     button: "Come back to a safe place",
+  },
+  resource: {
+    category: {
+      attributes: {
+        id: "ID",
+        key: "Key",
+        color: "Color",
+        icon: "Icon",
+      },
+      deletion: {
+        title: "Confirm deletion ?",
+        subtitle: "If you confirm deletion, all resources linked to this category will have status \"to cetegorize\".",
+      }
+    }
   }
 };
