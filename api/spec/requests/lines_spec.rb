@@ -57,6 +57,55 @@ RSpec.describe 'Lines' do
     end
   end
 
+  describe 'POST /lines' do
+    before do
+      call_endpoint('POST', lines_url, body.to_json, headers)
+    end
+
+    context 'when a mandatory field is missing' do
+      let(:body) do
+        {
+          data: {
+            type: 'lines',
+            attributes: {
+              amount: 67.32,
+              lineType: 'income'
+            }
+          }
+        }
+      end
+
+      it_behaves_like 'authenticated request', 'POST', '/lines'
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+    end
+
+    context 'when all fields are fulfilled' do
+      let(:body) do
+        {
+          data: {
+            type: 'lines',
+            attributes: {
+              label: 'test label',
+              amount: 67.32,
+              lineType: 'income'
+            }
+          }
+        }
+      end
+
+      let(:data) { JSON.parse(response.parsed_body)['data'] }
+
+      it { expect(response).to have_http_status(:created) }
+
+      it { expect(data).to have_link(:self) }
+
+      it { expect(data).to have_type('lines') }
+
+      it { expect(data).to have_jsonapi_attributes(:label, :amount, :lineType, :categoryId) }
+    end
+  end
+
   describe 'DELETE /lines/{id}' do
     let(:line) { create(:line, user:) }
 
