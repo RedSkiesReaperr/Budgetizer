@@ -123,28 +123,56 @@ RSpec.describe 'Categories' do
   end
 
   describe 'PATCH /categories/{id}' do
-    let(:category) { create(:category) }
+    let(:category) { create(:category, user:) }
 
     before do
       category
-      call_endpoint('PATCH', category_url(category.id), nil, headers)
+      call_endpoint('PATCH', category_url(category.id), body.to_json, headers)
     end
 
-    it_behaves_like 'authenticated request', 'PATCH', '/categories/-1'
+    context 'when editing a not editable field' do
+      let(:body) do
+        {
+          data: {
+            type: 'categories',
+            id: category.id,
+            attributes: {
+              key: 'test_key',
+              color: '#azerty',
+              userId: 1
+            }
+          }
+        }
+      end
 
-    it { expect(response).to have_http_status(:method_not_allowed) }
-  end
+      it_behaves_like 'authenticated request', 'PATCH', '/categories/-1'
 
-  describe 'PUT /categories/{id}' do
-    let(:category) { create(:category) }
-
-    before do
-      category
-      call_endpoint('PUT', category_url(category.id), nil, headers)
+      it { expect(response).to have_http_status(:bad_request) }
     end
 
-    it_behaves_like 'authenticated request', 'PUT', '/categories/-1'
+    context 'when editing only editable fields' do
+      let(:body) do
+        {
+          data: {
+            type: 'categories',
+            id: category.id,
+            attributes: {
+              key: 'test_key',
+              color: '#azerty',
+              icon: 'mdi-test'
+            }
+          }
+        }
+      end
+      let(:data) { JSON.parse(response.parsed_body)['data'] }
 
-    it { expect(response).to have_http_status(:method_not_allowed) }
+      it { expect(response).to have_http_status(:ok) }
+
+      it { expect(data).to have_link(:self) }
+
+      it { expect(data).to have_type('categories') }
+
+      it { expect(data).to have_jsonapi_attributes(:key, :color, :icon) }
+    end
   end
 end
