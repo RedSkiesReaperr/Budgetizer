@@ -150,6 +150,13 @@ export default {
         error: "Error while creating",
         success_title: "Category successfully created !",
         success_message: "Category created",
+      },
+      edition: {
+        action: "Update a category",
+        title: "Update a category",
+        error: "Error while edition",
+        success_title: "Category successfully updated !",
+        success_message: "Category updated",
       }
     }
   }

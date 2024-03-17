@@ -12,7 +12,7 @@
       <v-row>
         <v-col class="pa-2" v-for="category in categoriesStore.categories" v-bind:key="category.id" cols="12" sm="6"
                md="3" xl="2">
-          <CategoryCard :category="category" :on-delete="openDeleteDialog"></CategoryCard>
+          <CategoryCard :category="category" :on-delete="openDeleteDialog" :on-edit="openEditDialog"></CategoryCard>
         </v-col>
       </v-row>
     </v-container>
@@ -53,6 +53,20 @@
           :target="creatingCategory"/>
       </template>
     </ConfirmationModal>
+
+    <ConfirmationModal :is-open="isEditing" :on-canceled="closeEditDialog" :on-confirmed="confirmEdit">
+      <template v-slot:title>{{ $t("resource.category.edition.title") }}</template>
+      <template v-slot:content>
+        <CategoryForm
+          ref="categoryFormEdit"
+          :mode="CategoryFormMode.EDIT"
+          :on-submitting="editSubmitting"
+          :on-submit-success="editSucceed"
+          :on-submit-failed="editFailed"
+          :on-submitted="editSubmitted"
+          :target="editingCategory"/>
+      </template>
+    </ConfirmationModal>
   </template>
   <Alert></Alert>
 </template>
@@ -84,7 +98,10 @@ export default {
       deletingCategory: {} as Category,
       // Create Category
       isCreating: false,
-      creatingCategory: {} as Category
+      creatingCategory: {} as Category,
+      // Edit Category
+      isEditing: false,
+      editingCategory: {} as Category
     };
   },
   mounted() {
@@ -98,6 +115,7 @@ export default {
     }
   },
   methods: {
+    // Category deletion actions
     openDeleteDialog(cat: Category) {
       this.deletingCategory = cat
       this.isDeleting = true
@@ -115,6 +133,7 @@ export default {
         .then(() => this.categoryDeleted())
         .finally(() => this.isDeleting = false);
     },
+    // Category creation actions
     openCreateDialog() {
       this.creatingCategory = {attributes: {key: '', icon: '', color: ''}} as Category
       this.isCreating = true
@@ -125,9 +144,9 @@ export default {
     },
     async confirmCreate() {
       (this.$refs.categoryFormCreate as any).$refs.form.$refs.form.requestSubmit()
-      console.log(this.creatingCategory)
     },
-    createSubmitting() {},
+    createSubmitting() {
+    },
     createSucceed() {
       this.alertStore.show(AlertType.Success, this.$t('resource.category.creation.success_title'), this.$t('resource.category.creation.success_message'))
       this.refreshCategories()
@@ -136,7 +155,32 @@ export default {
     createFailed() {
       this.alertStore.show(AlertType.Error, this.$t('resource.category.creation.error'), '')
     },
-    createSubmitted() {},
+    createSubmitted() {
+    },
+    // Category edition actions
+    openEditDialog(cat: Category) {
+      this.editingCategory = cat
+      this.isEditing = true
+      this.alertStore.hide()
+    },
+    closeEditDialog() {
+      this.isEditing = false
+    },
+    confirmEdit() {
+      (this.$refs.categoryFormEdit as any).$refs.form.$refs.form.requestSubmit()
+    },
+    editSubmitting() {
+    },
+    editSucceed() {
+      this.alertStore.show(AlertType.Success, this.$t('resource.category.edition.success_title'), this.$t('resource.category.edition.success_message'))
+      this.refreshCategories()
+      this.isEditing = false
+    },
+    editFailed() {
+      this.alertStore.show(AlertType.Error, this.$t('resource.category.edition.error'), '')
+    },
+    editSubmitted() {
+    },
     refreshCategories() {
       this.categoriesStore.fetchAll()
     }

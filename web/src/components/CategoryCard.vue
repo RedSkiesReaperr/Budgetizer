@@ -6,6 +6,7 @@ import CategoryChip from "@/components/CategoryChip.vue";
 interface Props {
   category: Category;
   onDelete: (cat: Category) => void;
+  onEdit: (cat: Category) => void;
 }
 
 const props = defineProps<Props>();
@@ -13,6 +14,13 @@ const props = defineProps<Props>();
 
 <template>
   <BasicCard :loading="false">
+    <v-btn
+      icon="mdi-pencil-circle"
+      variant="text"
+      color="blue"
+      @click="props.onEdit(props.category)"
+      :style="{ position: 'absolute', top: 0, left: 0}">
+    </v-btn>
     <v-btn
       icon="mdi-delete-circle"
       variant="text"

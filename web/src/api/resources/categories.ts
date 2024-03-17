@@ -20,10 +20,18 @@ export interface CreatePayload {
   icon: string;
 }
 
+export interface UpdatePayload {
+  key?: string;
+  color?: string;
+  icon?: string;
+}
+
+
 export default {
   getAll: getAll,
   getOne: getOne,
   createOne: createOne,
+  updateOne: updateOne,
   deleteOne: deleteOne,
 };
 
@@ -42,6 +50,18 @@ async function createOne(createPayload: CreatePayload): Promise<Category> {
       data: {
         type: "categories",
         attributes: createPayload,
+      },
+    })
+  ).data.data;
+}
+
+async function updateOne(categoryId: string, updatePayload: UpdatePayload): Promise<Category> {
+  return (
+    await client.patch<ApiResponse<Category>>(`/categories/${categoryId}`, {
+      data: {
+        type: "categories",
+        id: categoryId,
+        attributes: updatePayload,
       },
     })
   ).data.data;

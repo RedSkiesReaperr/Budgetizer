@@ -150,6 +150,13 @@ export default {
         error: "Erreur lors de la création",
         success_title: "Catégorie créée !",
         success_message: "La catégorie a été créée",
+      },
+      edition: {
+        action: "Editer une catégorie",
+        title: "Edition d'une catégorie",
+        error: "Erreur lors de l'édition",
+        success_title: "Catégorie modifiée !",
+        success_message: "La catégorie a été mise à jour",
       }
     }
   }
