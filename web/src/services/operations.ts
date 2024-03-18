@@ -14,6 +14,10 @@ export function getOperationsByCategory(category: Category, operations: Operatio
   return operations.filter((op: Operation) => op.attributes.categoryId === parseInt(category.id))
 }
 
+export function getOperationsUncategorized(operations: Operation[]): Operation[] {
+  return operations.filter((op: Operation) => op.attributes.categoryId === null)
+}
+
 export function getOperationsByDay(targetDay: moment.Moment, operations: Operation[]): Operation[] {
   const formattedTargetDay: string = targetDay.format("YYYY-MM-DD")
 

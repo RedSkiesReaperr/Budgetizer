@@ -162,7 +162,7 @@ export default {
         pointed: this.targetOperation.attributes.pointed,
         comment: this.targetOperation.attributes.comment,
         opType: this.targetOperation.attributes.opType,
-        categoryId: this.targetOperation.attributes.categoryId
+        categoryId: this.targetOperation.attributes.categoryId || undefined
       }
     }
   },

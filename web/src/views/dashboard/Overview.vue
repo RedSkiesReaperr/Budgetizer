@@ -37,7 +37,20 @@
   <v-row>
     <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
       <BasicCard :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
-        <CategoriesPieChart/>
+        <v-card-subtitle class="text-center">{{ $t("charts.income_breakdown") }}</v-card-subtitle>
+        <CategoriesPieChart :operations="operationsStore.incomes"/>
+      </BasicCard>
+    </v-col>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
+        <v-card-subtitle class="text-center">{{ $t("charts.expense_breakdown") }}</v-card-subtitle>
+        <CategoriesPieChart :operations="operationsStore.expenses"/>
+      </BasicCard>
+    </v-col>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard :loading="operationsStore.fetching" :style="{ overflow: 'visible' }">
+        <v-card-subtitle class="text-center">{{ $t("charts.overall_breakdown") }}</v-card-subtitle>
+        <CategoriesPieChart :operations="operationsStore.operations"/>
       </BasicCard>
     </v-col>
   </v-row>

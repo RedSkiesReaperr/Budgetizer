@@ -159,5 +159,10 @@ export default {
         success_message: "La catégorie a été mise à jour",
       }
     }
+  },
+  charts: {
+    income_breakdown: "Répartition des revenus",
+    expense_breakdown: "Répartition des dépenses",
+    overall_breakdown: "Répartition générale",
   }
 };

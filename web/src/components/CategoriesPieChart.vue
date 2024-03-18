@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import {Operation} from "@/api/resources/operations";
+
+interface Props {
+  operations: Operation[];
+}
+
+defineProps<Props>();
+</script>
+
 <template>
   <vue-apex-charts
     type="donut"
@@ -8,25 +18,22 @@
 
 <script lang="ts">
 import VueApexCharts from "vue3-apexcharts";
-import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
-import {useOperationsStore} from "@/stores/operations";
+import {
+  getCategoryReadableKey,
+  getCategoryTranslationKey,
+  MISSING_CATEGORY,
+  MISSING_CATEGORY_IDENTIFIER
+} from "@/services/categories";
 import {useCategoriesStore} from "@/stores/categories";
 import {sum} from "@/services/calculations";
 import {formatNumber} from "@/services/formatters";
 import {Category} from "@/api/resources/categories";
-import {getOperationsByCategory} from "@/services/operations";
+import {getOperationsByCategory, getOperationsUncategorized} from "@/services/operations";
+
+const categoriesStore = useCategoriesStore();
 
 export default {
-  setup() {
-    const operationsStore = useOperationsStore()
-    const categoriesStore = useCategoriesStore();
-
-    return {operationsStore, categoriesStore}
-  },
   computed: {
-    categories(): Category[] {
-      return this.categoriesStore.expenseCategories
-    },
     chartOptions() {
       return {
         chart: {
@@ -75,6 +82,9 @@ export default {
         }],
       }
     },
+    categories(): Category[] {
+      return [...categoriesStore.expenseCategories, MISSING_CATEGORY]
+    },
     colors(): string[] {
       return this.categories.map((cat: Category) => cat.attributes.color)
     },
@@ -83,7 +93,13 @@ export default {
     },
     chartSeries(): number[] {
       const series = this.categories.map((cat: Category) => {
-        const ops = getOperationsByCategory(cat, this.operationsStore.operations)
+        let ops = []
+
+        if (cat.id === MISSING_CATEGORY_IDENTIFIER) {
+          ops = getOperationsUncategorized(this.$props.operations)
+        } else {
+          ops = getOperationsByCategory(cat, this.$props.operations)
+        }
 
         return Math.abs(sum(ops))
       })

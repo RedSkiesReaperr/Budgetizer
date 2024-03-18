@@ -1,7 +1,10 @@
 import {Category} from "@/api/resources/categories";
 
+export const MISSING_CATEGORY_IDENTIFIER = "MISSING"
+export const UNKOWN_CATEGORY_IDENTIFIER = "UNKNOWN"
+
 export const MISSING_CATEGORY: Category = {
-  id: "-1",
+  id: MISSING_CATEGORY_IDENTIFIER,
   type: "categories",
   links: {
     self: "missing"
@@ -14,7 +17,7 @@ export const MISSING_CATEGORY: Category = {
 }
 
 export const UNKNOWN_CATEGORY: Category = {
-  id: "-1",
+  id: UNKOWN_CATEGORY_IDENTIFIER,
   type: "categories",
   links: {
     self: "unknown"

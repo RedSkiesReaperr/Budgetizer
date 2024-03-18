@@ -1,5 +1,10 @@
 import {describe, expect, it} from "vitest";
-import {copyOperation, getOperationsByCategory, getOperationsByDay} from "@/services/operations";
+import {
+  copyOperation,
+  getOperationsByCategory,
+  getOperationsUncategorized,
+  getOperationsByDay
+} from "@/services/operations";
 import {Operation} from "@/api/resources/operations";
 import moment from "moment/moment";
 import {Category} from "@/api/resources/categories";
@@ -97,8 +102,68 @@ describe("Operations service", () => {
       },
     ]
 
-    it("returns a real copy", () => {
+    it("returns only category operations", () => {
       expect(getOperationsByCategory(category1, dataset)).toStrictEqual(expected)
+    });
+  })
+
+  describe("getOperationsUncategorized()", () => {
+    const dataset: Operation[] = [
+      {
+        attributes: {
+          amount: 289.33,
+          date: "",
+          label: "",
+          pointed: true,
+          opType: "",
+          categoryId: null,
+          comment: ""
+        },
+        id: "",
+        type: "",
+        links: {self: ""}
+      },
+      {
+        attributes: {
+          amount: 289.33,
+          date: "",
+          label: "",
+          pointed: true,
+          opType: "",
+          categoryId: 2,
+          comment: ""
+        },
+        id: "",
+        type: "",
+        links: {self: ""}
+      },
+      {
+        attributes: {amount: 76.34, date: "", label: "", pointed: true, opType: "", categoryId: 1, comment: ""},
+        id: "",
+        type: "",
+        links: {self: ""}
+      },
+    ]
+
+    const expected: Operation[] = [
+      {
+        attributes: {
+          amount: 289.33,
+          date: "",
+          label: "",
+          pointed: true,
+          opType: "",
+          categoryId: null,
+          comment: ""
+        },
+        id: "",
+        type: "",
+        links: {self: ""}
+      }
+    ]
+
+    it("returns only uncategorized operations", () => {
+      expect(getOperationsUncategorized(dataset)).toStrictEqual(expected)
     });
   })
 

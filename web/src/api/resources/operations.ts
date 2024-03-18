@@ -15,7 +15,7 @@ export interface Operation {
     comment: string;
     pointed: boolean;
     opType: string;
-    categoryId: number;
+    categoryId: number|null;
   };
 }
 

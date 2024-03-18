@@ -159,5 +159,10 @@ export default {
         success_message: "Category updated",
       }
     }
+  },
+  charts: {
+    income_breakdown: "Incomes breakdown",
+    expense_breakdown: "Expenses breakdown",
+    overall_breakdown: "Overall breakdown",
   }
 };
