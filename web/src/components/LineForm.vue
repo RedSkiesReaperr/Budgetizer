@@ -24,7 +24,7 @@ const props = defineProps<Props>();
     :on-submit-failed="props.onSubmitFailed"
     :on-submitted="props.onSubmitted">
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" xs="12" sm="12" md="6" lg="5" xl="5" xxl="5">
         <v-text-field
           v-model="targetLine.attributes.label"
           :label="$t('operation.attributes.label')"
@@ -34,7 +34,7 @@ const props = defineProps<Props>();
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" xs="12" sm="12" md="6" lg="4" xl="4" xxl="4">
         <v-text-field
           v-model.number="targetLine.attributes.amount"
           :label="$t('operation.attributes.amount')"
@@ -43,8 +43,7 @@ const props = defineProps<Props>();
           type="number"
         ></v-text-field>
       </v-col>
-
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
         <v-select
           v-model="targetLine.attributes.lineType"
           :label="$t('operation.attributes.type')"

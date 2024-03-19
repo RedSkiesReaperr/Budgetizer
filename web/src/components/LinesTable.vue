@@ -50,7 +50,7 @@ const props = defineProps<Props>();
   </v-data-table>
 
   <v-row justify="center">
-    <v-dialog v-model="editDialog" persistent>
+    <v-dialog v-model="editDialog" persistent max-width="1000">
       <v-card>
         <v-card-title class="pt-4">
           <span class="text-h5">{{ $t("operation.edition.title") }}</span>
