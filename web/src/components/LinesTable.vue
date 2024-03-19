@@ -33,7 +33,7 @@ const props = defineProps<Props>();
       <v-icon
         size="small"
         class="me-2"
-        @click="editLine(item)"
+        @click="openEditLine(item)"
         color="blue"
       >
         mdi-square-edit-outline
@@ -49,63 +49,36 @@ const props = defineProps<Props>();
     </template>
   </v-data-table>
 
-  <v-row justify="center">
-    <v-dialog v-model="editDialog" persistent max-width="1000">
-      <v-card>
-        <v-card-title class="pt-4">
-          <span class="text-h5">{{ $t("operation.edition.title") }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-overlay
-              class="align-center justify-center"
-              :model-value="editLoading"
-              :close-on-content-click="false"
-              contained
-              disabled
-              persistent
-            >
-              <v-progress-circular
-                color="primary"
-                indeterminate
-              ></v-progress-circular>
-            </v-overlay>
+  <ConfirmationModal :is-open="editDialog" :on-canceled="closeEditDialog" :on-confirmed="confirmEdit">
+    <template v-slot:title>{{ $t("operation.edition.title") }}</template>
+    <template v-slot:content>
+      <v-container>
+        <v-overlay
+          class="align-center justify-center"
+          :model-value="editLoading"
+          :close-on-content-click="false"
+          contained
+          disabled
+          persistent
+        >
+          <v-progress-circular
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
+        </v-overlay>
 
-            <LineForm
-              ref="lineFormEdit"
-              :mode="LineFormMode.EDIT"
-              :target="editedLine"
-              :on-submitting="editSubmitting"
-              :on-submit-success="editSucceed"
-              :on-submit-failed="editFailed"
-              :on-submitted="editSubmitted"
-            />
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-alert
-            closable
-            v-model="editError"
-            :text="$t('operation.edition.error')"
-            type="error"
-            variant="tonal"
-          ></v-alert>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="closeEditDialog"
-          >
-            {{ $t("actions.cancel") }}
-          </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="submitEdit">
-            {{ $t("actions.save") }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+        <LineForm
+          ref="lineFormEdit"
+          :mode="LineFormMode.EDIT"
+          :target="editedLine"
+          :on-submitting="editSubmitting"
+          :on-submit-success="editSucceed"
+          :on-submit-failed="editFailed"
+          :on-submitted="editSubmitted"
+        />
+      </v-container>
+    </template>
+  </ConfirmationModal>
 
   <ConfirmationModal :is-open="deleteDialog" :on-canceled="closeDeleteDialog" :on-confirmed="confirmDelete">
     <template v-slot:title>{{ $t("line.deletion.title") }}</template>
@@ -183,7 +156,7 @@ export default {
     },
   },
   methods: {
-    editLine(item: Line) {
+    openEditLine(item: Line) {
       this.editedLine = copyLine(item);
       this.editDialog = true;
     },
@@ -191,7 +164,7 @@ export default {
       this.editDialog = false;
       this.editError = false
     },
-    submitEdit() {
+    confirmEdit() {
       (this.$refs.lineFormEdit as any).$refs.form.$refs.form.requestSubmit()
     },
     editSubmitting() {

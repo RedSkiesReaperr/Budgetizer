@@ -11,9 +11,9 @@ const props = defineProps<Props>();
 <template>
   <v-dialog
     v-model="open"
-    width="auto"
     transition="fade-transition"
     persistent
+    max-width="1000"
   >
     <v-card>
       <v-card-title class="text-h5">
