@@ -66,16 +66,10 @@ header.v-toolbar {
 </style>
 <script lang="ts">
 import {useAppStore} from "@/stores/app";
-import api from "@/api";
 
 const appStore = useAppStore();
 
 export default {
-  // beforeCreate() {
-  //   if (Object.keys(appStore.currentBudget).length <= 0) {
-  //     this.$router.push({name: 'budgetSelector'});
-  //   }
-  // },
   data: () => ({
     selectedDate: {
       month: appStore.currentDateStartAt.month(),
@@ -94,9 +88,7 @@ export default {
       appStore.selectDate(modelDate.month, modelDate.year);
     },
     logout() {
-      api.auth.signOut().finally(() => {
-        this.$router.push({name: 'login'})
-      })
+      appStore.logout().finally(() => this.$router.push({name: 'login'}))
     }
   },
 };
