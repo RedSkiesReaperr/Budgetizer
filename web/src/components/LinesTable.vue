@@ -50,7 +50,7 @@ const props = defineProps<Props>();
   </v-data-table>
 
   <ConfirmationModal :is-open="editDialog" :on-canceled="closeEditDialog" :on-confirmed="confirmEdit">
-    <template v-slot:title>{{ $t("operation.edition.title") }}</template>
+    <template v-slot:title>{{ $t("line.edition.title") }}</template>
     <template v-slot:content>
       <v-container>
         <v-overlay
