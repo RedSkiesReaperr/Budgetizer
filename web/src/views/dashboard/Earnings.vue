@@ -1,9 +1,13 @@
 <template>
-  <BasicCard class="pb-10" :loading="operationsStore.fetching">
-    <OperationsTable :operations="operationsStore.incomes"
-                     :categories="categoriesStore.categories"
-                     :on-operations-changed="refreshOperations"/>
-  </BasicCard>
+  <v-row justify="center">
+    <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="10" xxl="8">
+      <BasicCard class="pb-10" :loading="operationsStore.fetching">
+        <OperationsTable :operations="operationsStore.incomes"
+                         :categories="categoriesStore.categories"
+                         :on-operations-changed="refreshOperations"/>
+      </BasicCard>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

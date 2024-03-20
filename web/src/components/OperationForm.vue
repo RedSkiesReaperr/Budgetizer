@@ -26,7 +26,7 @@ const props = defineProps<Props>();
     :on-submit-failed="props.onSubmitFailed"
     :on-submitted="props.onSubmitted">
     <v-row>
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" xs="12" sm="4" md="3" lg="2" xl="2" xxl="2">
         <v-text-field
           v-model="operationDate"
           :label="$t('operation.attributes.date')"
@@ -35,7 +35,7 @@ const props = defineProps<Props>();
         ></v-text-field>
       </v-col>
 
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" xs="12" sm="8" md="9" lg="7" xl="7" xxl="7">
         <v-text-field
           v-model="targetOperation.attributes.label"
           :label="$t('operation.attributes.label')"
@@ -44,17 +44,20 @@ const props = defineProps<Props>();
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
+
+      <v-col cols="12" xs="12" sm="4" md="4" lg="3" xl="3" xxl="3">
         <AmountInput v-model="targetOperation.attributes.amount" disabled></AmountInput>
       </v-col>
 
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" xs="12" sm="4" md="4" lg="5" xl="4" xxl="4">
         <TypeSelector v-model="targetOperation.attributes.opType"></TypeSelector>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+
+      <v-col cols="12" xs="12" sm="4" md="4" lg="5" xl="4" xxl="4">
         <CategorySelector v-model="targetOperation.attributes.categoryId" :categories="categoriesStore.categories"/>
       </v-col>
-      <v-col cols="12" md="2">
+
+      <v-col cols="12" xs="12" sm="4" md="2" lg="2" xl="4" xxl="4">
         <v-switch
           v-model="targetOperation.attributes.pointed"
           :label="$t('operation.attributes.pointed')"
@@ -64,7 +67,8 @@ const props = defineProps<Props>();
           inset
         ></v-switch>
       </v-col>
-      <v-col cols="12" md="12">
+
+      <v-col cols="12" xs="12" sm="8" md="10" lg="12" xl="12" xxl="12">
         <v-text-field
           v-model="targetOperation.attributes.comment"
           :label="$t('operation.attributes.comment')"
