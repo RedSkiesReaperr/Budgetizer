@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import {Operation} from "@/api/resources/operations";
-import {getCategoryById} from "@/services/categories";
 import Form from "@/components/Form.vue";
 import AmountInput from "@/components/AmountInput.vue";
 import TypeSelector from "@/components/TypeSelector.vue";
-import CategoryChip from "@/components/CategoryChip.vue";
+import CategorySelector from "@/components/CategorySelector.vue";
 
 interface Props {
   target: Operation;
@@ -53,22 +52,7 @@ const props = defineProps<Props>();
         <TypeSelector v-model="targetOperation.attributes.opType"></TypeSelector>
       </v-col>
       <v-col cols="12" sm="6" md="4">
-        <v-select
-          v-model="targetOperation.attributes.categoryId"
-          small-chips
-          :label="$t('operation.attributes.category')"
-          :items="categoryItems"
-          item-title="title"
-          item-value="value"
-          variant="outlined"
-        >
-          <template #selection="{ item }">
-            <CategoryChip
-              :category="getCategoryById(item.value, categories)"
-              size="small"
-            ></CategoryChip>
-          </template>
-        </v-select>
+        <CategorySelector v-model="targetOperation.attributes.categoryId" :categories="categoriesStore.categories"/>
       </v-col>
       <v-col cols="12" md="2">
         <v-switch
@@ -96,9 +80,7 @@ const props = defineProps<Props>();
 <script lang="ts">
 
 import api from "@/api";
-import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
 import {useCategoriesStore} from "@/stores/categories";
-import {Category} from "@/api/resources/categories";
 import {UpdatePayload} from "@/api/resources/operations";
 
 export enum OperationFormMode {EDIT}
@@ -112,23 +94,8 @@ export default {
     }
   },
   computed: {
-    categories(): Category[] {
-      return categoriesStore.categories;
-    },
     operationDate(): string {
       return new Date(this.targetOperation.attributes.date).toLocaleDateString(this.$i18n.locale);
-    },
-    categoryItems(): Array<{ value: string; title: string }> {
-      let items: Array<{ value: string; title: string }> = [];
-
-      categoriesStore.categories.forEach((cat: Category) => {
-        const translationKey = getCategoryTranslationKey(cat)
-        const title = (this.$te(translationKey)) ? this.$t(translationKey) : getCategoryReadableKey(cat)
-
-        items.push({value: cat.id, title: title});
-      });
-
-      return items;
     },
     updatePayload(): UpdatePayload {
       return {
