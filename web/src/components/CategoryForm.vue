@@ -24,7 +24,7 @@ const props = defineProps<Props>();
     :on-submit-failed="props.onSubmitFailed"
     :on-submitted="props.onSubmitted">
     <v-row>
-      <v-col cols="12" sm="12" md="12">
+      <v-col cols="12" xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
         <v-text-field
           v-model="targetCategory.attributes.key"
           :label="$t('resource.category.attributes.key')"
@@ -34,10 +34,8 @@ const props = defineProps<Props>();
           required
         ></v-text-field>
       </v-col>
-    </v-row>
 
-    <v-row>
-      <v-col cols="12" sm="12" md="12">
+      <v-col cols="12" xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
         <v-text-field
           v-model="iconModel"
           :label="$t('resource.category.attributes.icon')"
@@ -54,15 +52,17 @@ const props = defineProps<Props>();
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-color-picker v-model="targetCategory.attributes.color" mode="hexa" :hide-inputs="true"/>
+    <v-row justify="center">
+      <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+        <v-row class="pt-2" justify="center">
+          <v-color-picker v-model="targetCategory.attributes.color" mode="hexa" :hide-inputs="true"/>
+        </v-row>
       </v-col>
-    </v-row>
 
-    <v-row>
-      <v-col class="d-flex flex-row justify-center" cols="12" md="12">
-        <CategoryChip :category="targetPreview" size="default"></CategoryChip>
+      <v-col align-self="center" cols="12" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+        <v-row class="pt-2" justify="center">
+          <CategoryChip :category="targetPreview" size="default"></CategoryChip>
+        </v-row>
       </v-col>
     </v-row>
   </Form>

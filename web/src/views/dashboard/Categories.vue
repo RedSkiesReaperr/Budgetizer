@@ -3,19 +3,22 @@
     <v-skeleton-loader :elevation="0" type="card"></v-skeleton-loader>
   </template>
   <template v-else>
-    <v-container class="mb-6 d-flex flex-row justify-center">
-      <v-btn color="#27ae60" prepend-icon="mdi-plus" rounded="lg" @click="openCreateDialog">
-        {{ $t("resource.category.creation.action") }}
-      </v-btn>
-    </v-container>
-    <v-container class="pa-1" fluid>
-      <v-row>
-        <v-col class="pa-2" v-for="category in categoriesStore.categories" v-bind:key="category.id" cols="12" sm="6"
-               md="3" xl="2">
-          <CategoryCard :category="category" :on-delete="openDeleteDialog" :on-edit="openEditDialog"></CategoryCard>
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-row justify="center">
+      <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="1">
+        <v-btn class="w-100" color="#27ae60" prepend-icon="mdi-plus" rounded="lg" @click="openCreateDialog">
+          {{ $t("resource.category.creation.action") }}
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2"
+        v-for="category in categoriesStore.categories"
+        v-bind:key="category.id">
+        <CategoryCard :category="category" :on-delete="openDeleteDialog" :on-edit="openEditDialog"></CategoryCard>
+      </v-col>
+    </v-row>
 
     <ConfirmationModal :is-open="isDeleting" :on-canceled="closeDeleteDialog" :on-confirmed="confirmDelete">
       <template v-slot:title>{{ $t("resource.category.deletion.title") }}</template>
