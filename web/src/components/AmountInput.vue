@@ -1,21 +1,5 @@
 <script setup lang="ts">
-const [model] = defineModel<number>({
-  required: true,
-  get(v: string | number): number {
-    if (typeof v === "string") {
-      return 0
-    }
-
-    return v
-  },
-  set(v: string | number): number {
-    if (typeof v === "string") {
-      return 0
-    }
-
-    return v
-  }
-})
+const [model] = defineModel<number | undefined>({required: true})
 </script>
 
 <template>
