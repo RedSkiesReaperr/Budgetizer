@@ -31,7 +31,7 @@ const dashboardLayoutStore = useDashboardLayoutStore();
   </v-navigation-drawer>
 
   <v-app-bar flat color="background">
-    <v-app-bar-nav-icon @click="(_) => dashboardLayoutStore.invertIsRailMode()" elevation="0"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="dashboardLayoutStore.invertIsRailMode" elevation="0"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 
     <div class="w6">

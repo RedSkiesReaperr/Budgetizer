@@ -19,7 +19,7 @@
     "pinia": "^2.1.6",
     "roboto-fontface": "*",
     "vite-plugin-vuetify": "^1.0.2",
-    "vue": "^3.3.4",
+    "vue": "^3.4.21",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.4",
     "vue3-apexcharts": "^1.4.4",
