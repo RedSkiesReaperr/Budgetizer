@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {Line} from "@/api/resources/lines";
-import {getTypeTranslationKey} from "@/services/types";
 import Form from "@/components/Form.vue";
 import AmountInput from "@/components/AmountInput.vue";
+import TypeSelector from "@/components/TypeSelector.vue";
 
 interface Props {
   target: Line;
@@ -39,33 +39,13 @@ const props = defineProps<Props>();
         <AmountInput v-model="targetLine.attributes.amount"></AmountInput>
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-        <v-select
-          v-model="targetLine.attributes.lineType"
-          :label="$t('operation.attributes.type')"
-          :items="availableTypes"
-          :rules="rules.type"
-          item-value="value"
-          variant="outlined"
-          small-chips
-          required
-        >
-          <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :title="$t(getTypeTranslationKey(item.value))"></v-list-item>
-          </template>
-          <template #selection="{ item }">
-            <TypeChip
-              :raw-type="item.value"
-              size="small"
-            ></TypeChip>
-          </template>
-        </v-select>
+        <TypeSelector v-model="targetLine.attributes.lineType"></TypeSelector>
       </v-col>
     </v-row>
   </Form>
 </template>
 
 <script lang="ts">
-import TypeChip from "@/components/TypeChip.vue";
 import api from "@/api";
 import {UpdatePayload, CreatePayload} from "@/api/resources/lines";
 
@@ -75,13 +55,8 @@ export default {
   data() {
     return {
       targetLine: this.$props.target,
-      availableTypes: ["income", "vital", "non_essential"],
       rules: {
         label: [
-          (value: string) =>
-            value ? true : this.$t("form_validations.required"),
-        ],
-        type: [
           (value: string) =>
             value ? true : this.$t("form_validations.required"),
         ],
@@ -116,6 +91,5 @@ export default {
       }
     },
   },
-  components: {TypeChip}
 }
 </script>

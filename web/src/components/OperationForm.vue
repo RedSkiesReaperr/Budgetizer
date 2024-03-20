@@ -3,6 +3,8 @@ import {Operation} from "@/api/resources/operations";
 import {getCategoryById} from "@/services/categories";
 import Form from "@/components/Form.vue";
 import AmountInput from "@/components/AmountInput.vue";
+import TypeSelector from "@/components/TypeSelector.vue";
+import CategoryChip from "@/components/CategoryChip.vue";
 
 interface Props {
   target: Operation;
@@ -48,20 +50,7 @@ const props = defineProps<Props>();
       </v-col>
 
       <v-col cols="12" sm="6" md="4">
-        <v-select
-          v-model="targetOperation.attributes.opType"
-          small-chips
-          default="editingOperation.attributes.opType"
-          :label="$t('operation.attributes.type')"
-          :items="typeItems"
-          item-title="title"
-          item-value="value"
-          variant="outlined"
-        >
-          <template #selection="{ item }">
-            <TypeChip :raw-type="item.value" size="small"></TypeChip>
-          </template>
-        </v-select>
+        <TypeSelector v-model="targetOperation.attributes.opType"></TypeSelector>
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <v-select
@@ -110,8 +99,6 @@ import api from "@/api";
 import {getCategoryReadableKey, getCategoryTranslationKey} from "@/services/categories";
 import {useCategoriesStore} from "@/stores/categories";
 import {Category} from "@/api/resources/categories";
-import TypeChip from "@/components/TypeChip.vue";
-import CategoryChip from "@/components/CategoryChip.vue";
 import {UpdatePayload} from "@/api/resources/operations";
 
 export enum OperationFormMode {EDIT}
@@ -122,14 +109,6 @@ export default {
   data() {
     return {
       targetOperation: this.$props.target,
-      typeItems: [
-        {value: "income", title: this.$t("operation.types.income")},
-        {value: "vital", title: this.$t("operation.types.vital")},
-        {
-          value: "non_essential",
-          title: this.$t("operation.types.non_essential"),
-        },
-      ]
     }
   },
   computed: {
@@ -171,6 +150,5 @@ export default {
       }
     },
   },
-  components: {TypeChip, CategoryChip}
 }
 </script>
