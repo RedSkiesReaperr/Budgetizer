@@ -2,6 +2,7 @@
 import {Line} from "@/api/resources/lines";
 import {getTypeTranslationKey} from "@/services/types";
 import Form from "@/components/Form.vue";
+import AmountInput from "@/components/AmountInput.vue";
 
 interface Props {
   target: Line;
@@ -35,13 +36,7 @@ const props = defineProps<Props>();
         ></v-text-field>
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="6" lg="4" xl="4" xxl="4">
-        <v-text-field
-          v-model.number="targetLine.attributes.amount"
-          :label="$t('operation.attributes.amount')"
-          :rules="rules.amount"
-          variant="outlined"
-          type="number"
-        ></v-text-field>
+        <AmountInput v-model="targetLine.attributes.amount"></AmountInput>
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
         <v-select
@@ -85,12 +80,6 @@ export default {
         label: [
           (value: string) =>
             value ? true : this.$t("form_validations.required"),
-        ],
-        amount: [
-          (value: number) =>
-            value && value > 0
-              ? true
-              : this.$t("form_validations.gt", {limit: 0}),
         ],
         type: [
           (value: string) =>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {Operation} from "@/api/resources/operations";
 import {getCategoryById} from "@/services/categories";
-import {formatNumber} from "@/services/formatters";
 import Form from "@/components/Form.vue";
+import AmountInput from "@/components/AmountInput.vue";
 
 interface Props {
   target: Operation;
@@ -44,12 +44,7 @@ const props = defineProps<Props>();
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="3">
-        <v-text-field
-          :model-value="formatNumber(targetOperation.attributes.amount)"
-          :label="$t('operation.attributes.amount')"
-          variant="outlined"
-          disabled
-        ></v-text-field>
+        <AmountInput v-model="targetOperation.attributes.amount" disabled></AmountInput>
       </v-col>
 
       <v-col cols="12" sm="6" md="4">
