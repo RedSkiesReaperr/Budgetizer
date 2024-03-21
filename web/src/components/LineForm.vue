@@ -7,23 +7,25 @@ import TypeSelector from "@/components/TypeSelector.vue";
 interface Props {
   target: Line;
   mode: LineFormMode;
-  onSubmitting: () => void;
-  onSubmitSuccess: () => void;
-  onSubmitFailed: () => void;
-  onSubmitted: () => void;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
+const emit = defineEmits<{
+  submit: [];
+  success: [];
+  fail: [err: any];
+  finish: [];
+}>()
 </script>
 
 <template>
   <Form
     ref="form"
     :submit-request="submitRequest()"
-    :on-submitting="props.onSubmitting"
-    :on-submit-success="props.onSubmitSuccess"
-    :on-submit-failed="props.onSubmitFailed"
-    :on-submitted="props.onSubmitted">
+    @submit="emit('submit')"
+    @success="emit('success')"
+    @fail="(err: any) => emit('fail', err)"
+    @finish="emit('finish')">
     <v-row>
       <v-col cols="12" xs="12" sm="12" md="6" lg="5" xl="5" xxl="5">
         <v-text-field

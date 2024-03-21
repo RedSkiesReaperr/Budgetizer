@@ -16,11 +16,13 @@
         cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2"
         v-for="category in categoriesStore.categories"
         v-bind:key="category.id">
-        <CategoryCard :category="category" :on-delete="openDeleteDialog" :on-edit="openEditDialog"></CategoryCard>
+        <CategoryCard :category="category" @delete="openDeleteDialog(category)"
+                      @edit="openEditDialog(category)"></CategoryCard>
       </v-col>
     </v-row>
 
-    <ConfirmationModal :is-open="isDeleting" :on-canceled="closeDeleteDialog" :on-confirmed="confirmDelete">
+    <ConfirmationModal :is-open="isDeleting" :loading="deleteLoading" @cancel="closeDeleteDialog"
+                       @confirm="confirmDelete">
       <template v-slot:title>{{ $t("resource.category.deletion.title") }}</template>
       <template v-slot:subtitle>{{ $t("resource.category.deletion.subtitle") }}</template>
       <template v-slot:content>
@@ -43,31 +45,36 @@
       </template>
     </ConfirmationModal>
 
-    <ConfirmationModal :is-open="isCreating" :on-canceled="closeCreateDialog" :on-confirmed="confirmCreate">
+    <ConfirmationModal :is-open="isCreating" :loading="createLoading" @cancel="closeCreateDialog"
+                       @confirm="confirmCreate">
       <template v-slot:title>{{ $t("resource.category.creation.title") }}</template>
       <template v-slot:content>
-        <CategoryForm
-          ref="categoryFormCreate"
-          :mode="CategoryFormMode.CREATE"
-          :on-submitting="createSubmitting"
-          :on-submit-success="createSucceed"
-          :on-submit-failed="createFailed"
-          :on-submitted="createSubmitted"
-          :target="creatingCategory"/>
+        <v-container>
+          <CategoryForm
+            ref="categoryFormCreate"
+            :mode="CategoryFormMode.CREATE"
+            :target="creatingCategory"
+            @submit="createSubmitting"
+            @success="createSucceed"
+            @fail="(err: any) => createFailed()"
+            @finish="createSubmitted"/>
+        </v-container>
       </template>
     </ConfirmationModal>
 
-    <ConfirmationModal :is-open="isEditing" :on-canceled="closeEditDialog" :on-confirmed="confirmEdit">
+    <ConfirmationModal :is-open="isEditing" :loading="editLoading" @cancel="closeEditDialog" @confirm="confirmEdit">
       <template v-slot:title>{{ $t("resource.category.edition.title") }}</template>
       <template v-slot:content>
-        <CategoryForm
-          ref="categoryFormEdit"
-          :mode="CategoryFormMode.EDIT"
-          :on-submitting="editSubmitting"
-          :on-submit-success="editSucceed"
-          :on-submit-failed="editFailed"
-          :on-submitted="editSubmitted"
-          :target="editingCategory"/>
+        <v-container>
+          <CategoryForm
+            ref="categoryFormEdit"
+            :mode="CategoryFormMode.EDIT"
+            :target="editingCategory"
+            @submit="editSubmitting"
+            @success="editSucceed"
+            @fail="(err: any) => editFailed()"
+            @finish="editSubmitted"/>
+        </v-container>
       </template>
     </ConfirmationModal>
   </template>
@@ -98,12 +105,15 @@ export default {
     return {
       // Delete Category
       isDeleting: false,
+      deleteLoading: false,
       deletingCategory: {} as Category,
       // Create Category
       isCreating: false,
+      createLoading: false,
       creatingCategory: {} as Category,
       // Edit Category
       isEditing: false,
+      editLoading: false,
       editingCategory: {} as Category
     };
   },
@@ -125,16 +135,19 @@ export default {
     },
     categoryDeleted() {
       this.alertStore.show(AlertType.Success, this.$t('resource.category.deletion.success_title'), this.$t('resource.category.deletion.success_message'))
+      this.deleteLoading = false
       this.refreshCategories()
     },
     closeDeleteDialog() {
       this.isDeleting = false
+      this.deleteLoading = false
     },
     async confirmDelete() {
+      this.deleteLoading = true
       await api.categories
         .deleteOne(this.deletingCategory)
         .then(() => this.categoryDeleted())
-        .finally(() => this.isDeleting = false);
+        .finally(() => this.closeDeleteDialog());
     },
     // Category creation actions
     openCreateDialog() {
@@ -149,16 +162,18 @@ export default {
       (this.$refs.categoryFormCreate as any).$refs.form.$refs.form.requestSubmit()
     },
     createSubmitting() {
+      this.createLoading = true
     },
     createSucceed() {
       this.alertStore.show(AlertType.Success, this.$t('resource.category.creation.success_title'), this.$t('resource.category.creation.success_message'))
-      this.refreshCategories()
       this.isCreating = false
     },
     createFailed() {
       this.alertStore.show(AlertType.Error, this.$t('resource.category.creation.error'), '')
     },
     createSubmitted() {
+      this.createLoading = false
+      this.refreshCategories()
     },
     // Category edition actions
     openEditDialog(cat: Category) {
@@ -173,16 +188,18 @@ export default {
       (this.$refs.categoryFormEdit as any).$refs.form.$refs.form.requestSubmit()
     },
     editSubmitting() {
+      this.editLoading = true
     },
     editSucceed() {
       this.alertStore.show(AlertType.Success, this.$t('resource.category.edition.success_title'), this.$t('resource.category.edition.success_message'))
-      this.refreshCategories()
       this.isEditing = false
     },
     editFailed() {
       this.alertStore.show(AlertType.Error, this.$t('resource.category.edition.error'), '')
     },
     editSubmitted() {
+      this.editLoading = false
+      this.refreshCategories()
     },
     refreshCategories() {
       this.categoriesStore.fetchAll()

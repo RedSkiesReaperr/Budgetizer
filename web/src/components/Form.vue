@@ -1,13 +1,15 @@
 <script setup lang="ts">
 interface Props {
   submitRequest: () => Promise<any>;
-  onSubmitting: () => void;
-  onSubmitSuccess: () => void;
-  onSubmitFailed: (err: any) => void;
-  onSubmitted: () => void;
 }
 
 defineProps<Props>();
+defineEmits<{
+  submit: [];
+  success: [];
+  fail: [err: any];
+  finish: [];
+}>()
 </script>
 
 <template>
@@ -21,11 +23,11 @@ defineProps<Props>();
 export default {
   methods: {
     async submit() {
-      this.$props.onSubmitting()
+      this.$emit('submit')
       await this.$props.submitRequest()
-        .then(() => this.$props.onSubmitSuccess())
-        .catch((err: any) => this.$props.onSubmitFailed(err))
-        .finally(() => this.$props.onSubmitted());
+        .then(() => this.$emit('success'))
+        .catch((err: any) => this.$emit('fail', err))
+        .finally(() => this.$emit('finish'));
     },
   }
 }

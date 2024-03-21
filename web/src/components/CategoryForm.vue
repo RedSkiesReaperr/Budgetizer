@@ -6,23 +6,25 @@ import CategoryChip from "@/components/CategoryChip.vue";
 interface Props {
   target: Category;
   mode: CategoryFormMode;
-  onSubmitting: () => void;
-  onSubmitSuccess: () => void;
-  onSubmitFailed: () => void;
-  onSubmitted: () => void;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
+const emit = defineEmits<{
+  submit: [];
+  success: [];
+  fail: [err: any];
+  finish: [];
+}>()
 </script>
 
 <template>
   <Form
     ref="form"
     :submit-request="submitRequest()"
-    :on-submitting="props.onSubmitting"
-    :on-submit-success="props.onSubmitSuccess"
-    :on-submit-failed="props.onSubmitFailed"
-    :on-submitted="props.onSubmitted">
+    @submit="emit('submit')"
+    @success="emit('success')"
+    @fail="(err: any) => emit('fail', err)"
+    @finish="emit('finish')">
     <v-row>
       <v-col cols="12" xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
         <v-text-field

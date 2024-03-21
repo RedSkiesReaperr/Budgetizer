@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 interface Props {
   isOpen: boolean;
-  onCanceled: () => void;
-  onConfirmed: () => void;
+  loading: boolean;
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits(['cancel', 'confirm'])
 </script>
 
 <template>
@@ -23,14 +23,28 @@ const props = defineProps<Props>();
         <slot name="subtitle" class="mt-0"></slot>
       </v-card-subtitle>
       <v-card-text>
+        <v-overlay
+          class="align-center justify-center"
+          :model-value="props.loading"
+          :close-on-content-click="false"
+          contained
+          disabled
+          persistent
+        >
+          <v-progress-circular
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
+        </v-overlay>
+
         <slot name="content"></slot>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn variant="text" @click="props.onCanceled()">
+        <v-btn variant="text" @click="emit('cancel')">
           {{ $t("actions.cancel") }}
         </v-btn>
-        <v-btn color="red" variant="text" @click="props.onConfirmed()">
+        <v-btn color="red" variant="text" @click="emit('confirm')">
           {{ $t("actions.confirm") }}
         </v-btn>
       </v-card-actions>

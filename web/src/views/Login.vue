@@ -15,10 +15,10 @@ import Form from "@/components/Form.vue";
       <Form
         ref="loginForm"
         :submit-request="loginRequest()"
-        :on-submitting="loginSubmitting"
-        :on-submit-success="loginSucceed"
-        :on-submit-failed="loginFailed"
-        :on-submitted="loginSubmitted">
+        @submit="loginSubmitting"
+        @success="loginSucceed"
+        @fail="(err: LoginError) => loginFailed(err)"
+        @finish="loginSubmitted">
         <v-text-field v-model="email" type="email" :label="$t('email')" variant="outlined"
                       autocomplete="username"/>
         <v-text-field v-model="password" type="password" :label="$t('password')" variant="outlined"
@@ -51,6 +51,8 @@ import {AxiosError} from 'axios';
 import LanguageSwitch from "@/components/LanguageSwitch.vue";
 
 const alertStore = useAlertStore()
+
+type LoginError = AxiosError<{ errors: string[], success: boolean }>
 
 export default {
   data() {
@@ -85,7 +87,7 @@ export default {
       this.$router.push({name: 'dashboardOverview'});
       alertStore.hide()
     },
-    loginFailed(err: AxiosError<{ errors: string[], success: boolean }>) {
+    loginFailed(err: LoginError) {
       const errors = err.response?.data.errors.join('. ') || this.$t("something_went_wrong")
       alertStore.show(AlertType.Error, this.$t("login.error_title"), errors)
     },

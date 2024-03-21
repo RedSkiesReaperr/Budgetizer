@@ -5,14 +5,15 @@ import Alert from "@/components/Alert.vue";
 import {Category} from "@/api/resources/categories";
 import {getCategoryById} from "@/services/categories";
 import OperationForm, {OperationFormMode} from "@/components/OperationForm.vue";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 interface Props {
   operations: Operation[];
   categories: Category[];
-  onOperationsChanged: () => Promise<any>;
 }
 
 const props = defineProps<Props>();
+defineEmits(['operationChange'])
 </script>
 
 <template>
@@ -72,49 +73,21 @@ const props = defineProps<Props>();
     </template>
   </v-data-table>
 
-  <v-row justify="center">
-    <v-dialog v-model="editDialog" persistent max-width="1100">
-      <v-card>
-        <v-card-title class="pt-4">
-          <span class="text-h5">{{ $t("operation.edition.title") }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-overlay
-              class="align-center justify-center"
-              :model-value="editLoading"
-              :close-on-content-click="false"
-              contained
-              disabled
-              persistent
-            >
-              <v-progress-circular
-                color="primary"
-                indeterminate
-              ></v-progress-circular>
-            </v-overlay>
+  <ConfirmationModal :is-open="editDialog" :loading="editLoading" @cancel="closeEditDialog" @confirm="saveOperation">
+    <template v-slot:title>{{ $t("operation.edition.title") }}</template>
+    <template v-slot:content>
+      <v-container>
+        <OperationForm ref="operationFormEdit"
+                       :mode="OperationFormMode.EDIT"
+                       @submit="editSubmitting"
+                       @success="editSucceed"
+                       @fail="(err: any) => editFailed()"
+                       @finish="editSubmitted"
+                       :target="editedOperation"/>
+      </v-container>
+    </template>
+  </ConfirmationModal>
 
-            <OperationForm ref="operationFormEdit"
-                           :mode="OperationFormMode.EDIT"
-                           :on-submitting="editSubmitting"
-                           :on-submit-success="editSucceed"
-                           :on-submit-failed="editFailed"
-                           :on-submitted="editSubmitted"
-                           :target="editedOperation"/>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" @click="closeEditDialog">
-            {{ $t("actions.cancel") }}
-          </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="saveOperation">
-            {{ $t("actions.save") }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
   <Alert></Alert>
 </template>
 
@@ -196,7 +169,8 @@ export default {
     },
     editSucceed() {
       alertStore.show(AlertType.Success, this.$t('operation.edition.success_title'), this.$t("operation.edition.success_message"))
-      this.$props.onOperationsChanged().finally(() => this.closeEditDialog())
+      this.$emit('operationChange')
+      this.closeEditDialog()
     },
     editFailed() {
       alertStore.show(AlertType.Error, this.$t('operation.edition.error'), this.$t("something_went_wrong"))

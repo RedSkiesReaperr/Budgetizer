@@ -81,10 +81,14 @@ export default {
     edition: {
       title: "Edit a dashboard line",
       error: "Error while editing",
+      success_title: "Line edited",
+      success_message: "The line has been successfully updated !",
     },
     creation: {
       title: "Create a line",
       error: "Error while creating",
+      success_title: "Line created",
+      success_message: "The line has been successfully created !",
     },
     deletion: {
       title: "Confirm deletion ?",

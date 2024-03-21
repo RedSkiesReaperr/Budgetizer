@@ -4,7 +4,7 @@
       <BasicCard class="pb-10" :loading="operationsStore.fetching">
         <OperationsTable :operations="operationsStore.expenses"
                          :categories="categoriesStore.categories"
-                         :on-operations-changed="refreshOperations"/>
+                         @operation-change="refreshOperations"/>
       </BasicCard>
     </v-col>
   </v-row>

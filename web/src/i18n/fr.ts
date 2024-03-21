@@ -81,10 +81,14 @@ export default {
     edition: {
       title: "Editer une ligne de dashboard",
       error: "Erreur lors de l'édition",
+      success_title: "Ligne éditée",
+      success_message: "La ligne a mise à jour avec succès !",
     },
     creation: {
       title: "Créer une ligne",
       error: "Erreur lors de la création",
+      success_title: "Ligne créée",
+      success_message: "La ligne a été créée avec succès !",
     },
     deletion: {
       title: "Confirmer la suppression ?",

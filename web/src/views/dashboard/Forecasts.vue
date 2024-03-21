@@ -43,69 +43,29 @@
         >
         </v-btn>
 
-        <LinesTable :lines="linesStore.lines" :onLinesChanged="refreshInfos"/>
+        <LinesTable :lines="linesStore.lines" @line-change="refreshInfos"/>
 
       </BasicCard>
     </v-col>
   </v-row>
 
-  <v-row justify="center">
-    <v-dialog v-model="createDialog" persistent max-width="1000">
-      <v-card>
-        <v-card-title class="pt-4">
-          <span class="text-h5">{{ $t("line.creation.title") }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-overlay
-              class="align-center justify-center"
-              :model-value="createLoading"
-              :close-on-content-click="false"
-              contained
-              disabled
-              persistent
-            >
-              <v-progress-circular
-                color="primary"
-                indeterminate
-              ></v-progress-circular>
-            </v-overlay>
-
-            <LineForm
-              ref="lineFormEdit"
-              :mode="LineFormMode.CREATE"
-              :target="createdLine"
-              :on-submitting="createSubmitting"
-              :on-submit-success="createSucceed"
-              :on-submit-failed="createFailed"
-              :on-submitted="createSubmitted"
-            />
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-alert
-            closable
-            v-model="createError"
-            :text="$t('operation.edition.error')"
-            type="error"
-            variant="tonal"
-          ></v-alert>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="closeCreateDialog"
-          >
-            {{ $t("actions.cancel") }}
-          </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="submitCreate">
-            {{ $t("actions.create") }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <ConfirmationModal :is-open="createDialog" :loading="createLoading" @cancel="closeCreateDialog" @confirm="submitCreate">
+    <template v-slot:title>{{ $t("line.creation.title") }}</template>
+    <template v-slot:content>
+      <v-container>
+        <LineForm
+          ref="lineFormEdit"
+          :mode="LineFormMode.CREATE"
+          :target="createdLine"
+          @submit="createSubmitting"
+          @success="createSucceed"
+          @fail="(err: any) => createFailed()"
+          @finish="createSubmitted"
+        />
+      </v-container>
+    </template>
+  </ConfirmationModal>
+  <Alert/>
 </template>
 
 <script lang="ts">
@@ -123,6 +83,9 @@ import {useObjectivesStore} from "@/stores/objectives";
 import {useLinesStore} from "@/stores/lines";
 import LineForm, {LineFormMode} from "@/components/LineForm.vue";
 import {Line} from "@/api/resources/lines";
+import Alert from "@/components/Alert.vue";
+import {AlertType, useAlertStore} from "@/stores/alert";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 export default {
   setup() {
@@ -130,12 +93,14 @@ export default {
     const forecastsStore = useForecastsStore();
     const objectivesStore = useObjectivesStore();
     const linesStore = useLinesStore();
+    const alertStore = useAlertStore();
 
     return {
       appStore,
       forecastsStore,
       objectivesStore,
       linesStore,
+      alertStore,
       getTypeColor,
       formatNumber,
     };
@@ -204,9 +169,11 @@ export default {
       this.createLoading = true
     },
     createSucceed() {
+      this.alertStore.show(AlertType.Success, this.$t('line.creation.success_title'), this.$t('line.creation.success_message'))
       this.refreshInfos().then(() => this.closeCreateDialog())
     },
     createFailed() {
+      this.alertStore.show(AlertType.Error, this.$t('line.creation.error'), '')
       this.createError = true
     },
     createSubmitted() {
@@ -220,6 +187,6 @@ export default {
       return Promise.all([this.linesStore.fetchAll(), this.forecastsStore.fetch(), this.objectivesStore.fetchAll()])
     }
   },
-  components: {GaugeChart, BasicCard, LinesTable, LineForm, InfoCard},
+  components: {ConfirmationModal, Alert, GaugeChart, BasicCard, LinesTable, LineForm, InfoCard},
 };
 </script>

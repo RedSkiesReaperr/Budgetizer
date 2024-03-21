@@ -4,10 +4,10 @@ import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 interface Props {
   lines: Line[];
-  onLinesChanged: () => Promise<any>;
 }
 
 const props = defineProps<Props>();
+defineEmits(['lineChange']);
 </script>
 
 <template>
@@ -49,7 +49,7 @@ const props = defineProps<Props>();
     </template>
   </v-data-table>
 
-  <ConfirmationModal :is-open="editDialog" :on-canceled="closeEditDialog" :on-confirmed="confirmEdit">
+  <ConfirmationModal :is-open="editDialog" :loading="editLoading" @cancel="closeEditDialog" @confirm="confirmEdit">
     <template v-slot:title>{{ $t("line.edition.title") }}</template>
     <template v-slot:content>
       <v-container>
@@ -71,16 +71,17 @@ const props = defineProps<Props>();
           ref="lineFormEdit"
           :mode="LineFormMode.EDIT"
           :target="editedLine"
-          :on-submitting="editSubmitting"
-          :on-submit-success="editSucceed"
-          :on-submit-failed="editFailed"
-          :on-submitted="editSubmitted"
+          @submit="editSubmitting"
+          @success="editSucceed"
+          @fail="(err: any) => editFailed()"
+          @finish="editSubmitted"
         />
       </v-container>
     </template>
   </ConfirmationModal>
 
-  <ConfirmationModal :is-open="deleteDialog" :on-canceled="closeDeleteDialog" :on-confirmed="confirmDelete">
+  <ConfirmationModal :is-open="deleteDialog" :loading="deleteLoading" @cancel="closeDeleteDialog"
+                     @confirm="confirmDelete">
     <template v-slot:title>{{ $t("line.deletion.title") }}</template>
     <template v-slot:subtitle>{{ $t("line.deletion.body") }}</template>
     <template v-slot:content>
@@ -114,6 +115,9 @@ import {Line} from "@/api/resources/lines";
 import api from "@/api";
 import {copyLine} from "@/services/lines";
 import {formatAmount} from '@/services/formatters'
+import {AlertType, useAlertStore} from "@/stores/alert";
+
+const alertStore = useAlertStore();
 
 export default {
   data() {
@@ -121,11 +125,11 @@ export default {
       itemsPerPage: 30,
       // Delete Line
       deleteDialog: false,
+      deleteLoading: false,
       deletingLine: {} as Line,
       // Edit Line
       editDialog: false,
       editLoading: false,
-      editError: false,
       editedLine: {} as Line,
     };
   },
@@ -162,7 +166,6 @@ export default {
     },
     closeEditDialog() {
       this.editDialog = false;
-      this.editError = false
     },
     confirmEdit() {
       (this.$refs.lineFormEdit as any).$refs.form.$refs.form.requestSubmit()
@@ -171,10 +174,12 @@ export default {
       this.editLoading = true
     },
     editSucceed() {
-      this.$props.onLinesChanged().then(() => this.closeEditDialog())
+      alertStore.show(AlertType.Success, this.$t('line.edition.success_title'), this.$t('line.edition.success_message'))
+      this.$emit('lineChange')
+      this.closeEditDialog()
     },
     editFailed() {
-      this.editError = true
+      alertStore.show(AlertType.Error, this.$t('line.edition.error'), '')
     },
     editSubmitted() {
       this.editLoading = false
@@ -185,12 +190,14 @@ export default {
     },
     closeDeleteDialog() {
       this.deleteDialog = false;
+      this.deleteLoading = false;
     },
     async confirmDelete() {
+      this.deleteLoading = true;
       await api.lines
         .deleteOne(this.deletingLine.id)
-        .then(() => this.$props.onLinesChanged())
-        .finally(() => this.deleteDialog = false);
+        .then(() => this.$emit('lineChange'))
+        .finally(() => this.closeDeleteDialog());
     },
   },
   components: {TypeChip, LineForm},

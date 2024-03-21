@@ -5,15 +5,14 @@ import ActionCard from "@/components/ActionCard.vue";
 
 interface Props {
   category: Category;
-  onDelete: (cat: Category) => void;
-  onEdit: (cat: Category) => void;
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits(['edit', 'delete'])
 </script>
 
 <template>
-  <ActionCard @edit="onEdit(category)" @delete="onDelete(category)">
+  <ActionCard :loading="false" @edit="emit('edit')" @delete="emit('delete')">
     <v-card-title class="text-subtitle-1 text-center mb-2">{{ title }}</v-card-title>
 
     <v-card-text class="pb-0 d-flex flex-row flex-wrap justify-start align-start align-content-start">
