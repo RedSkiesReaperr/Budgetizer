@@ -13,6 +13,7 @@ defineProps<Props>();
 <template>
   <v-form ref="form" @submit.prevent="submit">
     <slot></slot>
+    <v-btn class="d-none" type="submit"></v-btn>
   </v-form>
 </template>
 
