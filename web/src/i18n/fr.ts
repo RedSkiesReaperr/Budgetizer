@@ -164,5 +164,9 @@ export default {
     income_breakdown: "Répartition des revenus",
     expense_breakdown: "Répartition des dépenses",
     overall_breakdown: "Répartition générale",
+  },
+  operations_categorize_card: {
+    all_categorized: "Toutes les opérations sont catégorisées !",
+    some_uncategorized: "Opération(s) à catégoriser",
   }
 };

@@ -20,6 +20,28 @@
     </v-col>
 
     <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
+      <BasicCard class="h-100" :loading="operationsStore.fetching">
+        <v-card-text class="h-100 d-flex">
+          <div class="w-100 d-flex flex-column justify-space-around align-center align-content-center">
+            <template v-if="operationsStore.fetching || operationsStore.operations.length <= 0">
+              <div class="text-body-2 text-grey-darken-1">{{ $t('no_data') }}</div>
+            </template>
+            <template v-else-if="uncategorizedOperations.length <= 0">
+              <v-icon icon="mdi-check-decagram" color="green" size="45"></v-icon>
+              <div class="text-subtitle-2">{{ $t("operations_categorize_card.all_categorized") }}</div>
+            </template>
+            <template v-else>
+              <div class="d-flex flex-column justify-space-around align-center align-content-center">
+                <div class="text-h4 text-orange">{{ uncategorizedOperations.length }}</div>
+              </div>
+              <div class="text-subtitle-2">{{ $t("operations_categorize_card.some_uncategorized") }}</div>
+            </template>
+          </div>
+        </v-card-text>
+      </BasicCard>
+    </v-col>
+
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="2" xxl="2">
       <BasicCard class="px-0 py-0" :loading="operationsStore.fetching">
         <OperationsSparkLineChart :subtitle="$t('earning', 2)" :operations="operationsStore.incomes"
                                   :x-axis-labels="daysChartLabels" curve-color="#00b894"/>
@@ -79,6 +101,8 @@ import {AxiosError} from "axios";
 import {useNotesStore} from "@/stores/notes";
 import Alert from "@/components/Alert.vue";
 import {useCategoriesStore} from "@/stores/categories";
+import {getOperationsUncategorized} from "@/services/operations";
+import {Operation} from "@/api/resources/operations";
 
 export default {
   setup() {
@@ -113,8 +137,12 @@ export default {
     daysChartLabels(): string[] {
       return daysInRangeAsStr(this.appStore.currentDateStartAt, this.appStore.currentDateEndAt, "YYYY-MM-DD")
     },
+    uncategorizedOperations(): Operation[] {
+      return getOperationsUncategorized(this.operationsStore.operations)
+    }
   },
   methods: {
+    getOperationsUncategorized,
     handleFileImport() {
       this.isSelecting = true;
 

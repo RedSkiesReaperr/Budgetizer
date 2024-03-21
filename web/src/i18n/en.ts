@@ -164,5 +164,9 @@ export default {
     income_breakdown: "Incomes breakdown",
     expense_breakdown: "Expenses breakdown",
     overall_breakdown: "Overall breakdown",
+  },
+  operations_categorize_card: {
+    all_categorized: "All operations are categorized !",
+    some_uncategorized: "Operation(s) to categorize",
   }
 };
