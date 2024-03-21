@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Category} from "@/api/resources/categories";
-import BasicCard from "@/components/BasicCard.vue";
 import CategoryChip from "@/components/CategoryChip.vue";
+import ActionCard from "@/components/ActionCard.vue";
 
 interface Props {
   category: Category;
@@ -13,24 +13,9 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <BasicCard :loading="false">
-    <v-btn
-      icon="mdi-pencil-circle"
-      variant="text"
-      color="blue"
-      @click="props.onEdit(props.category)"
-      :style="{ position: 'absolute', top: 0, left: 0}">
-    </v-btn>
-    <v-btn
-      icon="mdi-delete-circle"
-      variant="text"
-      color="red"
-      @click="props.onDelete(props.category)"
-      :style="{ position: 'absolute', top: 0, right: 0}">
-    </v-btn>
+  <ActionCard @edit="onEdit(category)" @delete="onDelete(category)">
+    <v-card-title class="text-subtitle-1 text-center mb-2">{{ title }}</v-card-title>
 
-    <v-card-title class="text-subtitle-1 text-center mb-2">{{ title }}
-    </v-card-title>
     <v-card-text class="pb-0 d-flex flex-row flex-wrap justify-start align-start align-content-start">
       <div class="pb-2 w-100 d-flex flex-row flex-wrap justify-start align-start align-content-start">
         <div class="w-50 d-flex flex-column flex-wrap justify-start align-start align-content-center">
@@ -55,7 +40,7 @@ const props = defineProps<Props>();
         <CategoryChip :category="props.category" size="default"></CategoryChip>
       </div>
     </v-card-text>
-  </BasicCard>
+  </ActionCard>
 </template>
 
 <script lang="ts">
