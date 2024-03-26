@@ -30,10 +30,7 @@
 
   <v-row justify="center">
     <v-col cols="12" xs="12" sm="12" md="12" lg="9" xl="6" xxl="6">
-      <BasicCard
-        class="pb-10"
-        :loading="linesStore.fetching"
-      >
+      <BasicCard :loading="linesStore.fetching">
         <v-btn
           icon="mdi-plus-circle-outline"
           variant="text"
