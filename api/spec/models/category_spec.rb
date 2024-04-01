@@ -9,6 +9,7 @@ RSpec.describe Category do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to have_many(:lines).dependent(:nullify) }
     it { is_expected.to have_many(:operations).dependent(:nullify) }
+    it { is_expected.to have_many(:import_configs).dependent(:nullify) }
   end
 
   describe 'Validations' do

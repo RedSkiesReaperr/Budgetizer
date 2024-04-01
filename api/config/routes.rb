@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   jsonapi_resources :categories
   jsonapi_resources :forecasts
+  jsonapi_resources :import_configs
   jsonapi_resources :lines
   jsonapi_resources :notes
   jsonapi_resources :objectives
