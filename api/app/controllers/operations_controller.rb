@@ -2,14 +2,7 @@
 
 class OperationsController < ApplicationController
   def create
-    processor = CsvFile::Processor.new(file_path: create_params.path,
-                                       validator: OperationsCsv::Validator.new,
-                                       sanitizer: OperationsCsv::Sanitizer.new)
-
-    director = OperationBuildingDirector.new(current_user)
-    operations = processor.process.map { |line| director.build_operation(line) }
-
-    Operation.create!(operations)
+    OperationsImporter.new(user: current_user).import(file_path: create_params.path)
 
     render status: :created, json: { success: true }
   rescue CsvFile::Errors::CsvFileError => e

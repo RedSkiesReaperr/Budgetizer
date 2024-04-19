@@ -19,7 +19,7 @@ RSpec.describe OperationBuildingDirector do
       allow(builder).to receive(:build_amount).with(87.24)
       allow(builder).to receive(:build_pointed).with(false)
       allow(builder).to receive(:build_op_type).with('label', 'supplier', 87.24)
-      allow(builder).to receive(:build_category)
+      allow(builder).to receive(:build_category).with('label', user)
       allow(builder).to receive(:build_user).with(user)
       allow(builder).to receive(:result).and_return('builded operation')
     end

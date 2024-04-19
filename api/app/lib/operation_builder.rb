@@ -7,7 +7,7 @@ class OperationBuilder
 
   def initialize
     @operation = { date: nil, label: nil, amount: nil, comment: '',
-                   pointed: false, op_type: nil, category: nil, user_id: nil }
+                   pointed: false, op_type: nil, category_id: nil, user_id: nil }
   end
 
   def result
@@ -46,8 +46,8 @@ class OperationBuilder
     operation[:op_type] = Operation.op_types[type]
   end
 
-  def build_category(category = nil)
-    operation[:category] = category
+  def build_category(label, user)
+    operation[:category_id] = guessed_category(label, user).try(:id)
   end
 
   def build_user(user)

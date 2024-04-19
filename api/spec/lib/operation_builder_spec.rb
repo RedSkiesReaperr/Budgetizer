@@ -76,6 +76,26 @@ RSpec.describe OperationBuilder do
   end
 
   describe '.build_category' do
-    it_behaves_like 'builder method', field: :category, test_value: nil, expected: nil
+    let(:label) { 'label' }
+    let(:user) { create(:user) }
+    let(:category) { create(:category, user:) }
+
+    context 'when category is guessed' do
+      before do
+        allow(builder).to receive(:guessed_category).with(label, user).and_return(category)
+        builder.build_category(label, user)
+      end
+
+      it { expect(builder.result[:category_id]).to eq(category.id) }
+    end
+
+    context 'when category isn\'t guessed' do
+      before do
+        allow(builder).to receive(:guessed_category).with(label, user).and_return(nil)
+        builder.build_category(label, user)
+      end
+
+      it { expect(builder.result[:category_id]).to be_nil }
+    end
   end
 end

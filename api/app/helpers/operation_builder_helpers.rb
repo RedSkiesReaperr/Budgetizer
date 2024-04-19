@@ -22,4 +22,13 @@ module OperationBuilderHelpers
   def income?(amount)
     amount.positive?
   end
+
+  def import_configs(user)
+    @import_configs ||= user.import_configs.where.not(category: nil)
+  end
+
+  def guessed_category(label, user)
+    import_config = import_configs(user).find { |ic| label.include?(ic.value) }
+    import_config&.category
+  end
 end

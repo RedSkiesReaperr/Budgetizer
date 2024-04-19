@@ -16,7 +16,7 @@ class OperationBuildingDirector
     builder.build_amount(data.amount)
     builder.build_pointed(false)
     builder.build_op_type(data.label, data.supplier, data.amount)
-    builder.build_category
+    builder.build_category(data.label, @user)
     builder.build_user(@user)
     builder.result
   end
@@ -24,12 +24,13 @@ class OperationBuildingDirector
   private
 
   def data_struct
-    @data_struct ||= Struct.new(:date, :label, :amount, :comment, :supplier, :user_id)
+    @data_struct ||= Struct.new(:date, :label, :amount, :comment, :supplier, :user_id, :category_id)
   end
 
   def data
     @data ||= data_struct.new(@raw_data[:date_op], @raw_data[:label], @raw_data[:amount],
-                              @raw_data[:comment], @raw_data[:supplier_found], @raw_data[:user_id])
+                              @raw_data[:comment], @raw_data[:supplier_found], @raw_data[:user_id],
+                              @raw_data[:category_id])
   end
 
   def reset_with!(raw)
